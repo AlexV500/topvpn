@@ -1,6 +1,5 @@
 <?php
 
-require_once plugin_dir_path(dirname(__FILE__)) . 'vendor/rakit/validation/src/Validator.php';
 
 abstract class AbstractModel
 {
@@ -8,26 +7,20 @@ abstract class AbstractModel
     public string $prefix;
     public string $dbTable;
     public string $pk;
-    public $httpUtils;
-    public $validateUtils;
     public string $lang = '';
     protected bool $multiLangMode;
-    protected bool $adminMode;
     protected string $orderDirection = 'ASC';
     public string $rowCount;
     public string $offset;
 
 
-    protected function __construct(string $dbTable, bool $multiLangMode = true, bool $adminMode = false)
+    protected function __construct(string $dbTable, bool $multiLangMode = true)
     {
         global $wpdb;
         $this->wpdb = &$wpdb;
         $this->prefix = $wpdb->prefix;
         $this->multiLangMode = $multiLangMode;
-        $this->adminMode = $adminMode;
         $this->dbTable = $this->prefix.$dbTable;
-        $this->httpUtils = new FxReviews_HTTP_Utils;
-        $this->validateUtils = new FxReviews_Validate_Utils;
     }
 
     public function setMultiLangMode()
