@@ -14,6 +14,11 @@ class TopVPNModel extends AbstractModel{
             'that_key_name' => 'os_id']
     ];
 
+    public function __construct(string $dbTable, bool $multiLangMode = true)
+    {
+        parent::__construct($dbTable, $multiLangMode);
+    }
+
     public function addRow($data)
     {
         $validate = (new Validator)->checkLength($data['vpn_name'], 3, 30, 'vpn_name', true)
@@ -23,9 +28,9 @@ class TopVPNModel extends AbstractModel{
             return Result::setResult('error', $validate->getResultMessage(), $data);
         }
 
-        $imgAdded = $this->checkFileAndUpload('os_logo', 'OSLogo');
+        $imgAdded = $this->checkFileAndUpload('vpn_logo', 'OSLogo');
         if ($imgAdded->getStatus() == 'ok') {
-            $data['os_logo'] = $imgAdded->getResultData();
+            $data['vpn_logo'] = $imgAdded->getResultData();
         }
         $recordedRow = $this->insertRow($data);
         if ($recordedRow['last_insert_id'] > 0) {
@@ -45,9 +50,9 @@ class TopVPNModel extends AbstractModel{
             return Result::setResult('error', $validate->getResultMessage(), $data);
         }
 
-        $imgAdded = $this->checkFileAndUpload('os_logo', 'OSLogo');
+        $imgAdded = $this->checkFileAndUpload('vpn_logo', 'OSLogo');
         if ($imgAdded->getStatus() == 'ok') {
-            $data['os_logo'] = $imgAdded->getResultData();
+            $data['vpn_logo'] = $imgAdded->getResultData();
         }
 
         $updatedRow = $this->updateRow($id, $data);
@@ -60,9 +65,12 @@ class TopVPNModel extends AbstractModel{
         return Result::setResult('ok', 'Изменено<br/>'.$imgAdded->getMessage(), $updatedRow);
     }
 
-    public function checkFileAndUpload($fieldName, $folder){
-        $path = FXREVIEWS_CORE_LIB . '/images/' . $folder . '/';
-        return ImageUpload::Upload($fieldName, $path);
+    public function deleteRow($id){
+
+        if($this->removeRow($id) !== ''){
+            return Result::setResult('error', 'Ошибка<br/>', '');
+        }
+        return Result::setResult('ok', 'Удалено<br/>', '');
     }
 
 }

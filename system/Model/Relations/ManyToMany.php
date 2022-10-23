@@ -96,7 +96,7 @@ class ManyToMany {
             if (empty(array_diff($manyItemsToThisOnePostData, $manyItemsToThisOneIds))&&(empty(array_diff($manyItemsToThisOneIds, $manyItemsToThisOnePostData)))) {
                 return TRUE;
             }
-            if (!$this->removeThisOneThatManyLinks($thatManyToThisOneLink[$this->thisPkeyRowName])){
+            if (!$this->_deleteManyToOne($thisId)){
                 return false;
             }
         }

@@ -191,7 +191,7 @@ abstract class AbstractModel
         return $returnData;
     }
 
-    public function deleteRow(int $pk){
+    public function removeRow(int $pk){
 
         $this->wpdb->delete( $this->dbTable, [$this->pk => $pk]);
         return $this->wpdb->last_error;
@@ -260,5 +260,10 @@ abstract class AbstractModel
             'position' => $currentRow['position']
         ];
         $this->updateRow($nextOrPrevRow['id'], $fields2, false);
+    }
+
+    public function checkFileAndUpload($fieldName, $folder){
+        $path = PLUGIN_CORE_LIB . '/images/' . $folder . '/';
+        return ImageUpload::Upload($fieldName, $path);
     }
 }
