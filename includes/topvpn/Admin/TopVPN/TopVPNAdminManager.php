@@ -9,22 +9,20 @@ class TopVPNAdminManager{
 
         switch ($action){
             case '':
-                $render = new TopVPNAdminList();
+                (new TopVPNAdminList)->init()->show();
                 break;
             case 'add':
-                $render = new TopVPNAdminAdd();
+                (new TopVPNAdminAdd)->init()->show();
                 break;
             case 'edit':
-                $render = new TopVPNAdminEdit();
+                (new TopVPNAdminEdit)->init()->show();
                 break;
             case 'position':
-                $render = new TopVPNAdminPosition();
+                (new TopVPNAdminPosition)->init()->show();
                 break;
             case 'delete':
-                $render = new TopVPNAdminDelete();
+                (new TopVPNAdminDelete)->init()->show();
                 break;
         }
-
-        $render->init()->show();
     }
 }

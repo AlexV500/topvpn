@@ -24,9 +24,8 @@ class OSModel extends AbstractModel{
         $recordedRow = $this->insertRow($data);
         if ($recordedRow['last_insert_id'] == 0) {
             return Result::setResult('error', 'Ошибка<br/>' . $imgAdded->getMessage(), $data);
-
-            return Result::setResult('ok', 'Добавлено<br/>' . $imgAdded->getMessage(), $recordedRow);
         }
+        return Result::setResult('ok', 'Добавлено<br/>' . $imgAdded->getMessage(), $recordedRow);
     }
 
     public function editRow($id, $data)

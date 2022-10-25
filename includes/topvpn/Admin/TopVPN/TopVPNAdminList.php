@@ -1,7 +1,7 @@
 <?php
 
 
-class TopVPNAdminList{
+class TopVPNAdminList extends AdminActions {
 
     public function init(){
 
