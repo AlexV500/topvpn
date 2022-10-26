@@ -14,9 +14,9 @@ class TopVPNModel extends AbstractModel{
             'that_key_name' => 'os_id']
     ];
 
-    public function __construct(string $dbTable, bool $multiLangMode = true)
+    public function __construct(string $dbTable)
     {
-        parent::__construct($dbTable, $multiLangMode);
+        parent::__construct($dbTable);
     }
 
     public function addRow($data)

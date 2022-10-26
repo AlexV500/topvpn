@@ -3,6 +3,16 @@
 
 class HTTP{
 
+    public static function getCurrentURL(){
+
+        $currentURL = ( is_ssl() ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+        $currentURL = remove_query_arg( 'paged', $currentURL );
+        $currentURL = remove_query_arg( 'action', $currentURL );
+        $currentURL = remove_query_arg( 'id', $currentURL );
+
+        return $currentURL;
+    }
+
     public static function requestGet( $key, $def = false ) {
         return isset( $_REQUEST[ $key ] ) ? $_REQUEST[ $key ] : $def;
     }

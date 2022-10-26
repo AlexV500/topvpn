@@ -90,4 +90,46 @@ class HtmlFormInputs
         '</textarea>';
         echo $output;
     }
+
+    public static function renderAdminLanguageSelector(array $getAllLanguageAdm, string $languageSysName){
+
+        $output = '';
+        $output .= '<select name="languageSysName">';
+        $output .='<option value="">Выбрать язык</option>';
+        foreach ( $getAllLanguageAdm as $language ) {
+            $selected = $language['language_sys_name'] == $languageSysName ? ' selected="selected" ' : '';
+            $output .='<option ' . $selected . ' value="'. $language['language_sys_name'] .'">' . $language['language_name'] . '</option>';
+        }
+        $output .= '</select>';
+        $output .= '<input type="hidden" value="selectLanguageAdm" name="selectLanguageAdm"/>';
+        $output .= '<input class="button button-primary" type="submit" value="' . __( 'Выбрать', 'fxreviews' ) . '"/>
+                    </form><br/>';
+        return $output;
+    }
+
+    public static function renderAdminHead(string $head){
+
+        $output = '';
+        $output .= '<h1>';
+        $output .= $head;
+        $output .= '</h1>';
+        return $output;
+    }
+
+    public static function renderAdminHeadOfTableList(array $columnDisplayNames){
+
+        $output = '';
+        $output .= '<thead>';
+        $output .= '<tr>';
+
+        foreach ( $columnDisplayNames as $key => $columnDisplayName ) {
+
+            $class = $key;
+            $output .= "<th scope='col' class='$class'>$columnDisplayName</th>";
+        }
+
+        $output .= '</tr>';
+        $output .= '</thead>';
+        return $output;
+    }
 }

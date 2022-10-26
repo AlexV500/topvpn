@@ -9,19 +9,19 @@ class TopVPNAdminManager{
 
         switch ($action){
             case '':
-                (new TopVPNAdminList)->init()->show();
+                (new TopVPNAdminList('TopVPNModel', 'vpn'))->init()->show();
                 break;
             case 'add':
-                (new TopVPNAdminAdd)->init()->show();
+                (new TopVPNAdminAdd('TopVPNModel', 'vpn'))->init()->show();
                 break;
             case 'edit':
-                (new TopVPNAdminEdit)->init()->show();
+                (new TopVPNAdminEdit('TopVPNModel', 'vpn'))->init()->show();
                 break;
             case 'position':
-                (new TopVPNAdminPosition)->init()->show();
+                (new TopVPNAdminPosition('TopVPNModel', 'vpn'))->init()->show();
                 break;
             case 'delete':
-                (new TopVPNAdminDelete)->init()->show();
+                (new TopVPNAdminDelete('TopVPNModel', 'vpn'))->init()->show();
                 break;
         }
     }

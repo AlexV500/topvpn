@@ -1,7 +1,7 @@
 <?php
 
 
-class PaginationOffset{
+class PaginationConfig{
 
     private $setValueOfCount;
     private $count;

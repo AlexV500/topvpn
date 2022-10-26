@@ -8,19 +8,28 @@ abstract class AbstractModel
     public string $dbTable;
     public string $pk;
     public string $lang = '';
-    protected bool $multiLangMode;
+    protected bool $multiLangMode = true;
     protected string $orderDirection = 'ASC';
     public string $rowCount;
     public string $offset;
 
 
-    protected function __construct(string $dbTable, bool $multiLangMode = true)
+    protected function __construct(string $dbTable)
     {
         global $wpdb;
         $this->wpdb = &$wpdb;
         $this->prefix = $wpdb->prefix;
-        $this->multiLangMode = $multiLangMode;
         $this->dbTable = $this->prefix.$dbTable;
+    }
+
+    public function switchMultiLangMode($lang)
+    {
+        if($lang !== ''){
+            $this->setMultiLangMode();
+        } else {
+            $this->unsetMultiLangMode();
+        }
+        return $this;
     }
 
     public function setMultiLangMode()
@@ -29,7 +38,7 @@ abstract class AbstractModel
         return $this;
     }
 
-    public function setSingleLangMode()
+    public function unsetMultiLangMode()
     {
         $this->multiLangMode = false;
         return $this;
