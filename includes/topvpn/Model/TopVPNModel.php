@@ -7,10 +7,10 @@ require_once plugin_dir_path(dirname(__FILE__)) . 'system/Utils/Validator.php';
 
 class TopVPNModel extends AbstractModel{
 
-    private $keyManyToManyFields = [
+    private array $keyManyToManyFields = [
         'os' =>[
             'pivot_table_name' => 'vpn_os',
-            'this_key_name' => 'vpn_os',
+            'this_key_name' => 'vpn_id',
             'that_key_name' => 'os_id']
     ];
 
@@ -19,7 +19,7 @@ class TopVPNModel extends AbstractModel{
         parent::__construct($dbTable);
     }
 
-    public function addRow($data)
+    public function addRow( array $data) : object
     {
         $validate = (new Validator)->checkLength($data['vpn_name'], 3, 30, 'vpn_name', true)
             ->checkLength($data['vpn_sys_name'], 3, 30, 'vpn_sys_name', true);
@@ -41,7 +41,7 @@ class TopVPNModel extends AbstractModel{
         return Result::setResult('ok', 'Добавлено<br/>'.$imgAdded->getMessage(), $recordedRow);
     }
 
-    public function editRow($id, $data)
+    public function editRow($id, $data) : object
     {
         $validate = (new Validator)->checkLength($data['vpn_name'], 3, 30, 'vpn_name', true)
             ->checkLength($data['vpn_sys_name'], 3, 30, 'vpn_sys_name', true);
@@ -65,7 +65,7 @@ class TopVPNModel extends AbstractModel{
         return Result::setResult('ok', 'Изменено<br/>'.$imgAdded->getMessage(), $updatedRow);
     }
 
-    public function deleteRow($id){
+    public function deleteRow($id) : object{
 
         if($this->removeRow($id) !== ''){
             return Result::setResult('error', 'Ошибка<br/>', '');

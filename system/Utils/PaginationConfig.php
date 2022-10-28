@@ -3,11 +3,11 @@
 
 class PaginationConfig{
 
-    private $setValueOfCount;
-    private $count;
-    private $offset;
-    private $paged;
-    private $paginate;
+    private int $setValueOfCount;
+    private int $count;
+    private int $offset;
+    private int $paged;
+    private bool $paginate;
 
     public function __construct($setValueOfCount, $count){
 
@@ -15,7 +15,7 @@ class PaginationConfig{
         $this->count = $count;
     }
 
-    public function calculate(){
+    public function calculate() : object{
 
         $this->offset = isset( $_GET['offset'] ) ? intval( $_GET['offset'] ) : 0;
         if ( $this->offset < 0 ) {
@@ -38,6 +38,7 @@ class PaginationConfig{
         if ( $this->paged != 0 ) {
             $this->offset = ( $this->paged - 1 ) * $this->setValueOfCount;
         }
+        return $this;
     }
 
     public function getOffset(){

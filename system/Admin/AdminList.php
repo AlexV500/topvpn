@@ -1,43 +1,22 @@
 <?php
 
 
-class AdminActions{
+abstract class AdminList extends AdminActions {
 
-    protected $model;
-    protected $languageSysNameGet;
-    protected $allLanguageAdm;
-    protected $paginationCount;
-    protected $rowsCount;
-    protected $rowsData;
-    protected $offset;
-    protected $paged;
-    protected $paginate;
-    protected $columnDisplayNames;
-    protected $currentURL;
+    protected int $paginationCount;
+    protected int $rowsCount;
+    protected array $rowsData;
+    protected int $offset;
+    protected int $paged;
+    protected bool $paginate;
+    protected array $columnDisplayNames;
 
-    public function __construct($model, $dbTable){
-        $this->model = new $model($dbTable);
+
+    public function __construct($model, $dbTable)
+    {
+        parent::__construct($model, $dbTable);
     }
 
-    public function getModel(){
-        return $this->model;
-    }
-
-    public function getLanguageSysNameGet(){
-        return $this->languageSysNameGet;
-    }
-
-    public function getAllLanguageAdm(){
-        return $this->allLanguageAdm;
-    }
-
-    public function setLang(){
-        return $this->getModel()->setLang($this->languageSysNameGet);
-    }
-
-    public function switchMultiLangMode(){
-        return $this->getModel()->switchMultiLangMode($this->languageSysNameGet);
-    }
 
     public function setRowsCount($activeMode) : object{
         $this->rowsCount = $this->getModel()->countAllRows($activeMode);
@@ -66,10 +45,6 @@ class AdminActions{
         return $this->paginationCount;
     }
 
-    protected function initAllLanguageAdm(){
-        $this->allLanguageAdm = (new LanguageModel('languages'))->getAllLanguageAdm();
-        return $this;
-    }
 
     protected function getOffset(){
         return $this->offset;
@@ -99,15 +74,6 @@ class AdminActions{
         return $this->columnDisplayNames;
     }
 
-    protected function setCurrentURL() : object{
-        $this->currentURL = HTTP::getCurrentURL();
-        return $this;
-    }
-
-    protected function getCurrentURL(){
-        return $this->currentURL;
-    }
-
     protected function checkPositionAction(){
 
         $set = '';
@@ -128,26 +94,5 @@ class AdminActions{
         }
     }
 
-    protected function selectLanguageAdm() : object{
 
-        if(isset($_SESSION['fxlang'])){
-            $this->languageSysNameGet = $_SESSION['fxlang'];
-        } else {
-            $this->languageSysNameGet = '';
-        }
-        return $this;
-    }
-
-    protected function getStatusTitle(int $rowStatus){
-
-        $status = '';
-
-        if($rowStatus == 0){
-            $status = 'Скрытый';
-        }
-        if($rowStatus == 1){
-            $status = 'Активный';
-        }
-        return $status;
-    }
 }

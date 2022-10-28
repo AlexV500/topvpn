@@ -1,21 +1,21 @@
 <?php
 
-class HtmlFormInputs
+class AdminHtmlFormInputs
 {
-   public static function input($label, $name, $value, $class='', $required = ''){
+   public static function input($label, $name, $value, $class='', $required = '') : string{
 
        $output ='<div class="field">' .
        '<label class="field-label '.$required.'">' .
        '<span class="label">' .
-       __( $label, 'fxreviews' ) .
+           $label .
        '</span>' .
        '</label>' .
        '</div>' .
        '<input id="name-field" name="'.$name.'" class="'.$class.'" type="text" value="' . esc_attr( stripslashes( $value ) ) . '"/>';
-       echo $output;
+       return $output;
    }
 
-    public static function select($label, $name, array $valueArray, $formFill, $required = ''){
+    public static function select($label, $name, array $valueArray, $formFill, $required = '') : string{
 
         $output ='<div class="field">' .
         '<label class="field-label '.$required.'">' .
@@ -29,10 +29,10 @@ class HtmlFormInputs
             $valueSelected = $arrayKey == $formFill ? ' selected="selected" ' : '';
             $output .='<option ' . $valueSelected . ' value="'. $arrayKey .'">' . $label . '</option>';        }
         $output .='</select>';
-        echo $output;
+        return $output;
     }
 
-    public static function selectManyToOne($label, $name, array $valueArray, $formFill, $required = ''){
+    public static function selectManyToOne($label, $name, array $valueArray, $formFill, $required = '') : string{
 
         $output ='<div class="field">' .
             '<label class="field-label">' .
@@ -73,10 +73,10 @@ class HtmlFormInputs
             $output .= '</tr>';
             $output .= '</table>';
         }
-        echo $output;
+        return $output;
     }
 
-    public static function textarea($label, $name, $formFill, $required = ''){
+    public static function textarea($label, $name, $formFill, $required = '') : string{
 
         $output ='<div class="field">' .
         '<label class="field-label '.$required.'">' .
@@ -88,10 +88,10 @@ class HtmlFormInputs
         '<textarea rows="10" cols="90" name="'.$name.'" class="">'.
         stripslashes( $formFill['short_description'] ).
         '</textarea>';
-        echo $output;
+        return $output;
     }
 
-    public static function renderAdminLanguageSelector(array $getAllLanguageAdm, string $languageSysName){
+    public static function renderAdminLanguageSelector(array $getAllLanguageAdm, string $languageSysName) : string{
 
         $output = '';
         $output .= '<select name="languageSysName">';
@@ -107,7 +107,7 @@ class HtmlFormInputs
         return $output;
     }
 
-    public static function renderAdminHead(string $head){
+    public static function renderAdminHead(string $head) : string{
 
         $output = '';
         $output .= '<h1>';
@@ -116,7 +116,7 @@ class HtmlFormInputs
         return $output;
     }
 
-    public static function renderAdminHeadOfTableList(array $columnDisplayNames){
+    public static function renderAdminHeadOfTableList(array $columnDisplayNames) : string{
 
         $output = '';
         $output .= '<thead>';
@@ -130,6 +130,26 @@ class HtmlFormInputs
 
         $output .= '</tr>';
         $output .= '</thead>';
+        return $output;
+    }
+
+    public static function renderAdminFormButton( string $label, string $title, string $class, string $url, string $params) : string{
+
+        $output = '';
+        $output .= '<div class="manage">';
+        $output .= "<a title='" . $title . "' class='" . $class . "' href='" . esc_url( $url ) . $params . "'><span class='label'>" . $label . "</span></a>";
+        $output .= '</div>';
+        return $output;
+    }
+
+    public static function renderAdminPagination($paginationCount, $rowsCount) : string{
+
+        $output = '';
+        require_once( FXREVIEWS_CORE_LIB . 'system/Utils/Pagination.php' );
+        $pagination = new FxReviews_Pagination($paginationCount, null, $rowsCount);
+        $output .= '<div class="tablenav bottom">';
+        $output .= $pagination->pagination( 'bottom' );
+        $output .= '</div>';
         return $output;
     }
 }

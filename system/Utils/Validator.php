@@ -3,7 +3,7 @@
 
 class Validator
 {
-    private $errors = [];
+    private array $errors = [];
     const OK = 'ok';
     const ERROR = 'error';
     const VALUE_IS_NOT_CORRECT_LENGHT = 'Значение имеет не корректную длинну';
@@ -12,7 +12,7 @@ class Validator
     const DATETIME_IS_NOT_VALID = 'Не корректен формат даты-времени';
     const VALUE_IS_NOT_INTEGER = 'Значение должно быть целым числом';
 
-    public function checkLength($value = "", $min, $max, $field, $emptycheck = false) {
+    public function checkLength($value = "", $min, $max, $field, $emptycheck = false) : object {
 
         if ($this->emptyCheck($emptycheck, $value)){
             $this->errors[][$field] = self::VALUE_IS_EMPTY;
@@ -26,7 +26,7 @@ class Validator
         return $this;
     }
 
-    public function isEmail($email, $field = 'email', $emptycheck = false){
+    public function isEmail($email, $field = 'email', $emptycheck = false) : object{
 
         if ($this->emptyCheck($emptycheck, $email)){
             $this->errors[][$field] = self::VALUE_IS_EMPTY;
@@ -41,7 +41,7 @@ class Validator
         }
     }
 
-    public function isInteger($value, $field){
+    public function isInteger($value, $field) : object{
         if (!is_int($value)) {
             $this->errors[][$field] = self::VALUE_IS_NOT_INTEGER;
             return $this;
@@ -49,7 +49,7 @@ class Validator
         return $this;
     }
 
-    public function validateDateTime($date, $format = 'Y-m-d H:i:s', $field)
+    public function validateDateTime($date, $format = 'Y-m-d H:i:s', $field) : object
     {
         $d = DateTime::createFromFormat($format, $date);
         if($d && $d->format($format) == $date){
@@ -60,7 +60,7 @@ class Validator
         }
     }
 
-    private function emptyCheck($emptycheck, $value){
+    private function emptyCheck($emptycheck, $value) : bool{
         if($emptycheck){
             if (!isset($value) || trim($value) == ''){
                 return true;
@@ -68,7 +68,7 @@ class Validator
         } return false;
     }
 
-    public function getResultMessage(){
+    public function getResultMessage() : string {
         $output = '';
         if (count($this->errors) > 0){
             foreach($this->errors as $error){
@@ -78,7 +78,7 @@ class Validator
         return 'Ошибка валидации<br/>' .$output;
     }
 
-    public function getResultStatus(){
+    public function getResultStatus() : string {
         if (count($this->errors) == 0){
             return self::OK;
         } else {

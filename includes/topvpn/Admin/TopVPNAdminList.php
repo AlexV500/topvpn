@@ -1,9 +1,9 @@
 <?php
 
 
-class TopVPNAdminList extends AdminActions {
+class TopVPNAdminList extends AdminList {
 
-    protected $activeMode = false;
+    protected bool $activeMode = false;
 
     public function __construct(string $model, string $dbTable)
     {
@@ -15,7 +15,7 @@ class TopVPNAdminList extends AdminActions {
         $this->checkPositionAction();
         $this->selectLanguageAdm();
         $this->switchMultiLangMode();
-        $this->initAllLanguageAdm();
+        $this->initAllLanguageAdm('LanguageModel', 'languages');
         $this->setPaginationConfig();
         $this->setCurrentURL();
         $this->setRowsCount($this->activeMode);
@@ -36,13 +36,13 @@ class TopVPNAdminList extends AdminActions {
         return $this;
     }
 
-    public function render(){
+    public function render() : object{
 
         $output = '';
-        $output .= HtmlFormInputs::renderAdminHead('Список VPN');
+        $output .= AdminHtmlFormInputs::renderAdminHead('Список VPN');
         $output .= '<form id="add-topvpn" enctype="" action="" method="post">';
-        $output .= HtmlFormInputs::renderAdminLanguageSelector($this->getAllLanguageAdm(), $this->getLanguageSysNameGet());
-        $output .= HtmlFormInputs::renderAdminHeadOfTableList($this->getColumnDisplayNames());
+        $output .= AdminHtmlFormInputs::renderAdminLanguageSelector($this->getAllLanguageAdm(), $this->getLanguageSysNameGet());
+        $output .= AdminHtmlFormInputs::renderAdminHeadOfTableList($this->getColumnDisplayNames());
         $output .= '<tbody>';
 
         if ( $this->getRowsCount() > 0 ) {
@@ -84,6 +84,10 @@ class TopVPNAdminList extends AdminActions {
 
         $output .= '</tbody>';
         $output .= '</table>';
-        
+
+        $output .= AdminHtmlFormInputs::renderAdminPagination($this->paginationCount(), $this->rowsCount());
+        $output .= AdminHtmlFormInputs::renderAdminFormButton('Добавить новый VPN', 'Добавить новый VPN', 'button add', $this->getCurrentURL(), '&action=add');
+        $this->render = $output;
+        return $this;
     }
 }

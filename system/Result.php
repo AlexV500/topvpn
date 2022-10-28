@@ -1,8 +1,9 @@
 <?php
 
 class Result{
-    private $resultStatus;
-    private $resultMessage = [];
+
+    private string $resultStatus;
+    private string $resultMessage;
     private $resultData;
 
     public function __construct($resultStatus, $resultMessage, $resultData){
@@ -12,34 +13,34 @@ class Result{
         $this->setResultData($resultData);
     }
 
-    public static function setResult($resultStatus, $resultMessage, $resultData){
+    public static function setResult($resultStatus, $resultMessage, $resultData) : object {
         return new self($resultStatus, $resultMessage, $resultData);
     }
 
-    public function setResultStatus($resultStatus)
+    public function setResultStatus($resultStatus) : object
     {
         $this->resultStatus = $resultStatus;
         return $this;
     }
 
-    public function setResultMessage($resultMessage)
+    public function setResultMessage($resultMessage) : object
     {
-        $this->resultMessage[] = $resultMessage;
+        $this->resultMessage = $resultMessage;
         return $this;
     }
 
-    public function setResultData($resultData)
+    public function setResultData($resultData) : object
     {
-        $this->resultData[] = $resultData;
+        $this->resultData = $resultData;
         return $this;
     }
 
-    public function getResultStatus()
+    public function getResultStatus() : string
     {
         return $this->resultStatus;
     }
 
-    public function getResultMessage()
+    public function getResultMessage() : string
     {
         return $this->resultMessage;
     }
