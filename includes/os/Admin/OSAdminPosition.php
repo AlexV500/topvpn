@@ -1,7 +1,7 @@
 <?php
 
 
-class TopVPNAdminPosition extends AdminPosition{
+class OSAdminPosition extends AdminPosition{
 
     public function init(){
 

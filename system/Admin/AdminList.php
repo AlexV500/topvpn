@@ -28,7 +28,7 @@ abstract class AdminList extends AdminActions {
         return $this;
     }
 
-    public function getRowsCount(){
+    public function getRowsCount() : int{
         return $this->rowsCount;
     }
 
@@ -41,12 +41,12 @@ abstract class AdminList extends AdminActions {
         return $this;
     }
 
-    public function getPaginationCount(){
+    public function getPaginationCount() : int{
         return $this->paginationCount;
     }
 
 
-    protected function getOffset(){
+    protected function getOffset() : int{
         return $this->offset;
     }
 
@@ -54,7 +54,7 @@ abstract class AdminList extends AdminActions {
         return $this->paged;
     }
 
-    protected function getPaginate(){
+    protected function getPaginate() : bool{
         return $this->paginate;
     }
 

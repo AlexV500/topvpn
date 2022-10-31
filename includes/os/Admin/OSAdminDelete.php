@@ -1,50 +1,51 @@
 <?php
 
 
-class TopVPNAdminDelete extends AdminPostAction{
+class OSAdminDelete extends AdminPostAction
+{
 
     public function init() : object {
-        $this->setId(HTTP::getGet('topvpn_id'));
+        $this->setId(HTTP::getGet('os_id'));
         $data = $this->getModel()->getRowById($this->getId());
         $this->setFormFills(
             [
-                'vpn_name' => $data['vpn_name'],
+                'os_name' => $data['os_name'],
             ]
         );
 
-        if ( isset( $_POST['delete_vpn'] )){
+        if ( isset( $_POST['delete_os'] )){
             $result = $this->getModel()->deleteRow($this->getId());
             if ($result->getResultStatus() == 'ok'){
-                $this->setOk('TopVPNModel', 'VPN '.HTTP::getGet('vpn_name').' удален успешно!');
-                $this->setResultMessages('TopVPNModel','ok', $this->getOk());
+                $this->setOk('OSModel', 'OS '.HTTP::getGet('os_name').' удален успешно!');
+                $this->setResultMessages('OSModel','ok', $this->getOk());
             }
             if ($result->getResultStatus() == 'error'){
-                $this->setError('TopVPNModel', $result->getResultMessage());
-                $this->setResultMessages('TopVPNModel','error', $this->getError());
+                $this->setError('OSModel', $result->getResultMessage());
+                $this->setResultMessages('OSModel','error', $this->getError());
             }
         }
         return $this;
     }
 
-    public function render() : object {
-
+    public function render() : object
+    {
         $output = '';
-        $output .= AdminHtmlFormInputs::renderAdminHead('Удалить VPN '.HTTP::getGet('vpn_name'));
+        $output .= AdminHtmlFormInputs::renderAdminHead('Удалить OS '.HTTP::getGet('os_name'));
         $output .= AdminHtmlFormOutputs::renderResultMessages($this->getResultMessages());
-        $output .= '<form id="edit-topvpn" enctype="" action="" method="post">';
+        $output .= '<form id="edit-os" enctype="" action="" method="post">';
         $output .= '<div class="topvpn delete">' .
             '<div class="field">' .
             '<label class="field-label first required">' .
             '<span class="label">' .
-            __( 'Вы действительно хотите удалить VPN?', 'topvpn' ) .
+            __( 'Вы действительно хотите удалить OS?', 'topvpn' ) .
             '</span>' .
             '</label>' .
             '</div>' .
             '<div class="mb-20"></div>'.
             '<input class="button button-primary" type="submit" value="' . __( 'Удалить', 'topvpn' ) . '"/>' .
             '<a class="cancel button" href="' . $this->getCurrentURL() . '">' . __( 'Отмена', 'topvpn' ) . '</a>' .
-            '<input type="hidden" value="deleteVPNAdm" name="delete_vpn"/>' .
-            '<input type="hidden" value="'.$this->getId().'" name="vpn_id"/>' .
+            '<input type="hidden" value="deleteOSAdm" name="delete_os"/>' .
+            '<input type="hidden" value="'.$this->getId().'" name="os_id"/>' .
             '<input type="hidden" value="delete" name="action"/>';
         $output .=
         $output .= '</form>';

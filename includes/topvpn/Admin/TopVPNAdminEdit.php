@@ -9,7 +9,7 @@ class TopVPNAdminEdit extends AdminPostAction
 
     public function init() : object{
 
-        $this->setId(HTTP::getGet('id'));
+        $this->setId(HTTP::getGet('topvpn_id'));
         $this->initAllLanguageAdm('LanguageModel', 'languages');
         $osModel = new OSModel('os');
         $data = $this->getModel()->getRowById($this->getId());
