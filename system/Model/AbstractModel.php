@@ -149,6 +149,9 @@ abstract class AbstractModel
         $returnData = [];
 
         foreach($fields as $field => $val){
+            if ($field == 'created'){
+                $val = date( 'Y-m-d H:i:s' , time() );
+            }
             $names[] = $field;
             $masks[] = "$val";
         }
@@ -183,6 +186,9 @@ abstract class AbstractModel
         $returnData = [];
 
         foreach($fields as $field => $val){
+            if ($field == 'updated'){
+                $val = date( 'Y-m-d H:i:s' , time() );
+            }
             $pairs[] = "$field=$val";
         }
 

@@ -10,7 +10,7 @@ class HTTP{
         $currentURL = remove_query_arg( 'action', $currentURL );
         $currentURL = remove_query_arg( 'id', $currentURL );
 
-        return $currentURL;
+        return esc_url($currentURL);
     }
 
     public static function requestGet( $key, $def = false ) {
@@ -51,7 +51,7 @@ class HTTP{
         return $default;
     }
 
-    public static function getGet($idx, $default = null){
+    public static function getGet($idx, $default = null) : string{
 
         if(isset($_GET[$idx]))
             return $_GET[$idx];

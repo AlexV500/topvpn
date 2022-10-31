@@ -46,7 +46,7 @@ abstract class AdminActions implements IAdminActions {
         return $this;
     }
 
-    protected function getCurrentURL(){
+    protected function getCurrentURL() : string{
         return $this->currentURL;
     }
 

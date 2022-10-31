@@ -18,7 +18,7 @@ class TopVPNAdminManager{
                 (new TopVPNAdminEdit('TopVPNModel', 'vpn'))->init()->render()->show();
                 break;
             case 'position':
-                (new TopVPNAdminPosition('TopVPNModel', 'vpn'))->init()->render()->show();
+                (new TopVPNAdminPosition('TopVPNModel', 'vpn'))->init();
                 break;
             case 'delete':
                 (new TopVPNAdminDelete('TopVPNModel', 'vpn'))->init()->render()->show();
