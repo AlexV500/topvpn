@@ -1,5 +1,5 @@
 <?php
-
+require_once V_CORE_LIB . 'Utils/HTTP.php';
 
 class TopVPNAdminManager{
 
@@ -9,19 +9,24 @@ class TopVPNAdminManager{
 
         switch ($action){
             case '':
-                (new TopVPNAdminList('TopVPNModel', 'vpn'))->init()->render()->show();
+                require_once V_PLUGIN_INCLUDES_DIR . 'topvpn/Admin/TopVPNAdminList.php';
+                (new TopVPNAdminList('TopVPNModel', 'topvpn_vpn'))->init()->render()->show();
                 break;
             case 'add':
-                (new TopVPNAdminAdd('TopVPNModel', 'vpn'))->init()->render()->show();
+                require_once V_PLUGIN_INCLUDES_DIR . 'topvpn/Admin/TopVPNAdminAdd.php';
+                (new TopVPNAdminAdd('TopVPNModel', 'topvpn_vpn'))->init()->render()->show();
                 break;
             case 'edit':
-                (new TopVPNAdminEdit('TopVPNModel', 'vpn'))->init()->render()->show();
+                require_once V_PLUGIN_INCLUDES_DIR . 'topvpn/Admin/TopVPNAdminEdit.php';
+                (new TopVPNAdminEdit('TopVPNModel', 'topvpn_vpn'))->init()->render()->show();
                 break;
             case 'position':
-                (new TopVPNAdminPosition('TopVPNModel', 'vpn'))->init();
+                require_once V_PLUGIN_INCLUDES_DIR . 'topvpn/Admin/TopVPNAdminPosition.php';
+                (new TopVPNAdminPosition('TopVPNModel', 'topvpn_vpn'))->init();
                 break;
             case 'delete':
-                (new TopVPNAdminDelete('TopVPNModel', 'vpn'))->init()->render()->show();
+                require_once V_PLUGIN_INCLUDES_DIR . 'topvpn/Admin/TopVPNAdminDelete.php';
+                (new TopVPNAdminDelete('TopVPNModel', 'topvpn_vpn'))->init()->render()->show();
                 break;
         }
     }

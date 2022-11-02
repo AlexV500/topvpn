@@ -122,6 +122,15 @@ class Topvpn {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-topvpn-public.php';
 
+        require_once plugin_dir_path(dirname(__FILE__)) . 'includes/constants.php';
+
+        if( is_admin() ) {
+
+            require_once V_PLUGIN_INCLUDES_DIR . 'lang/Admin/LangAdminManager.php';
+            require_once V_PLUGIN_INCLUDES_DIR . 'os/Admin/OSAdminManager.php';
+            require_once V_PLUGIN_INCLUDES_DIR . 'topvpn/Admin/TopVPNAdminManager.php';
+        }
+
 		$this->loader = new Topvpn_Loader();
 
 	}

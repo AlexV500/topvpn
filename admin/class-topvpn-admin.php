@@ -106,7 +106,7 @@ class Topvpn_Admin {
         } else return $manager::init();
     }
 
-    public function fxreviews_admin_menu() {
+    public function topvpn_admin_menu() {
 
         $pages = array();
 
@@ -125,23 +125,23 @@ class Topvpn_Admin {
 //        add_action( 'admin_print_scripts-' . $page, 'fxreviews_admin_print_scripts' );
 
         $page = add_submenu_page(
-            'show_fxbrokerslist',
+            'show_oslist',
             __( 'Операционные системы', 'topvpnos' ),
             __( 'Операционные системы', 'topvpnos' ),
             'manage_options',
-            'show_topvpnoslist',
+            'show_oslist',
             apply_filters( 'topvpn_add_submenu_page_function', array($this, 'adminLoadDispatcher'), 'OsAdminManager')
         );
         $pages[] = $page;
 
 
         $page = add_submenu_page(
-            'show_topvpnbrokerslist',
+            'show_topvpnlist',
             __( 'Язык', 'topvpnlanguage' ),
             __( 'Язык', 'topvpnlanguage' ),
             'manage_options',
             'show_topvpnlanguagelist',
-            apply_filters( 'topvpn_add_submenu_page_function', array($this, 'adminLoadDispatcher'), 'LanguageAdminManager')
+            apply_filters( 'topvpn_add_submenu_page_function', array($this, 'adminLoadDispatcher'), 'LangAdminManager')
         );
         $pages[] = $page;
 

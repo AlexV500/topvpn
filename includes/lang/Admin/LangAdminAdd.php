@@ -1,8 +1,8 @@
 <?php
-
 require_once V_CORE_LIB . 'Admin/AdminPostAction.php';
 require_once V_CORE_LIB . 'View/Admin/AdminHtmlFormInputs.php';
 require_once V_CORE_LIB . 'View/Admin/AdminHtmlFormOutputs.php';
+require_once V_PLUGIN_INCLUDES_DIR . 'lang/Admin/LangModel.php';
 
 class LangAdminAdd extends AdminPostAction{
 
@@ -15,7 +15,7 @@ class LangAdminAdd extends AdminPostAction{
             [
                 'lang_name' => '',
                 'lang_sys_name' => '',
-                'logo' => '',
+                'lang_logo' => '',
                 'active' => '',
                 'created' => '',
             ]
@@ -48,7 +48,7 @@ class LangAdminAdd extends AdminPostAction{
         $output .= '<form id="add_lang" enctype="" action="" method="post">';
         $output .= AdminHtmlFormInputs::input('Название Языка','lang_name', $this->getFormFill('lang_name'),'namefield','required');
         $output .= AdminHtmlFormInputs::input('Системное название OS','lang_sys_name', $this->getFormFill('lang_name'),'namefield','required');
-        $output .= AdminHtmlFormInputs::file('Флаг','logo', 'namefield','required');
+        $output .= AdminHtmlFormInputs::file('Флаг','lang_logo', 'namefield','required');
         $output .= AdminHtmlFormInputs::select('Активный', 'active', [1 => 'Да', 0 => 'Нет'], $this->getFormFill('active'), '');
         $output .= '<input type="hidden" name="created" value="">';
         $output .= '</form>';

@@ -1,5 +1,9 @@
 <?php
-
+require_once V_CORE_LIB . 'Admin/AdminPostAction.php';
+require_once V_CORE_LIB . 'View/Admin/AdminHtmlFormInputs.php';
+require_once V_CORE_LIB . 'View/Admin/AdminHtmlFormOutputs.php';
+require_once V_PLUGIN_INCLUDES_DIR . 'topvpn/Admin/TopVPNModel.php';
+require_once V_PLUGIN_INCLUDES_DIR . 'os/Admin/OSModel.php';
 
 class TopVPNAdminAdd extends AdminPostAction
 {
@@ -15,19 +19,20 @@ class TopVPNAdminAdd extends AdminPostAction
             [
                 'vpn_name' => '',
                 'vpn_sys_name' => '',
+                'vpn_logo' => '',
                 'country' => '',
                 'referal_link' => '',
                 'referal_link_mobile' => '',
                 'top_status' => '',
                 'rating' => '',
                 'rating_description' => '',
-                'active' => '',
-                'short_description' => '',
-                'description' => '',
                 'price' => '',
                 'safe_from_rice' => '',
                 'lang' => '',
                 'os' => $os,
+                'short_description' => '',
+                'description' => '',
+                'active' => '',
                 'created' => '',
             ]
         );

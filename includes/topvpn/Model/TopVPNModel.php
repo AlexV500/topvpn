@@ -1,5 +1,4 @@
 <?php
-
 require_once V_CORE_LIB . 'Model/AbstractModel.php';
 require_once V_CORE_LIB . 'Model/Relations/ManyToMany.php';
 require_once V_CORE_LIB . 'Utils/Validator.php';
@@ -9,7 +8,7 @@ class TopVPNModel extends AbstractModel{
 
     private array $keyManyToManyFields = [
         'os' =>[
-            'pivot_table_name' => 'vpn_os',
+            'pivot_table_name' => 'topvpn_vpn_os',
             'this_key_name' => 'vpn_id',
             'that_key_name' => 'os_id']
     ];

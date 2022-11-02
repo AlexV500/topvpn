@@ -1,5 +1,5 @@
 <?php
-
+require_once V_CORE_LIB . 'Utils/HTTP.php';
 
 class OSAdminManager{
 
@@ -9,19 +9,24 @@ class OSAdminManager{
 
         switch ($action){
             case '':
-                (new OSAdminList('OSModel', 'os'))->init()->render()->show();
+                require_once V_PLUGIN_INCLUDES_DIR . 'os/Admin/OSAdminList.php';
+                (new OSAdminList('OSModel', 'topvpn_os'))->init()->render()->show();
                 break;
             case 'add':
-                (new OSAdminAdd('OSModel', 'os'))->init()->render()->show();
+                require_once V_PLUGIN_INCLUDES_DIR . 'os/Admin/OSAdminAd.php';
+                (new OSAdminAdd('OSModel', 'topvpn_os'))->init()->render()->show();
                 break;
             case 'edit':
-                (new OSAdminEdit('OSModel', 'os'))->init()->render()->show();
+                require_once V_PLUGIN_INCLUDES_DIR . 'os/Admin/OSAdminEdit.php';
+                (new OSAdminEdit('OSModel', 'topvpn_os'))->init()->render()->show();
                 break;
             case 'position':
-                (new OSAdminPosition('OSModel', 'os'))->init();
+                require_once V_PLUGIN_INCLUDES_DIR . 'os/Admin/OSAdminPosition.php';
+                (new OSAdminPosition('OSModel', 'topvpn_os'))->init();
                 break;
             case 'delete':
-                (new OSAdminDelete('OSModel', 'os'))->init()->render()->show();
+                require_once V_PLUGIN_INCLUDES_DIR . 'os/Admin/OSAdminDelete.php';
+                (new OSAdminDelete('OSModel', 'topvpn_os'))->init()->render()->show();
                 break;
         }
     }

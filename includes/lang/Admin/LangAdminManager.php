@@ -1,5 +1,5 @@
 <?php
-
+require_once V_CORE_LIB . 'Utils/HTTP.php';
 
 class LangAdminManager{
 
@@ -9,19 +9,24 @@ class LangAdminManager{
 
         switch ($action){
             case '':
-                (new LangAdminList('LangModel', 'Lang'))->init()->render()->show();
+                require_once V_PLUGIN_INCLUDES_DIR . 'lang/Admin/LangAdminList.php';
+                (new LangAdminList('LangModel', 'topvpn_lang'))->init()->render()->show();
                 break;
             case 'add':
-                (new LangAdminAdd('LangModel', 'Lang'))->init()->render()->show();
+                require_once V_PLUGIN_INCLUDES_DIR . 'lang/Admin/LangAdminAdd.php';
+                (new LangAdminAdd('LangModel', 'topvpn_lang'))->init()->render()->show();
                 break;
             case 'edit':
-                (new LangAdminEdit('LangModel', 'Lang'))->init()->render()->show();
+                require_once V_PLUGIN_INCLUDES_DIR . 'lang/Admin/LangAdminEdit.php';
+                (new LangAdminEdit('LangModel', 'topvpn_lang'))->init()->render()->show();
                 break;
             case 'position':
-                (new LangAdminPosition('LangModel', 'Lang'))->init();
+                require_once V_PLUGIN_INCLUDES_DIR . 'lang/Admin/LangAdminPosition.php';
+                (new LangAdminPosition('LangModel', 'topvpn_lang'))->init();
                 break;
             case 'delete':
-                (new LangAdminDelete('LangModel', 'Lang'))->init()->render()->show();
+                require_once V_PLUGIN_INCLUDES_DIR . 'lang/Admin/LangAdminDelete.php';
+                (new LangAdminDelete('LangModel', 'topvpn_lang'))->init()->render()->show();
                 break;
         }
     }

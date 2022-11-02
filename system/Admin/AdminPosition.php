@@ -1,5 +1,5 @@
 <?php
-
+require_once V_CORE_LIB . 'Utils/HTTP.php';
 
 abstract class AdminPosition{
 

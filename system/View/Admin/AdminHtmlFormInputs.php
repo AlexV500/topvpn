@@ -36,7 +36,7 @@ class AdminHtmlFormInputs
         $output = '<div class="field">' .
             '<label class="field-label ' . $required . '">' .
             '<span class="label">' .
-            __($label, 'fxreviews') .
+            __($label, 'topvpn') .
             '</span>' .
             '</label>' .
             '</div>' .
@@ -57,7 +57,7 @@ class AdminHtmlFormInputs
         $output = '<div class="field">' .
             '<label class="field-label">' .
             '<span class="label ' . $required . '">' .
-            __($label, 'fxreviews') .
+            __($label, 'topvpn') .
             '</span>' .
             '</label>' .
             '</div>';
@@ -116,7 +116,7 @@ class AdminHtmlFormInputs
         $output = '<div class="field">' .
             '<label class="field-label ' . $required . '">' .
             '<span class="label">' .
-            __($label, 'fxreviews') .
+            __($label, 'topvpn') .
             '</span>' .
             '</label>' .
             '</div>' .
@@ -133,12 +133,12 @@ class AdminHtmlFormInputs
         $output .= '<select name="languageSysName">';
         $output .= '<option value="">Выбрать язык</option>';
         foreach ($getAllLanguageAdm as $language) {
-            $selected = $language['language_sys_name'] == $languageSysName ? ' selected="selected" ' : '';
-            $output .= '<option ' . $selected . ' value="' . $language['language_sys_name'] . '">' . $language['language_name'] . '</option>';
+            $selected = $language['lang_sys_name'] == $languageSysName ? ' selected="selected" ' : '';
+            $output .= '<option ' . $selected . ' value="' . $language['lang_sys_name'] . '">' . $language['lang_name'] . '</option>';
         }
         $output .= '</select>';
         $output .= '<input type="hidden" value="selectLanguageAdm" name="selectLanguageAdm"/>';
-        $output .= '<input class="button button-primary" type="submit" value="' . __('Выбрать', 'fxreviews') . '"/>
+        $output .= '<input class="button button-primary" type="submit" value="' . __('Выбрать', 'topvpn') . '"/>
                     </form><br/>';
         return $output;
     }
@@ -185,8 +185,8 @@ class AdminHtmlFormInputs
     {
 
         $output = '';
-        require_once(FXREVIEWS_CORE_LIB . 'system/Utils/Pagination.php');
-        $pagination = new FxReviews_Pagination($paginationCount, null, $rowsCount);
+        require_once(V_CORE_LIB . 'Utils/Pagination.php');
+        $pagination = new Pagination($paginationCount, null, $rowsCount);
         $output .= '<div class="tablenav bottom">';
         $output .= $pagination->pagination('bottom');
         $output .= '</div>';

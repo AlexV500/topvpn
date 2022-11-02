@@ -1,6 +1,7 @@
 <?php
 
 require_once V_CORE_LIB . 'Admin/AdminActions.php';
+require_once V_CORE_LIB . 'Utils/PaginationConfig.php';
 
 abstract class AdminList extends AdminActions {
 

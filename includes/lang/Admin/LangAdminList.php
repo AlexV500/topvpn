@@ -1,8 +1,8 @@
 <?php
-
 require_once V_CORE_LIB . 'Admin/AdminList.php';
 require_once V_CORE_LIB . 'View/Admin/AdminHtmlFormInputs.php';
 require_once V_CORE_LIB . 'View/Admin/AdminHtmlFormOutputs.php';
+require_once V_PLUGIN_INCLUDES_DIR . 'lang/Admin/LangModel.php';
 
 class LangAdminList extends AdminList
 {

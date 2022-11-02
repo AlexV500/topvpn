@@ -1,5 +1,6 @@
 <?php
-
+require_once V_CORE_LIB . 'Admin/AdminPosition.php';
+require_once V_PLUGIN_INCLUDES_DIR . 'os/Admin/OSModel.php';
 
 class OSAdminPosition extends AdminPosition{
 

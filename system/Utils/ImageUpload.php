@@ -1,4 +1,5 @@
 <?php
+require_once V_CORE_LIB . 'Utils/Result.php';
 
 class ImageUpload{
 

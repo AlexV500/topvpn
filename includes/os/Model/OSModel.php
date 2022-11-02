@@ -1,5 +1,4 @@
 <?php
-
 require_once V_CORE_LIB . 'Model/AbstractModel.php';
 require_once V_CORE_LIB . 'Utils/Validator.php';
 require_once V_CORE_LIB . 'Utils/Result.php';
