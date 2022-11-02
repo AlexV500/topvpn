@@ -1,5 +1,6 @@
 <?php
 
+require_once V_CORE_LIB . 'Admin/AdminActions/IAdminActions.php';
 
 abstract class AdminActions implements IAdminActions {
 

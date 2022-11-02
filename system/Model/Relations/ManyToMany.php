@@ -1,6 +1,6 @@
 <?php
 
-require_once plugin_dir_path(dirname(__FILE__)) . 'system/Model/DTO/DBRelationTableDTO.php';
+require_once V_CORE_LIB .  '/Model/DTO/DBRelationTableDTO.php';
 
 class ManyToMany {
 

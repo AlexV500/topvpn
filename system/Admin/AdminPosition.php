@@ -11,7 +11,6 @@ abstract class AdminPosition{
 
     public function setPosition($id){
 
-        $id = $_GET['vpn_id'];
         $line = $_GET['line'];
         $currentURL = HTTP::getCurrentURL();
 

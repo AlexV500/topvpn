@@ -10,7 +10,7 @@ class TopVPNAdminList extends AdminList {
         $this->checkPositionAction();
         $this->selectLanguageAdm();
         $this->switchMultiLangMode();
-        $this->initAllLanguageAdm('LanguageModel', 'languages');
+        $this->initAllLanguageAdm('LangModel', 'languages');
         $this->setPaginationConfig();
         $this->setCurrentURL();
         $this->setRowsCount($this->activeMode);
@@ -65,9 +65,9 @@ class TopVPNAdminList extends AdminList {
 
                 $output .= "<td class='status'>".$this->getStatusTitle($result['active'])."</td>";
 
-                $output .= "<td class='edit'><a href='" . add_query_arg( 'paged', $this->getPaged(), $this->getCurrentURL() ) . "&action=edit&topvpn_id=" . $result['id'] . "' alt='" . __( 'Редактировать', 'topvpn') . "'><img src='". FXREVIEWS_PLUGIN_URL ."images/edit.png'/></a></td>";
+                $output .= "<td class='edit'><a href='" . add_query_arg( 'paged', $this->getPaged(), $this->getCurrentURL() ) . "&action=edit&topvpn_id=" . $result['id'] . "' alt='" . __( 'Редактировать', 'topvpn') . "'><img src='". V_PLUGIN_URL ."images/edit.png'/></a></td>";
                 $output .= "<td class='remove'>" .
-                    "<a href='" . $this->getCurrentURL() . "&action=delete&topvpn_id=" . $result['id'] . "' alt='" . __( 'Удалить', 'topvpn') . "'><img src='". FXREVIEWS_PLUGIN_URL ."images/remove.png'/></a>" . "</td>";
+                    "<a href='" . $this->getCurrentURL() . "&action=delete&topvpn_id=" . $result['id'] . "' alt='" . __( 'Удалить', 'topvpn') . "'><img src='". V_PLUGIN_URL ."images/remove.png'/></a>" . "</td>";
 
                 $output .= '</tr>';
 

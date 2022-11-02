@@ -1,5 +1,6 @@
 <?php
 
+require_once V_CORE_LIB . 'Admin/AdminActions.php';
 
 abstract class AdminPostAction extends AdminActions{
 

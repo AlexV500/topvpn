@@ -1,9 +1,9 @@
 <?php
 
-require_once plugin_dir_path(dirname(__FILE__)) . 'system/Model/AbstractModel.php';
-require_once plugin_dir_path(dirname(__FILE__)) . 'system/Model/Relations/ManyToMany.php';
-require_once plugin_dir_path(dirname(__FILE__)) . 'system/Utils/ImageUpload.php';
-require_once plugin_dir_path(dirname(__FILE__)) . 'system/Utils/Validator.php';
+require_once V_CORE_LIB . 'Model/AbstractModel.php';
+require_once V_CORE_LIB . 'Model/Relations/ManyToMany.php';
+require_once V_CORE_LIB . 'Utils/Validator.php';
+require_once V_CORE_LIB . 'Utils/Result.php';
 
 class TopVPNModel extends AbstractModel{
 

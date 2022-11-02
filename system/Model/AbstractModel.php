@@ -1,5 +1,5 @@
 <?php
-
+require_once V_CORE_LIB . 'Admin/ImageUpload.php';
 
 abstract class AbstractModel
 {
@@ -136,14 +136,14 @@ abstract class AbstractModel
     
     public function insertRow(array $fields, bool $validationMode = true) : array{
 
-        if($validationMode) {
-            $rules = $this->rebuildRules($this->validationRules);
-            $validation = $this->validator->validate($fields, $rules);
-
-            if ($validation->fails()) {
-                throw new ExcValidation('cant add article', $validation->errors());
-            }
-        }
+//        if($validationMode) {
+//            $rules = $this->rebuildRules($this->validationRules);
+//            $validation = $this->validator->validate($fields, $rules);
+//
+//            if ($validation->fails()) {
+//                throw new ExcValidation('cant add article', $validation->errors());
+//            }
+//        }
         $names = [];
         $masks = [];
         $returnData = [];
@@ -174,14 +174,14 @@ abstract class AbstractModel
 
     public function updateRow(int $id, array $fields, bool $validationMode = true) : array{
 
-        if($validationMode) {
-            $rules = $this->rebuildRules($this->validationRules, $id);
-            $validation = $this->validator->validate($fields, $rules);
-
-            if ($validation->fails()) {
-                throw new ExcValidation('cant add article', $validation->errors());
-            }
-        }
+//        if($validationMode) {
+//            $rules = $this->rebuildRules($this->validationRules, $id);
+//            $validation = $this->validator->validate($fields, $rules);
+//
+//            if ($validation->fails()) {
+//                throw new ExcValidation('cant add article', $validation->errors());
+//            }
+//        }
         $pairs = [];
         $returnData = [];
 
@@ -278,7 +278,7 @@ abstract class AbstractModel
     }
 
     public function checkFileAndUpload($fieldName, $folder){
-        $path = PLUGIN_CORE_LIB . '/images/' . $folder . '/';
+        $path = V_PLUGIN_DIR . '/images/' . $folder . '/';
         return ImageUpload::Upload($fieldName, $path);
     }
 }

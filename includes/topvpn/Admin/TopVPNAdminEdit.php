@@ -10,7 +10,7 @@ class TopVPNAdminEdit extends AdminPostAction
     public function init() : object{
 
         $this->setId(HTTP::getGet('topvpn_id'));
-        $this->initAllLanguageAdm('LanguageModel', 'languages');
+        $this->initAllLanguageAdm('LangModel', 'languages');
         $osModel = new OSModel('os');
         $data = $this->getModel()->getRowById($this->getId());
         $this->os = $osModel->getAllRows(true, true, false);
@@ -60,9 +60,10 @@ class TopVPNAdminEdit extends AdminPostAction
         $output = '';
         $output .= AdminHtmlFormInputs::renderAdminHead('Редактировать VPN '.$this->getFormFill('vpn_name'));
         $output .= AdminHtmlFormOutputs::renderResultMessages($this->getResultMessages());
-        $output .= '<form id="edit-topvpn" enctype="" action="" method="post">';
+        $output .= '<form id="edit_vpn" enctype="" action="" method="post">';
         $output .= AdminHtmlFormInputs::input('Название VPN','vpn_name', $this->getFormFill('vpn_name'),'namefield','required');
         $output .= AdminHtmlFormInputs::input('Системное название VPN','vpn_sys_name', $this->getFormFill('vpn_name'),'namefield','required');
+        $output .= AdminHtmlFormInputs::file('Логотип','vpn_logo', 'namefield','required');
         $output .= AdminHtmlFormInputs::input('Страна основания','country', $this->getFormFill('country'),'namefield','');
         $output .= AdminHtmlFormInputs::input('Партнерская ссылка','referal_link', $this->getFormFill('referal_link'),'namefield','');
         $output .= AdminHtmlFormInputs::input('Партнерская моб. ссылка','referal_link_mobile', $this->getFormFill('referal_link_mobile'),'namefield','');
@@ -77,6 +78,7 @@ class TopVPNAdminEdit extends AdminPostAction
         $output .= AdminHtmlFormInputs::renderAdminLanguageSelector($this->getAllLanguageAdm(), $this->getLanguageSysNameGet());
         $output .= AdminHtmlFormInputs::selectManyToOne('Поддерживаемые операционные системы', 'os', $this->getFormFillArray('os'), ['image_name' => 'logo', 'image_path' => 'logo', 'checked' => $this->osChecked], '');
         $output .= '<input type="hidden" name="updated" value="">';
+        $output .= '<input type="hidden" name="edit_vpn" value="1">';
         $output .= '</form>';
         $this->render = $output;
         return $this;

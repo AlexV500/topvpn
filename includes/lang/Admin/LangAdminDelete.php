@@ -1,50 +1,55 @@
 <?php
 
+require_once V_CORE_LIB . 'Admin/AdminPostAction.php';
+require_once V_CORE_LIB . 'View/Admin/AdminHtmlFormInputs.php';
+require_once V_CORE_LIB . 'View/Admin/AdminHtmlFormOutputs.php';
 
-class TopVPNAdminDelete extends AdminPostAction{
+
+class LangAdminDelete extends AdminPostAction{
 
     public function init() : object {
-        $this->setId(HTTP::getGet('topvpn_id'));
+        $this->setId(HTTP::getGet('lang_id'));
         $data = $this->getModel()->getRowById($this->getId());
         $this->setFormFills(
             [
-                'vpn_name' => $data['vpn_name'],
+                'lang_name' => $data['lang_name'],
             ]
         );
 
-        if ( isset( $_POST['delete_vpn'] )){
+        if ( isset( $_POST['delete_lang'] )){
             $result = $this->getModel()->deleteRow($this->getId());
             if ($result->getResultStatus() == 'ok'){
-                $this->setOk('TopVPNModel', 'VPN '.HTTP::getGet('vpn_name').' удален успешно!');
-                $this->setResultMessages('TopVPNModel','ok', $this->getOk());
+                $this->setOk('LangModel', 'Язык '.HTTP::getGet('lang_name').' удален успешно!');
+                $this->setResultMessages('LangModel','ok', $this->getOk());
             }
             if ($result->getResultStatus() == 'error'){
-                $this->setError('TopVPNModel', $result->getResultMessage());
-                $this->setResultMessages('TopVPNModel','error', $this->getError());
+                $this->setError('LangModel', $result->getResultMessage());
+                $this->setResultMessages('LangModel','error', $this->getError());
             }
         }
         return $this;
     }
 
-    public function render() : object {
 
+    public function render() : object
+    {
         $output = '';
-        $output .= AdminHtmlFormInputs::renderAdminHead('Удалить VPN '.HTTP::getGet('vpn_name'));
+        $output .= AdminHtmlFormInputs::renderAdminHead('Удалить Язык '.HTTP::getGet('lang_name'));
         $output .= AdminHtmlFormOutputs::renderResultMessages($this->getResultMessages());
-        $output .= '<form id="delete_vpn" enctype="" action="" method="post">';
+        $output .= '<form id="delete_lang" enctype="" action="" method="post">';
         $output .= '<div class="topvpn delete">' .
             '<div class="field">' .
             '<label class="field-label first required">' .
             '<span class="label">' .
-            __( 'Вы действительно хотите удалить VPN?', 'topvpn' ) .
+            __( 'Вы действительно хотите удалить Язык?', 'topvpn' ) .
             '</span>' .
             '</label>' .
             '</div>' .
             '<div class="mb-20"></div>'.
             '<input class="button button-primary" type="submit" value="' . __( 'Удалить', 'topvpn' ) . '"/>' .
             '<a class="cancel button" href="' . $this->getCurrentURL() . '">' . __( 'Отмена', 'topvpn' ) . '</a>' .
-            '<input type="hidden" value="1" name="delete_vpn"/>' .
-            '<input type="hidden" value="'.$this->getId().'" name="vpn_id"/>' .
+            '<input type="hidden" value="deleteLangAdm" name="delete_lang"/>' .
+            '<input type="hidden" value="'.$this->getId().'" name="lang_id"/>' .
             '<input type="hidden" value="delete" name="action"/>';
         $output .=
         $output .= '</form>';

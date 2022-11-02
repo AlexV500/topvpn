@@ -1,7 +1,9 @@
 <?php
+require_once V_CORE_LIB . 'Model/AbstractModel.php';
+require_once V_CORE_LIB . 'Utils/Validator.php';
+require_once V_CORE_LIB . 'Utils/Result.php';
 
-
-class LanguageModel extends AbstractModel{
+class LangModel extends AbstractModel{
 
     public function __construct(string $dbTable)
     {
@@ -10,8 +12,8 @@ class LanguageModel extends AbstractModel{
 
     public function addRow($data)
     {
-        $validate = (new Validator)->checkLength($data['language_name'], 3, 30, 'os_name', true)
-            ->checkLength($data['language_sys_name'], 2, 10, 'os_sys_name', true);
+        $validate = (new Validator)->checkLength($data['lang_name'], 3, 30, 'lang_name', true)
+            ->checkLength($data['lang_sys_name'], 2, 10, 'lang_sys_name', true);
 
         if ($validate->getResultStatus() == 'error') {
             return Result::setResult('error', $validate->getResultMessage(), $data);
@@ -30,24 +32,19 @@ class LanguageModel extends AbstractModel{
 
     public function editRow($id, $data)
     {
-        $validate = (new Validator)->checkLength($data['language_name'], 3, 30, 'language_name', true)
-            ->checkLength($data['language_sys_name'], 3, 30, 'language_sys_name', true);
+        $validate = (new Validator)->checkLength($data['lang_name'], 3, 30, 'lang_name', true)
+            ->checkLength($data['lang_sys_name'], 3, 30, 'lang_sys_name', true);
 
         if($validate->getResultStatus() == 'error'){
             return Result::setResult('error', $validate->getResultMessage(), $data);
         }
 
-        $imgAdded = $this->checkFileAndUpload('lang_logo', 'languageLogo');
+        $imgAdded = $this->checkFileAndUpload('lang_logo', 'langLogo');
         if ($imgAdded->getStatus() == 'ok') {
             $data['lang_logo'] = $imgAdded->getResultData();
         }
 
         $updatedRow = $this->updateRow($id, $data);
-        if(count($updatedRow) > 0){
-            $updatedRow = ManyToMany::editManyToOne($this->keyManyToManyFields, $updatedRow, $id, $data);
-        } else {
-            return Result::setResult('error', 'Ошибка<br/>' . $imgAdded->getMessage(), $data);
-        }
 
         return Result::setResult('ok', 'Изменено<br/>'.$imgAdded->getMessage(), $updatedRow);
     }
@@ -59,6 +56,5 @@ class LanguageModel extends AbstractModel{
         }
         return Result::setResult('ok', 'Удалено<br/>', '');
     }
-
 
 }

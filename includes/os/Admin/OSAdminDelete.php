@@ -1,4 +1,7 @@
 <?php
+require_once V_CORE_LIB . 'Admin/AdminPostAction.php';
+require_once V_CORE_LIB . 'View/Admin/AdminHtmlFormInputs.php';
+require_once V_CORE_LIB . 'View/Admin/AdminHtmlFormOutputs.php';
 
 
 class OSAdminDelete extends AdminPostAction
@@ -32,7 +35,7 @@ class OSAdminDelete extends AdminPostAction
         $output = '';
         $output .= AdminHtmlFormInputs::renderAdminHead('Удалить OS '.HTTP::getGet('os_name'));
         $output .= AdminHtmlFormOutputs::renderResultMessages($this->getResultMessages());
-        $output .= '<form id="edit-os" enctype="" action="" method="post">';
+        $output .= '<form id="delete_os" enctype="" action="" method="post">';
         $output .= '<div class="topvpn delete">' .
             '<div class="field">' .
             '<label class="field-label first required">' .

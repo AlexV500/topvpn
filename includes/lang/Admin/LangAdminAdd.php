@@ -1,27 +1,27 @@
 <?php
+
 require_once V_CORE_LIB . 'Admin/AdminPostAction.php';
 require_once V_CORE_LIB . 'View/Admin/AdminHtmlFormInputs.php';
 require_once V_CORE_LIB . 'View/Admin/AdminHtmlFormOutputs.php';
 
-
-class OSAdminAdd extends AdminPostAction{
+class LangAdminAdd extends AdminPostAction{
 
     protected array $postData;
-    protected array $os;
+    protected array $lang;
 
-    public function init() : object
+    public function init()
     {
         $this->setFormFills(
             [
-                'os_name' => '',
-                'os_sys_name' => '',
-                'os_logo' => '',
+                'lang_name' => '',
+                'lang_sys_name' => '',
+                'logo' => '',
                 'active' => '',
                 'created' => '',
             ]
         );
 
-        if ( isset( $_POST['add_os'] )){
+        if ( isset( $_POST['add_lang'] )){
             foreach ($this->getFormFills() as $key => $value){
                 $this->postData[$key] = $_POST[$key];
                 $formFill[$key] = $_POST[$key];
@@ -29,29 +29,28 @@ class OSAdminAdd extends AdminPostAction{
             }
             $result = $this->getModel()->addRow($this->postData);
             if ($result->getResultStatus() == 'ok'){
-                $this->setOk('OSModel', 'OS добавлен успешно!');
-                $this->setResultMessages('OSModel','ok', $this->getOk());
+                $this->setOk('LangModel', 'Язык добавлен успешно!');
+                $this->setResultMessages('LangModel','ok', $this->getOk());
             }
             if ($result->getResultStatus() == 'error'){
-                $this->setError('OSModel', $result->getResultMessage());
-                $this->setResultMessages('OSModel','error', $this->getError());
+                $this->setError('LangModel', $result->getResultMessage());
+                $this->setResultMessages('LangModel','error', $this->getError());
             }
         }
         return $this;
     }
 
-    public function render() : object
+    public function render()
     {
         $output = '';
-        $output .= AdminHtmlFormInputs::renderAdminHead('Добавить OS');
+        $output .= AdminHtmlFormInputs::renderAdminHead('Добавить Язык');
         $output .= AdminHtmlFormOutputs::renderResultMessages($this->getResultMessages());
-        $output .= '<form id="add_os" enctype="" action="" method="post">';
-        $output .= AdminHtmlFormInputs::input('Название OS','os_name', $this->getFormFill('os_name'),'namefield','required');
-        $output .= AdminHtmlFormInputs::input('Системное название OS','os_sys_name', $this->getFormFill('os_name'),'namefield','required');
-        $output .= AdminHtmlFormInputs::file('Логотип','os_logo', 'namefield','required');
+        $output .= '<form id="add_lang" enctype="" action="" method="post">';
+        $output .= AdminHtmlFormInputs::input('Название Языка','lang_name', $this->getFormFill('lang_name'),'namefield','required');
+        $output .= AdminHtmlFormInputs::input('Системное название OS','lang_sys_name', $this->getFormFill('lang_name'),'namefield','required');
+        $output .= AdminHtmlFormInputs::file('Флаг','logo', 'namefield','required');
         $output .= AdminHtmlFormInputs::select('Активный', 'active', [1 => 'Да', 0 => 'Нет'], $this->getFormFill('active'), '');
         $output .= '<input type="hidden" name="created" value="">';
-        $output .= '<input type="hidden" name="add_os" value="1">';
         $output .= '</form>';
         $this->render = $output;
         return $this;

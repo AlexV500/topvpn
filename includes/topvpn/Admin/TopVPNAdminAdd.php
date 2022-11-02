@@ -8,7 +8,7 @@ class TopVPNAdminAdd extends AdminPostAction
 
     public function init() : object{
 
-        $this->initAllLanguageAdm('LanguageModel', 'languages');
+        $this->initAllLanguageAdm('LangModel', 'languages');
         $osModel = new OSModel('os');
         $os = $osModel->getAllRows(true, true, false);
         $this->setFormFills(
@@ -56,9 +56,10 @@ class TopVPNAdminAdd extends AdminPostAction
         $output = '';
         $output .= AdminHtmlFormInputs::renderAdminHead('Добавить VPN');
         $output .= AdminHtmlFormOutputs::renderResultMessages($this->getResultMessages());
-        $output .= '<form id="add-topvpn" enctype="" action="" method="post">';
+        $output .= '<form id="add_vpn" enctype="" action="" method="post">';
         $output .= AdminHtmlFormInputs::input('Название VPN','vpn_name', $this->getFormFill('vpn_name'),'namefield','required');
         $output .= AdminHtmlFormInputs::input('Системное название VPN','vpn_sys_name', $this->getFormFill('vpn_name'),'namefield','required');
+        $output .= AdminHtmlFormInputs::file('Логотип','vpn_logo', 'namefield','required');
         $output .= AdminHtmlFormInputs::input('Страна основания','country', $this->getFormFill('country'),'namefield','');
         $output .= AdminHtmlFormInputs::input('Партнерская ссылка','referal_link', $this->getFormFill('referal_link'),'namefield','');
         $output .= AdminHtmlFormInputs::input('Партнерская моб. ссылка','referal_link_mobile', $this->getFormFill('referal_link_mobile'),'namefield','');
@@ -73,6 +74,7 @@ class TopVPNAdminAdd extends AdminPostAction
         $output .= AdminHtmlFormInputs::renderAdminLanguageSelector($this->getAllLanguageAdm(), $this->getLanguageSysNameGet());
         $output .= AdminHtmlFormInputs::selectManyToOne('Поддерживаемые операционные системы', 'os', $this->getFormFillArray('os'), ['image_name' => 'logo', 'image_path' => 'logo'], '');
         $output .= '<input type="hidden" name="created" value="">';
+        $output .= '<input type="hidden" name="add_vpn" value="1">';
         $output .= '</form>';
         $this->render = $output;
         return $this;

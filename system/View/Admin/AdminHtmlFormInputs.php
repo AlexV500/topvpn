@@ -16,6 +16,20 @@ class AdminHtmlFormInputs
         return $output;
     }
 
+    public static function file($label, $name, $class = '', $required = ''): string
+    {
+
+        $output = '<div class="field">' .
+            '<label class="field-label ' . $required . '">' .
+            '<span class="label">' .
+            $label .
+            '</span>' .
+            '</label>' .
+            '</div>' .
+            '<input id="name-field" name="' . $name . '" class="' . $class . '" type="file"/>';
+        return $output;
+    }
+
     public static function select($label, $name, $formFill, array $valueArray, $required = ''): string
     {
 
@@ -64,7 +78,7 @@ class AdminHtmlFormInputs
                 foreach ($items as $item):
 
                     if ((isset($params['image_name'])) && (isset($params['image_path']))) {
-                        $logo = FXREVIEWS_PLUGIN_URL . $params['image_path'] . $item[$params['image_name']];
+                        $logo = V_PLUGIN_URL . $params['image_path'] . $item[$params['image_name']];
                         $img = '<img src="' . $logo . '" alt="">';
                     }
                     $formChecked = '';

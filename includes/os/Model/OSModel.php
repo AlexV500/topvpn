@@ -1,5 +1,8 @@
 <?php
 
+require_once V_CORE_LIB . 'Model/AbstractModel.php';
+require_once V_CORE_LIB . 'Utils/Validator.php';
+require_once V_CORE_LIB . 'Utils/Result.php';
 
 class OSModel extends AbstractModel{
 
@@ -43,11 +46,6 @@ class OSModel extends AbstractModel{
         }
 
         $updatedRow = $this->updateRow($id, $data);
-        if(count($updatedRow) > 0){
-            $updatedRow = ManyToMany::editManyToOne($this->keyManyToManyFields, $updatedRow, $id, $data);
-        } else {
-            return Result::setResult('error', 'Ошибка<br/>' . $imgAdded->getMessage(), $data);
-        }
 
         return Result::setResult('ok', 'Изменено<br/>'.$imgAdded->getMessage(), $updatedRow);
     }
