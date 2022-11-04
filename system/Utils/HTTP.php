@@ -51,7 +51,7 @@ class HTTP{
         return $default;
     }
 
-    public static function getGet($idx, $default = null) : string{
+    public static function getGet($idx, $default = null){
 
         if(isset($_GET[$idx]))
             return $_GET[$idx];

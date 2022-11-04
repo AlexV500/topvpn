@@ -23,16 +23,18 @@ abstract class AdminPostAction extends AdminActions{
         return $this->id;
     }
 
-    protected function setPostData(){
-
+    protected function setPostData()
+    {
         $formFill = [];
-        foreach ($this->getFormFills() as $key => $value){
-            if($key == 'position'){
-                $this->postData['position'] = $this->getModel()->getMaxPosition() + 1;
-                continue;
+        foreach ($this->getFormFills() as $key => $value) {
+            if (isset($_POST[$key])) {
+                if ($key == 'position') {
+                    $this->postData['position'] = $this->getModel()->getMaxPosition() + 1;
+                    continue;
+                }
+                $this->postData[$key] = $_POST[$key];
+                $formFill[$key] = $_POST[$key];
             }
-            $this->postData[$key] = $_POST[$key];
-            $formFill[$key] = $_POST[$key];
         }
         $this->setFormFills($formFill);
     }

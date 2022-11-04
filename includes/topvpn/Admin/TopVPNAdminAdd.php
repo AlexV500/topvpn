@@ -40,6 +40,7 @@ class TopVPNAdminAdd extends AdminPostAction
         );
 
         if ( isset( $_POST['add_vpn'] )){
+            print_r($_POST);
             $this->setPostData();
             $result = $this->getModel()->addRow($this->postData);
             if ($result->getResultStatus() == 'ok'){
@@ -76,6 +77,7 @@ class TopVPNAdminAdd extends AdminPostAction
         $output .= AdminHtmlFormInputs::input('Економия','save_from_price', $this->getFormFill('save_from_price'),'namefield','');
         $output .= AdminHtmlFormInputs::renderAdminLanguageSelectorField($this->getAllLanguageAdm(), $this->getLanguageSysNameGet());
         $output .= AdminHtmlFormInputs::selectManyToOne('Поддерживаемые операционные системы', 'os', $this->getFormFillArray('os'), ['image_name' => 'logo', 'image_path' => 'logo'], '');
+        $output .= '<input type="hidden" name="vpn_logo" value="">';
         $output .= '<input type="hidden" name="created" value="">';
         $output .= '<input type="hidden" name="add_vpn" value="1">';
         $output .= AdminHtmlFormInputs::renderAdminFormSubmitButton('Добавить');

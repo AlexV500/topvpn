@@ -16,6 +16,7 @@ class OSAdminAdd extends AdminPostAction{
                 'os_name' => '',
                 'os_sys_name' => '',
                 'os_logo' => '',
+                'position' => '',
                 'active' => '',
                 'created' => '',
             ]
@@ -41,7 +42,7 @@ class OSAdminAdd extends AdminPostAction{
         $output = '';
         $output .= AdminHtmlFormInputs::renderAdminHead('Добавить OS');
         $output .= AdminHtmlFormOutputs::renderResultMessages($this->getResultMessages());
-        $output .= '<form id="add_os" enctype="" action="" method="post">';
+        $output .= '<form id="add_os" enctype="multipart/form-data" action="admin.php?page=show_oslist&action=add" method="post">';
         $output .= AdminHtmlFormInputs::input('Название OS','os_name', $this->getFormFill('os_name'),'namefield','required');
         $output .= AdminHtmlFormInputs::input('Системное название OS','os_sys_name', $this->getFormFill('os_name'),'namefield','required');
         $output .= AdminHtmlFormInputs::file('Логотип','os_logo', 'namefield','required');

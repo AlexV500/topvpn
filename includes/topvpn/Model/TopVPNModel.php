@@ -28,12 +28,12 @@ class TopVPNModel extends AbstractModel{
         }
 
         $imgAdded = $this->checkFileAndUpload('vpn_logo', 'OSLogo');
-        if ($imgAdded->getStatus() == 'ok') {
+        if ($imgAdded->getResultStatus() == 'ok') {
             $data['vpn_logo'] = $imgAdded->getResultData();
         }
         $recordedRow = $this->insertRow($data);
         if ($recordedRow['last_insert_id'] > 0) {
-            $recordedRow = ManyToMany::addManyToOne($this->keyManyToManyFields, $recordedRow, $data);
+            $recordedRow = ManyToMany::addManyToOne($this->keyManyToManyFields, $recordedRow, $data['os']);
         } else {
             return Result::setResult('error', 'Ошибка<br/>' . $imgAdded->getMessage(), $data);
         }
@@ -56,7 +56,7 @@ class TopVPNModel extends AbstractModel{
 
         $updatedRow = $this->updateRow($id, $data);
         if(count($updatedRow) > 0){
-            $updatedRow = ManyToMany::editManyToOne($this->keyManyToManyFields, $updatedRow, $id, $data);
+            $updatedRow = ManyToMany::editManyToOne($this->keyManyToManyFields, $updatedRow, $id, $data['os']);
         } else {
             return Result::setResult('error', 'Ошибка<br/>' . $imgAdded->getMessage(), $data);
         }
