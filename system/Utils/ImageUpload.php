@@ -3,7 +3,7 @@ require_once V_CORE_LIB . 'Utils/Result.php';
 
 class ImageUpload{
 
-    public static function imageUpload($fieldName, $path){
+    public static function Upload($fieldName, $path){
 
         $returnData = [];
 

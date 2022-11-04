@@ -121,7 +121,7 @@ class AdminHtmlFormInputs
             '</label>' .
             '</div>' .
             '<textarea rows="10" cols="90" name="' . $name . '" class="">' .
-            stripslashes($formFill['short_description']) .
+            stripslashes($formFill) .
             '</textarea>';
         return $output;
     }
@@ -130,6 +130,7 @@ class AdminHtmlFormInputs
     {
 
         $output = '';
+        $output .= '<form id="add-topvpn" enctype="" action="" method="post">';
         $output .= '<select name="languageSysName">';
         $output .= '<option value="">Выбрать язык</option>';
         foreach ($getAllLanguageAdm as $language) {
@@ -140,6 +141,26 @@ class AdminHtmlFormInputs
         $output .= '<input type="hidden" value="selectLanguageAdm" name="selectLanguageAdm"/>';
         $output .= '<input class="button button-primary" type="submit" value="' . __('Выбрать', 'topvpn') . '"/>
                     </form><br/>';
+        return $output;
+    }
+
+    public static function renderAdminLanguageSelectorField(array $getAllLanguageAdm, string $languageSysName): string
+    {
+        $output = '<div class="field">' .
+            '<label class="field-label">' .
+            '<span class="label">' .
+            __( 'Язык', 'fxreviews' ) .
+            '</span>' .
+            '</label>' .
+            '</div>' .
+            '<select name="lang">'.
+            '<option value="">Выбрать язык</option>';
+
+        foreach ($getAllLanguageAdm as $language) {
+            $selected = $language['lang_sys_name'] == $languageSysName ? ' selected="selected" ' : '';
+            $output .= '<option ' . $selected . ' value="' . $language['lang_sys_name'] . '">' . $language['lang_name'] . '</option>';
+        }
+        $output .= '</select>';
         return $output;
     }
 
@@ -178,6 +199,11 @@ class AdminHtmlFormInputs
         $output .= '<div class="manage">';
         $output .= "<a title='" . $title . "' class='" . $class . "' href='" . esc_url($url) . $params . "'><span class='label'>" . $label . "</span></a>";
         $output .= '</div>';
+        return $output;
+    }
+
+    public static function renderAdminFormSubmitButton($value){
+        $output = '<input class="button button-primary" type="submit" value="' . $value . '"/>';
         return $output;
     }
 

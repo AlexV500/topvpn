@@ -13,7 +13,7 @@ class OSAdminManager{
                 (new OSAdminList('OSModel', 'topvpn_os'))->init()->render()->show();
                 break;
             case 'add':
-                require_once V_PLUGIN_INCLUDES_DIR . 'os/Admin/OSAdminAd.php';
+                require_once V_PLUGIN_INCLUDES_DIR . 'os/Admin/OSAdminAdd.php';
                 (new OSAdminAdd('OSModel', 'topvpn_os'))->init()->render()->show();
                 break;
             case 'edit':

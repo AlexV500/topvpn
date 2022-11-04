@@ -2,8 +2,9 @@
 require_once V_CORE_LIB . 'Admin/AdminPostAction.php';
 require_once V_CORE_LIB . 'View/Admin/AdminHtmlFormInputs.php';
 require_once V_CORE_LIB . 'View/Admin/AdminHtmlFormOutputs.php';
-require_once V_PLUGIN_INCLUDES_DIR . 'topvpn/Admin/TopVPNModel.php';
-require_once V_PLUGIN_INCLUDES_DIR . 'os/Admin/OSModel.php';
+require_once V_PLUGIN_INCLUDES_DIR . 'topvpn/Model/TopVPNModel.php';
+require_once V_PLUGIN_INCLUDES_DIR . 'os/Model/OSModel.php';
+require_once V_PLUGIN_INCLUDES_DIR . 'lang/Model/LangModel.php';
 
 class TopVPNAdminEdit extends AdminPostAction
 {
@@ -34,7 +35,7 @@ class TopVPNAdminEdit extends AdminPostAction
                 'short_description' => $data['short_description'],
                 'description' => $data['description'],
                 'price' => $data['price'],
-                'save_from_rice' => $data['save_from_rice'],
+                'save_from_price' => $data['save_from_price'],
                 'lang' => $data['lang'],
                 'os' => $this->os,
                 'updated' => '',
@@ -75,11 +76,11 @@ class TopVPNAdminEdit extends AdminPostAction
         $output .= AdminHtmlFormInputs::select('Топ статус', 'top_status', $this->getFormFill('top_status'), [0 => 'Нет', 1 => 'Top'], '');
         $output .= AdminHtmlFormInputs::input('Рейтинг','rating', $this->getFormFill('rating'),'namefield','');
         $output .= AdminHtmlFormInputs::input('Описание рейтинга','rating_description', $this->getFormFill('rating_description'),'namefield','');
-        $output .= AdminHtmlFormInputs::select('Активный', 'active', [1 => 'Да', 0 => 'Нет'], $this->getFormFill('active'), '');
+        $output .= AdminHtmlFormInputs::select('Активный', 'active', $this->getFormFill('active'), [1 => 'Да', 0 => 'Нет'], '');
         $output .= AdminHtmlFormInputs::textarea('Короткое описание', 'short_description', $this->getFormFill('short_description'), '');
         $output .= AdminHtmlFormInputs::textarea('Полное описание', 'description', $this->getFormFill('description'), '');
         $output .= AdminHtmlFormInputs::input('Прайс','price', $this->getFormFill('price'),'namefield','');
-        $output .= AdminHtmlFormInputs::input('Економия','save_from_rice', $this->getFormFill('save_from_rice'),'namefield','');
+        $output .= AdminHtmlFormInputs::input('Економия','save_from_price', $this->getFormFill('save_from_price'),'namefield','');
         $output .= AdminHtmlFormInputs::renderAdminLanguageSelector($this->getAllLanguageAdm(), $this->getLanguageSysNameGet());
         $output .= AdminHtmlFormInputs::selectManyToOne('Поддерживаемые операционные системы', 'os', $this->getFormFillArray('os'), ['image_name' => 'logo', 'image_path' => 'logo', 'checked' => $this->osChecked], '');
         $output .= '<input type="hidden" name="updated" value="">';

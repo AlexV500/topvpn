@@ -5,10 +5,10 @@ require_once V_CORE_LIB . 'Admin/AdminActions/IAdminActions.php';
 abstract class AdminActions implements IAdminActions {
 
     protected object $model;
-    protected string $languageSysNameGet;
+    protected string $languageSysNameGet = 'en_EN';
     protected array $allLanguageAdm;
     protected string $currentURL;
-    protected array $resultMessages;
+    protected array $resultMessages = [];
     protected array $ok;
     protected array $errors;
     protected string $render;
@@ -38,7 +38,7 @@ abstract class AdminActions implements IAdminActions {
     }
 
     protected function initAllLanguageAdm( string $languageModel, string $dbTable) : object{
-        $this->allLanguageAdm = (new $languageModel($dbTable))->getAllLanguageAdm();
+        $this->allLanguageAdm = (new $languageModel($dbTable))->getAllRows(true, true, false);
         return $this;
     }
 
@@ -52,6 +52,11 @@ abstract class AdminActions implements IAdminActions {
     }
 
     protected function selectLanguageAdm() : object{
+
+        if ( isset( $_POST['selectLanguageAdm'] )){
+            $languageSysNamePost = $_POST['languageSysName'];
+            $_SESSION['fxlang'] = $languageSysNamePost;
+        }
 
         if(isset($_SESSION['fxlang'])){
             $this->languageSysNameGet = $_SESSION['fxlang'];

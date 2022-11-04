@@ -2,19 +2,23 @@
 require_once V_CORE_LIB . 'Admin/AdminList.php';
 require_once V_CORE_LIB . 'View/Admin/AdminHtmlFormInputs.php';
 require_once V_CORE_LIB . 'View/Admin/AdminHtmlFormOutputs.php';
-require_once V_PLUGIN_INCLUDES_DIR . 'os/Admin/OSModel.php';
+require_once V_PLUGIN_INCLUDES_DIR . 'os/Model/OSModel.php';
 
 class OSAdminList extends AdminList{
 
-    protected bool $activeMode = false;
+    public function __construct($model, $dbTable)
+    {
+        parent::__construct($model, $dbTable);
+    }
 
     public function init() : object
     {
+        $this->initRowsCount($this->activeMode);
+        $this->setPaginationCount();
+        $this->initPaginationConfig();
+        $this->setModelPaginationConfig();
+        $this->initRowsData($this->activeMode);
         $this->checkPositionAction();
-        $this->setPaginationConfig();
-        $this->setCurrentURL();
-        $this->setRowsCount($this->activeMode);
-        $this->setRowsData($this->activeMode);
         $this->setColumnDisplayNames(array(
             'id' => __( 'id', 'topvpn' ),
             'name'         => __( 'OS', 'topvpn' ),
@@ -32,6 +36,8 @@ class OSAdminList extends AdminList{
     {
         $output = '';
         $output .= AdminHtmlFormInputs::renderAdminHead('Список OS');
+        $output .= '<table id="" class="wp-list-table widefat fixed" cellspacing="0">';
+        $output .= AdminHtmlFormInputs::renderAdminHeadOfTableList($this->getColumnDisplayNames());
         if ( $this->getRowsCount() > 0 ) {
             for ( $i = 0; $i < $this->getRowsCount(); $i++ ) {
 
@@ -67,7 +73,7 @@ class OSAdminList extends AdminList{
         $output .= '</tbody>';
         $output .= '</table>';
 
-        $output .= AdminHtmlFormInputs::renderAdminPagination($this->paginationCount(), $this->rowsCount());
+        $output .= AdminHtmlFormInputs::renderAdminPagination($this->getRowsCount(), $this->getPaginationCount());
         $output .= AdminHtmlFormInputs::renderAdminFormButton('Добавить новую OS', 'Добавить новую OS', 'button add', $this->getCurrentURL(), '&action=add');
         $this->render = $output;
         return $this;

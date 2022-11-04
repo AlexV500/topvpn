@@ -2,7 +2,7 @@
 require_once V_CORE_LIB . 'Admin/AdminPostAction.php';
 require_once V_CORE_LIB . 'View/Admin/AdminHtmlFormInputs.php';
 require_once V_CORE_LIB . 'View/Admin/AdminHtmlFormOutputs.php';
-require_once V_PLUGIN_INCLUDES_DIR . 'os/Admin/OSModel.php';
+require_once V_PLUGIN_INCLUDES_DIR . 'os/Model/OSModel.php';
 
 class OSAdminAdd extends AdminPostAction{
 
@@ -22,11 +22,7 @@ class OSAdminAdd extends AdminPostAction{
         );
 
         if ( isset( $_POST['add_os'] )){
-            foreach ($this->getFormFills() as $key => $value){
-                $this->postData[$key] = $_POST[$key];
-                $formFill[$key] = $_POST[$key];
-                $this->setFormFills($formFill);
-            }
+            $this->setPostData();
             $result = $this->getModel()->addRow($this->postData);
             if ($result->getResultStatus() == 'ok'){
                 $this->setOk('OSModel', 'OS добавлен успешно!');
@@ -49,9 +45,10 @@ class OSAdminAdd extends AdminPostAction{
         $output .= AdminHtmlFormInputs::input('Название OS','os_name', $this->getFormFill('os_name'),'namefield','required');
         $output .= AdminHtmlFormInputs::input('Системное название OS','os_sys_name', $this->getFormFill('os_name'),'namefield','required');
         $output .= AdminHtmlFormInputs::file('Логотип','os_logo', 'namefield','required');
-        $output .= AdminHtmlFormInputs::select('Активный', 'active', [1 => 'Да', 0 => 'Нет'], $this->getFormFill('active'), '');
+        $output .= AdminHtmlFormInputs::select('Активный', 'active', $this->getFormFill('active'), [1 => 'Да', 0 => 'Нет'], '');
         $output .= '<input type="hidden" name="created" value="">';
         $output .= '<input type="hidden" name="add_os" value="1">';
+        $output .= AdminHtmlFormInputs::renderAdminFormSubmitButton('Добавить');
         $output .= '</form>';
         $this->render = $output;
         return $this;

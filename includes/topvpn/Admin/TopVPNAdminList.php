@@ -2,23 +2,30 @@
 require_once V_CORE_LIB . 'Admin/AdminList.php';
 require_once V_CORE_LIB . 'View/Admin/AdminHtmlFormInputs.php';
 require_once V_CORE_LIB . 'View/Admin/AdminHtmlFormOutputs.php';
-require_once V_PLUGIN_INCLUDES_DIR . 'topvpn/Admin/TopVPNModel.php';
-require_once V_PLUGIN_INCLUDES_DIR . 'os/Admin/OSModel.php';
+require_once V_PLUGIN_INCLUDES_DIR . 'topvpn/Model/TopVPNModel.php';
+require_once V_PLUGIN_INCLUDES_DIR . 'os/Model/OSModel.php';
+require_once V_PLUGIN_INCLUDES_DIR . 'lang/Model/LangModel.php';
 
 class TopVPNAdminList extends AdminList {
 
-    protected bool $activeMode = false;
+    public function __construct($model, $dbTable)
+    {
+        parent::__construct($model, $dbTable);
+    }
 
     public function init(){
 
-        $this->checkPositionAction();
         $this->selectLanguageAdm();
         $this->switchMultiLangMode();
-        $this->initAllLanguageAdm('LangModel', 'languages');
-        $this->setPaginationConfig();
-        $this->setCurrentURL();
-        $this->setRowsCount($this->activeMode);
-        $this->setRowsData($this->activeMode);
+        $this->initAllLanguageAdm('LangModel', 'topvpn_lang');
+        $this->initRowsCount($this->activeMode);
+        $this->setPaginationCount();
+        $this->initPaginationConfig();
+        $this->setModelPaginationConfig();
+        $this->initRowsData($this->activeMode);
+        $this->checkPositionAction();
+      //  $this->setActiveMode();
+
         $this->setColumnDisplayNames(array(
             'id' => __( 'id', 'topvpn' ),
             'name'         => __( 'VPN', 'topvpn' ),
@@ -39,8 +46,8 @@ class TopVPNAdminList extends AdminList {
 
         $output = '';
         $output .= AdminHtmlFormInputs::renderAdminHead('Список VPN');
-        $output .= '<form id="add-topvpn" enctype="" action="" method="post">';
         $output .= AdminHtmlFormInputs::renderAdminLanguageSelector($this->getAllLanguageAdm(), $this->getLanguageSysNameGet());
+        $output .= '<table id="" class="wp-list-table widefat fixed" cellspacing="0">';
         $output .= AdminHtmlFormInputs::renderAdminHeadOfTableList($this->getColumnDisplayNames());
         $output .= '<tbody>';
 
@@ -84,7 +91,7 @@ class TopVPNAdminList extends AdminList {
         $output .= '</tbody>';
         $output .= '</table>';
 
-        $output .= AdminHtmlFormInputs::renderAdminPagination($this->paginationCount(), $this->rowsCount());
+        $output .= AdminHtmlFormInputs::renderAdminPagination($this->getRowsCount(), $this->getPaginationCount());
         $output .= AdminHtmlFormInputs::renderAdminFormButton('Добавить новый VPN', 'Добавить новый VPN', 'button add', $this->getCurrentURL(), '&action=add');
         $this->render = $output;
         return $this;

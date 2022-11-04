@@ -8,6 +8,7 @@ class LangModel extends AbstractModel{
     public function __construct(string $dbTable)
     {
         parent::__construct($dbTable);
+        $this->unsetMultiLangMode();
     }
 
     public function addRow($data)

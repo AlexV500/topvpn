@@ -2,18 +2,19 @@
 require_once V_CORE_LIB . 'Admin/AdminList.php';
 require_once V_CORE_LIB . 'View/Admin/AdminHtmlFormInputs.php';
 require_once V_CORE_LIB . 'View/Admin/AdminHtmlFormOutputs.php';
-require_once V_PLUGIN_INCLUDES_DIR . 'lang/Admin/LangModel.php';
+require_once V_PLUGIN_INCLUDES_DIR . 'lang/Model/LangModel.php';
 
 class LangAdminList extends AdminList
 {
 
     public function init() : object
     {
+        $this->initRowsCount($this->activeMode);
+        $this->setPaginationCount();
+        $this->initPaginationConfig();
+        $this->setModelPaginationConfig();
+        $this->initRowsData($this->activeMode);
         $this->checkPositionAction();
-        $this->setPaginationConfig();
-        $this->setCurrentURL();
-        $this->setRowsCount($this->activeMode);
-        $this->setRowsData($this->activeMode);
         $this->setColumnDisplayNames(array(
             'id' => __( 'id', 'topvpn' ),
             'name'         => __( 'Язык', 'topvpn' ),
@@ -31,6 +32,8 @@ class LangAdminList extends AdminList
     {
         $output = '';
         $output .= AdminHtmlFormInputs::renderAdminHead('Список Языков');
+        $output .= '<table id="" class="wp-list-table widefat fixed" cellspacing="0">';
+        $output .= AdminHtmlFormInputs::renderAdminHeadOfTableList($this->getColumnDisplayNames());
         if ( $this->getRowsCount() > 0 ) {
             for ( $i = 0; $i < $this->getRowsCount(); $i++ ) {
 
@@ -66,7 +69,7 @@ class LangAdminList extends AdminList
         $output .= '</tbody>';
         $output .= '</table>';
 
-        $output .= AdminHtmlFormInputs::renderAdminPagination($this->paginationCount(), $this->rowsCount());
+        $output .= AdminHtmlFormInputs::renderAdminPagination($this->getRowsCount(), $this->getPaginationCount());
         $output .= AdminHtmlFormInputs::renderAdminFormButton('Добавить новый язык', 'Добавить новый язык', 'button add', $this->getCurrentURL(), '&action=add');
         $this->render = $output;
         return $this;

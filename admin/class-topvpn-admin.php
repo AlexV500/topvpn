@@ -51,7 +51,7 @@ class Topvpn_Admin {
 
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
-
+        add_action( 'admin_menu', array( $this, 'topvpn_admin_menu' ));
 	}
 
 	/**
@@ -117,7 +117,7 @@ class Topvpn_Admin {
             'manage_options',
             'show_topvpnlist',
             array( $this, 'adminLoadDispatcher' ),
-            TOPVPN_PLUGIN_URL . 'images/affiliates.png',
+            V_PLUGIN_URL . 'images/affiliates.png',
             '58.187'
         );
         $pages[] = $page;
@@ -125,12 +125,14 @@ class Topvpn_Admin {
 //        add_action( 'admin_print_scripts-' . $page, 'fxreviews_admin_print_scripts' );
 
         $page = add_submenu_page(
-            'show_oslist',
+            'show_topvpnlist',
             __( 'Операционные системы', 'topvpnos' ),
             __( 'Операционные системы', 'topvpnos' ),
             'manage_options',
             'show_oslist',
-            apply_filters( 'topvpn_add_submenu_page_function', array($this, 'adminLoadDispatcher'), 'OsAdminManager')
+            apply_filters( 'topvpn_add_submenu_page_function', function (){
+                return OsAdminManager::init();
+            })
         );
         $pages[] = $page;
 
@@ -141,7 +143,9 @@ class Topvpn_Admin {
             __( 'Язык', 'topvpnlanguage' ),
             'manage_options',
             'show_topvpnlanguagelist',
-            apply_filters( 'topvpn_add_submenu_page_function', array($this, 'adminLoadDispatcher'), 'LangAdminManager')
+            apply_filters( 'topvpn_add_submenu_page_function', function (){
+                return LangAdminManager::init();
+            })
         );
         $pages[] = $page;
 

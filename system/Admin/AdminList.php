@@ -1,6 +1,6 @@
 <?php
 
-require_once V_CORE_LIB . 'Admin/AdminActions.php';
+require_once V_CORE_LIB . 'Admin/AdminActions/AdminActions.php';
 require_once V_CORE_LIB . 'Utils/PaginationConfig.php';
 
 abstract class AdminList extends AdminActions {
@@ -12,20 +12,21 @@ abstract class AdminList extends AdminActions {
     protected int $paged;
     protected bool $paginate;
     protected array $columnDisplayNames;
-
+    protected bool $activeMode = false;
 
     public function __construct($model, $dbTable)
     {
         parent::__construct($model, $dbTable);
+
+        $this->setCurrentURL();
     }
 
-
-    public function setRowsCount($activeMode) : object{
+    public function initRowsCount($activeMode) : object{
         $this->rowsCount = $this->getModel()->countAllRows($activeMode);
         return $this;
     }
 
-    public function setRowsData($activeMode) : object{
+    public function initRowsData($activeMode) : object{
         $this->rowsData = $this->getModel()->getAllRows($activeMode);
         return $this;
     }
@@ -47,7 +48,6 @@ abstract class AdminList extends AdminActions {
         return $this->paginationCount;
     }
 
-
     protected function getOffset() : int{
         return $this->offset;
     }
@@ -60,11 +60,17 @@ abstract class AdminList extends AdminActions {
         return $this->paginate;
     }
 
-    protected function setPaginationConfig(){
-        $paginationConfig = new PaginationConfig($this->getPaginationCount(), $this->getRowCount());
+    protected function initPaginationConfig(){
+        $paginationConfig = new PaginationConfig($this->getPaginationCount(), $this->getRowsCount());
+        $paginationConfig->calculate();
         $this->offset = $paginationConfig->getOffset();
         $this->paged = $paginationConfig->getPaged();
         $this->paginate = $paginationConfig->getPaginate();
+    }
+
+    protected function setModelPaginationConfig(){
+     //   $this->getModel()->setRowCount($this->getRowsCount());
+        $this->getModel()->setOffset($this->getOffset());
     }
 
     protected function setColumnDisplayNames(array $columnDisplayNames) : object{
@@ -74,6 +80,11 @@ abstract class AdminList extends AdminActions {
 
     protected function getColumnDisplayNames(){
         return $this->columnDisplayNames;
+    }
+
+    public function setActiveMode( bool $mode) : object{
+        $this->activeMode = $mode;
+        return $this;
     }
 
     protected function checkPositionAction(){

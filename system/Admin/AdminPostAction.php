@@ -1,11 +1,12 @@
 <?php
 
-require_once V_CORE_LIB . 'Admin/AdminActions.php';
+require_once V_CORE_LIB . 'Admin/AdminActions/AdminActions.php';
 
 abstract class AdminPostAction extends AdminActions{
 
     protected int $id;
     protected array $formFills;
+    protected array $postData;
 
     public function __construct($model, $dbTable)
     {
@@ -22,9 +23,24 @@ abstract class AdminPostAction extends AdminActions{
         return $this->id;
     }
 
-    protected function setFormFills(array $formfills){
+    protected function setPostData(){
+
+        $formFill = [];
+        foreach ($this->getFormFills() as $key => $value){
+            if($key == 'position'){
+                $this->postData['position'] = $this->getModel()->getMaxPosition() + 1;
+                continue;
+            }
+            $this->postData[$key] = $_POST[$key];
+            $formFill[$key] = $_POST[$key];
+        }
+        $this->setFormFills($formFill);
+    }
+
+    protected function setFormFills(array $formfills) : object{
 
         $this->formFills = $formfills;
+        return $this;
     }
 
     protected function getFormFills() : array{

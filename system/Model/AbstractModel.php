@@ -1,5 +1,5 @@
 <?php
-require_once V_CORE_LIB . 'Admin/ImageUpload.php';
+require_once V_CORE_LIB . 'Utils/ImageUpload.php';
 
 abstract class AbstractModel
 {
@@ -89,11 +89,11 @@ abstract class AbstractModel
         $paginatSql = '';
 
         if ($orderMode) {
-            $orderSql = 'ORDER BY position ' . '{'.$this->orderDirection.'}';
+            $orderSql = 'ORDER BY position ' . $this->orderDirection;
         }
 
         if ($paginationMode) {
-            $paginatSql = 'LIMIT ' . '{'.$this->rowCount.'}' . ' OFFSET ' . '{'.$this->offset.'}';
+            $paginatSql = 'LIMIT ' . $this->countAllRows($activeMode) . ' OFFSET ' . $this->offset;
         }
 
         if ($this->multiLangMode) {
@@ -130,8 +130,7 @@ abstract class AbstractModel
             }
         }
 
-        $count = $this->wpdb->get_var($query);
-        return $count;
+        return $this->wpdb->get_var($query);
     }
     
     public function insertRow(array $fields, bool $validationMode = true) : array{
@@ -212,7 +211,7 @@ abstract class AbstractModel
         return $this->wpdb->last_error;
     }
 
-    public function getMaxPosition()
+    public function getMaxPosition() : int
     {
         return $this->wpdb->get_var("SELECT MAX(position) as maxPosition FROM `{$this->dbTable}`");
     }
