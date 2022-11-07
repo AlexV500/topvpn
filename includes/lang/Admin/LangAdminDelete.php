@@ -7,8 +7,10 @@ require_once V_PLUGIN_INCLUDES_DIR . 'lang/Model/LangModel.php';
 class LangAdminDelete extends AdminPostAction{
 
     public function init() : object {
-        $this->setId(HTTP::getGet('lang_id'));
+
+        $this->setId(HTTP::getGet('item_id'));
         $data = $this->getModel()->getRowById($this->getId());
+        $this->deleteName = $data['lang_name'];
         $this->setFormFills(
             [
                 'lang_name' => $data['lang_name'],
@@ -16,14 +18,14 @@ class LangAdminDelete extends AdminPostAction{
         );
 
         if ( isset( $_POST['delete_lang'] )){
-            $result = $this->getModel()->deleteRow($this->getId());
+            $result = $this->getModel()->deleteRow($data);
             if ($result->getResultStatus() == 'ok'){
-                $this->setOk('LangModel', 'Язык '.HTTP::getGet('lang_name').' удален успешно!');
-                $this->setResultMessages('LangModel','ok', $this->getOk());
+                $this->setOk('LangModel', $result->getResultMessage());
+                $this->setResultMessages('LangModel','ok', $this->getOk('LangModel'));
             }
             if ($result->getResultStatus() == 'error'){
                 $this->setError('LangModel', $result->getResultMessage());
-                $this->setResultMessages('LangModel','error', $this->getError());
+                $this->setResultMessages('LangModel','error', $this->getError('LangModel'));
             }
         }
         return $this;
@@ -33,14 +35,14 @@ class LangAdminDelete extends AdminPostAction{
     public function render() : object
     {
         $output = '';
-        $output .= AdminHtmlFormInputs::renderAdminHead('Удалить Язык '.HTTP::getGet('lang_name'));
+        $output .= AdminHtmlFormInputs::renderAdminHead('Удалить Язык '.$this->deleteName);
         $output .= AdminHtmlFormOutputs::renderResultMessages($this->getResultMessages());
         $output .= '<form id="delete_lang" enctype="" action="" method="post">';
         $output .= '<div class="topvpn delete">' .
             '<div class="field">' .
             '<label class="field-label first required">' .
             '<span class="label">' .
-            __( 'Вы действительно хотите удалить Язык?', 'topvpn' ) .
+            __( 'Вы действительно хотите удалить Язык ' . $this->deleteName . '?', 'topvpn' ) .
             '</span>' .
             '</label>' .
             '</div>' .
@@ -48,9 +50,8 @@ class LangAdminDelete extends AdminPostAction{
             '<input class="button button-primary" type="submit" value="' . __( 'Удалить', 'topvpn' ) . '"/>' .
             '<a class="cancel button" href="' . $this->getCurrentURL() . '">' . __( 'Отмена', 'topvpn' ) . '</a>' .
             '<input type="hidden" value="deleteLangAdm" name="delete_lang"/>' .
-            '<input type="hidden" value="'.$this->getId().'" name="lang_id"/>' .
+            '<input type="hidden" value="'.$this->getId().'" name="item_id"/>' .
             '<input type="hidden" value="delete" name="action"/>';
-        $output .=
         $output .= '</form>';
         $this->render = $output;
         return $this;

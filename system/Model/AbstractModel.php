@@ -6,12 +6,14 @@ abstract class AbstractModel
     public $wpdb;
     public string $prefix;
     public string $dbTable;
-    public string $pk;
+    public string $pk = 'id' ;
     public string $lang = '';
     protected bool $multiLangMode = true;
+    protected string $orderColumn = 'id';
     protected string $orderDirection = 'ASC';
     public string $rowCount;
     public string $offset;
+    public array $errorStatus;
 
 
     protected function __construct(string $dbTable)
@@ -22,7 +24,18 @@ abstract class AbstractModel
         $this->dbTable = $this->prefix.$dbTable;
     }
 
-    public function switchMultiLangMode($lang)
+    public function setErrorStatus( string $type, bool $status = false) : object
+    {
+        $this->errorStatus[$type] = $status;
+        return $this;
+    }
+
+    public function getErrorStatus(string $type){
+
+        return $this->errorStatus[$type];
+    }
+
+    public function switchMultiLangMode( string $lang) : object
     {
         if($lang !== ''){
             $this->setMultiLangMode();
@@ -32,43 +45,55 @@ abstract class AbstractModel
         return $this;
     }
 
-    public function setMultiLangMode()
+    public function setMultiLangMode() : object
     {
         $this->multiLangMode = true;
         return $this;
     }
 
-    public function unsetMultiLangMode()
+    public function unsetMultiLangMode() : object
     {
         $this->multiLangMode = false;
         return $this;
     }
 
-    public function setLang($lang)
+    public function setLang( string $lang) : object
     {
         $this->lang = $lang;
         return $this;
     }
 
-    public function setRowCount($rowCount)
+    public function setPk( string $pk) : object
+    {
+        $this->pk = $pk;
+        return $this;
+    }
+
+    public function setRowCount( int $rowCount) : object
     {
         $this->rowCount = $rowCount;
         return $this;
     }
 
-    public function setOffset($offset)
+    public function setOffset($offset) : object
     {
         $this->offset = $offset;
         return $this;
     }
 
-    public function setOrderDirection($direction)
+    public function setOrderColumn( string $column) : object
+    {
+        $this->orderColumn = $column;
+        return $this;
+    }
+
+    public function setOrderDirection( string $direction) : object
     {
         $this->orderDirection = $direction;
         return $this;
     }
 
-    public function getRowById($id)
+    public function getRowById( int $id)
     {
         return $this->wpdb->get_row("SELECT * FROM `{$this->dbTable}` WHERE id={$id}", ARRAY_A);
     }
@@ -83,14 +108,12 @@ abstract class AbstractModel
         return $this->wpdb->get_row("SELECT * FROM `{$this->dbTable}` WHERE $columnName={$cnValue}", ARRAY_A);
     }
 
-    public function getAllRows(bool $activeMode = true, bool $orderMode = true, bool $paginationMode = true)
+    public function getAllRows(bool $activeMode = true, bool $paginationMode = true)
     {
         $orderSql = '';
         $paginatSql = '';
 
-        if ($orderMode) {
-            $orderSql = 'ORDER BY position ' . $this->orderDirection;
-        }
+        $orderSql = 'ORDER BY '.$this->orderColumn.' ' . $this->orderDirection;
 
         if ($paginationMode) {
             $paginatSql = 'LIMIT ' . $this->countAllRows($activeMode) . ' OFFSET ' . $this->offset;
@@ -148,11 +171,14 @@ abstract class AbstractModel
         $returnData = [];
 
         foreach($fields as $field => $val){
+            if(is_array($val)){
+                continue;
+            }
             if ($field == 'created'){
                 $val = date( 'Y-m-d H:i:s' , time() );
             }
             $names[] = $field;
-            $masks[] = "$val";
+            $masks[] = "'".$val."'";
         }
 
         $namesStr = implode(', ', $names);
@@ -162,6 +188,8 @@ abstract class AbstractModel
         $this->wpdb->query($query, $fields);
 
         $insertedRow = $this->getRowById($this->wpdb->insert_id);
+//        echo 'Test<br/>';
+//        print_r($insertedRow);
         foreach ($insertedRow as $key => $val){
             if(array_key_exists($key, $fields)){
                 $returnData[$key] = $val;
@@ -183,24 +211,33 @@ abstract class AbstractModel
 //        }
         $pairs = [];
         $returnData = [];
+        $this->setErrorStatus('updateRow');
 
-        foreach($fields as $field => $val){
-            if ($field == 'updated'){
-                $val = date( 'Y-m-d H:i:s' , time() );
+        foreach ($fields as $field => $val) {
+            if (is_array($val)) {
+                continue;
             }
-            $pairs[] = "$field=$val";
+            if ($field == 'updated') {
+                $val = date('Y-m-d H:i:s', time());
+            }
+            $pairs[] = "$field='$val'";
         }
 
         $pairsStr = implode(', ', $pairs);
 
-        $query = "UPDATE `{$this->dbTable}` SET $pairsStr WHERE {$this->pk} = {$this->pk}";
-        if($this->wpdb->query($query, $fields + [$this->pk => $id])){
-            $insertedRow = $this->getRowById($this->wpdb->insert_id);
-            foreach ($insertedRow as $key => $val){
-                if(array_key_exists($key, $fields)){
-                    $returnData[$key] = $val;
+        $query = "UPDATE `{$this->dbTable}` SET $pairsStr WHERE {$this->pk} = {$id}";
+        if ($this->wpdb->query($query, $fields + [$this->pk => $id])) {
+            $updatedRow = $this->getRowByPk($this->pk, $id);
+//            echo '<pre>';
+//            print_r($updatedRow);
+//            echo '</pre>';
+            if ($updatedRow !== null) {
+                foreach ($updatedRow as $key => $val) {
+                    if (array_key_exists($key, $fields)) {
+                        $returnData[$key] = $val;
+                    }
                 }
-            }
+            } else $this->setErrorStatus('updateRow', true);
         }
         return $returnData;
     }
@@ -222,7 +259,7 @@ abstract class AbstractModel
         $prevRow = false;
         $count = $this->countAllRows(false);
         $query = $this->getAllRows(false, true, false);
-        if ($count > 1) {
+        if (($count > 1) && ($id > 0)) {
             foreach ($query as $key => $row) {
                 if ($row['id'] == $id) {
                     if ($key !== 0) {
@@ -233,7 +270,7 @@ abstract class AbstractModel
             }
             if (($currentRow) && ($prevRow)) {
                 if (($currentRow !== '') && ($prevRow !== '')) {
-                    $this->setPosition($id, $currentRow, $prevRow);
+                   return $this->setPosition($id, $currentRow, $prevRow);
                 } else return false;
             } else return false;
         } else return false;
@@ -246,7 +283,7 @@ abstract class AbstractModel
         $count = $this->countAllRows(false);
         $query = $this->getAllRows(false, true, false);
 
-        if ($count > 1) {
+        if (($count > 1) && ($id > 0)) {
             foreach ($query as $key => $row) {
                 if ($row['id'] == $id) {
                     if ($key < ($count - 1)) {
@@ -257,27 +294,71 @@ abstract class AbstractModel
             }
             if (($currentRow) && ($nextRow)) {
                 if (($currentRow !== '') && ($nextRow !== '')) {
-                    $this->setPosition($id, $currentRow, $nextRow);
+                  return $this->setPosition($id, $currentRow, $nextRow);
                 } else return false;
             } else return false;
         } else return false;
     }
 
-    protected function setPosition($id, $currentRow, $nextOrPrevRow)
+    protected function setPosition( int $id, $currentRow, $nextOrPrevRow) : bool
     {
         $fields1 = [
             'position' => $nextOrPrevRow['position']
         ];
-        $this->updateRow($currentRow['id'], $fields1, false);
 
         $fields2 = [
             'position' => $currentRow['position']
         ];
+
+        $this->updateRow($currentRow['id'], $fields1, false);
+
+        if($this->getErrorStatus('updateRow')){
+            return false;
+        }
+
         $this->updateRow($nextOrPrevRow['id'], $fields2, false);
+
+        if($this->getErrorStatus('updateRow')){
+            return false;
+        }
+
+        return true;
     }
 
-    public function checkFileAndUpload($fieldName, $folder){
-        $path = V_PLUGIN_DIR . '/images/' . $folder . '/';
+    public function checkFileAndUpload( string $fieldName, string $path){
         return ImageUpload::Upload($fieldName, $path);
+    }
+
+    public function checkFileAndUnlink(array $data, string $fieldName, string $path): string
+    {
+
+        $ok = false;
+        $file = '';
+        $this->setErrorStatus('no_file');
+        $this->setErrorStatus('no_column_record');
+
+        if (isset($data[$fieldName])) {
+            $file = $path . $data[$fieldName];
+            if (file_exists($file)) {
+                unlink($file);
+                $ok = true;
+            } else {
+                $this->setErrorStatus('no_file', true);
+            }
+        } else $this->setErrorStatus('no_column_record', true);
+
+
+        $return = '';
+        if ($this->getErrorStatus('no_file')) {
+            $return .= 'Не найден файл изображения!<br/>';
+        }
+        if ($this->getErrorStatus('no_column_record')) {
+            $return .= 'Не найдено название изображения в колонке записи в б.д.!<br/>';
+        }
+
+        if ($ok) {
+            $return .= 'Изображение: ' . $file . ' удалено успешно!<br/>';
+        }
+        return $return;
     }
 }

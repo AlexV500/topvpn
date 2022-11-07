@@ -2,15 +2,13 @@
 
 require_once V_CORE_LIB . 'Admin/AdminActions/AdminActions.php';
 require_once V_CORE_LIB . 'Utils/PaginationConfig.php';
+require_once V_CORE_LIB . 'Traits/InitRows.php';
+require_once V_CORE_LIB . 'Traits/InitOrder.php';
+require_once V_CORE_LIB . 'Traits/InitPagination.php';
 
 abstract class AdminList extends AdminActions {
+    use InitRows, InitOrder, InitPagination;
 
-    protected int $paginationCount;
-    protected int $rowsCount;
-    protected array $rowsData;
-    protected int $offset;
-    protected int $paged;
-    protected bool $paginate;
     protected array $columnDisplayNames;
     protected bool $activeMode = false;
 
@@ -19,58 +17,6 @@ abstract class AdminList extends AdminActions {
         parent::__construct($model, $dbTable);
 
         $this->setCurrentURL();
-    }
-
-    public function initRowsCount($activeMode) : object{
-        $this->rowsCount = $this->getModel()->countAllRows($activeMode);
-        return $this;
-    }
-
-    public function initRowsData($activeMode) : object{
-        $this->rowsData = $this->getModel()->getAllRows($activeMode);
-        return $this;
-    }
-
-    public function getRowsCount() : int{
-        return $this->rowsCount;
-    }
-
-    public function getRowsData(){
-        return $this->rowsData;
-    }
-
-    public function setPaginationCount($count = 20) : object{
-        $this->paginationCount = $count;
-        return $this;
-    }
-
-    public function getPaginationCount() : int{
-        return $this->paginationCount;
-    }
-
-    protected function getOffset() : int{
-        return $this->offset;
-    }
-
-    protected function getPaged(){
-        return $this->paged;
-    }
-
-    protected function getPaginate() : bool{
-        return $this->paginate;
-    }
-
-    protected function initPaginationConfig(){
-        $paginationConfig = new PaginationConfig($this->getPaginationCount(), $this->getRowsCount());
-        $paginationConfig->calculate();
-        $this->offset = $paginationConfig->getOffset();
-        $this->paged = $paginationConfig->getPaged();
-        $this->paginate = $paginationConfig->getPaginate();
-    }
-
-    protected function setModelPaginationConfig(){
-     //   $this->getModel()->setRowCount($this->getRowsCount());
-        $this->getModel()->setOffset($this->getOffset());
     }
 
     protected function setColumnDisplayNames(array $columnDisplayNames) : object{
@@ -87,24 +33,33 @@ abstract class AdminList extends AdminActions {
         return $this;
     }
 
-    protected function checkPositionAction(){
+    protected function checkPositionAction() : bool{
 
         $set = '';
-        $id = '';
+        $id = 0;
+        $positionUp = false;
+        $positionDown = false;
 
         if ( isset( $_GET['position_set'] )){
             $set = $_GET['position_set'];
         }
-        if ( isset( $_GET['id'] )){
-            $id = $_GET['id'];
+        if ( isset( $_GET['item_id'] )){
+             $id = (int) $_GET['item_id'];
         }
 
         if($set == 'up'){
-            (new $this->model)->positionUp($id);
+            $positionUp = $this->getModel()->positionUp($id);
+            if(!$positionUp){
+                return false;
+            }
         }
         if($set == 'down'){
-            (new $this->model)->positionDown($id);
+            $positionDown = $this->getModel()->positionDown($id);
+            if(!$positionDown){
+                return false;
+            }
         }
+        return true;
     }
 
 

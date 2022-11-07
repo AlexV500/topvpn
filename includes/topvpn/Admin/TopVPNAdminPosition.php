@@ -6,7 +6,7 @@ class TopVPNAdminPosition extends AdminPosition{
 
     public function init(){
 
-        $id = $_GET['vpn_id'];
+        $id = $_GET['item_id'];
         $this->setPosition($id);
     }
 }

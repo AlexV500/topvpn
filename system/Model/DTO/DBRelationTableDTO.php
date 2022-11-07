@@ -8,20 +8,20 @@ class DBRelationTableDTO
 
     public function __construct($pivotTableName, $thisPkeyRowName, $thatPkeyRowName)
     {
-        $this->pivotTable = $pivotTableName;
+        $this->pivotTableName = $pivotTableName;
         $this->thisPkeyRowName = $thisPkeyRowName;
         $this->thatPkeyRowName = $thatPkeyRowName;
     }
 
-    public function getPivotTableName(){
+    public function getPivotTableName() : string{
         return $this->pivotTableName;
     }
 
-    public function getThisPkeyRowName(){
+    public function getThisPkeyRowName() : string{
         return $this->thisPkeyRowName;
     }
 
-    public function getThatPkeyRowName(){
+    public function getThatPkeyRowName() : string{
         return $this->thatPkeyRowName;
     }
 }

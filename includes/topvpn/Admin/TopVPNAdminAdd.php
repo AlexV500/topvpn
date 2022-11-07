@@ -15,7 +15,7 @@ class TopVPNAdminAdd extends AdminPostAction
 
         $this->initAllLanguageAdm('LangModel', 'topvpn_lang');
         $osModel = new OSModel('topvpn_os');
-        $os = $osModel->getAllRows(true, true, false);
+        $os = $osModel->getAllRows(true, false);
         $this->setFormFills(
             [
                 'vpn_name' => '',
@@ -33,8 +33,8 @@ class TopVPNAdminAdd extends AdminPostAction
                 'os' => $os,
                 'short_description' => '',
                 'description' => '',
-                'position' => '',
-                'active' => '',
+            //    'position' => '',
+                'active' => 1,
                 'created' => '',
             ]
         );
@@ -45,17 +45,17 @@ class TopVPNAdminAdd extends AdminPostAction
             $result = $this->getModel()->addRow($this->postData);
             if ($result->getResultStatus() == 'ok'){
                 $this->setOk('TopVPNModel', 'VPN добавлен успешно!');
-                $this->setResultMessages('TopVPNModel','ok', $this->getOk());
+                $this->setResultMessages('TopVPNModel','ok', $this->getOk('TopVPNModel'));
             }
             if ($result->getResultStatus() == 'error'){
                 $this->setError('TopVPNModel', $result->getResultMessage());
-                $this->setResultMessages('TopVPNModel','error', $this->getError());
+                $this->setResultMessages('TopVPNModel','error', $this->getError('TopVPNModel'));
             }
         }
         return $this;
     }
 
-    public function render(){
+    public function render() : object{
 
         $output = '';
         $output .= AdminHtmlFormInputs::renderAdminHead('Добавить VPN');

@@ -18,6 +18,13 @@
  * @since reviews 1.0.0
  */
 
+#wpbody-content {
+    padding-bottom: 65px;
+    float: left;
+    width: 99%;
+    overflow: visible;
+}
+
 label.field-label {
     padding-right: 0.5em;
     /*padding-left: 1em;*/
@@ -510,4 +517,44 @@ li.add-ons:hover {
 .reviews-fields .save {
     margin: 1em 0;
     display: block;
+}
+
+.wp-list-table .topvpnlist-id{
+    width: 2%;
+}
+.wp-list-table .topvpnlist-name{
+    width: 10%;
+}
+.wp-list-table .topvpnlist-sysName{
+    width: 10%;
+}
+.wp-list-table .topvpnlist-rating{
+    width: 6%;
+}
+.wp-list-table .topvpnlist-price{
+    width: 6%;
+}
+.wp-list-table .topvpnlist-lang{
+    width: 7%;
+}
+.wp-list-table .topvpnlist-positionUp{
+    width: 7%;
+}
+.wp-list-table .topvpnlist-positionDown{
+    width: 7%;
+}
+.wp-list-table .topvpnlist-status{
+    width: 5%;
+}
+.wp-list-table .topvpnlist-created{
+    width: 11%;
+}
+.wp-list-table .topvpnlist-updated{
+    width: 11%;
+}
+.wp-list-table .topvpnlist-edit{
+    width: 4%;
+}
+.wp-list-table .topvpnlist-delete{
+    width: 5%;
 }

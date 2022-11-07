@@ -26,18 +26,19 @@ class TopVPNModel extends AbstractModel{
         if($validate->getResultStatus() == 'error'){
             return Result::setResult('error', $validate->getResultMessage(), $data);
         }
-
-        $imgAdded = $this->checkFileAndUpload('vpn_logo', 'OSLogo');
+        $path = V_PLUGIN_INCLUDES_DIR . '/images/vpn/';
+        $imgAdded = $this->checkFileAndUpload('vpn_logo', $path);
         if ($imgAdded->getResultStatus() == 'ok') {
             $data['vpn_logo'] = $imgAdded->getResultData();
         }
+        $data['position'] = $this->getMaxPosition() + 1;
         $recordedRow = $this->insertRow($data);
         if ($recordedRow['last_insert_id'] > 0) {
-            $recordedRow = ManyToMany::addManyToOne($this->keyManyToManyFields, $recordedRow, $data['os']);
+            $recordedRow = ManyToMany::addManyToOne($this->keyManyToManyFields, $recordedRow, $data);
         } else {
-            return Result::setResult('error', 'Ошибка<br/>' . $imgAdded->getMessage(), $data);
+            return Result::setResult('error', 'Ошибка<br/>' . $imgAdded->getResultMessage(), $data);
         }
-        return Result::setResult('ok', 'Добавлено<br/>'.$imgAdded->getMessage(), $recordedRow);
+        return Result::setResult('ok', 'Добавлено<br/>'.$imgAdded->getResultMessage(), $recordedRow);
     }
 
     public function editRow($id, $data) : object
@@ -49,27 +50,34 @@ class TopVPNModel extends AbstractModel{
             return Result::setResult('error', $validate->getResultMessage(), $data);
         }
 
-        $imgAdded = $this->checkFileAndUpload('vpn_logo', 'OSLogo');
-        if ($imgAdded->getStatus() == 'ok') {
+        $path = V_PLUGIN_INCLUDES_DIR . '/images/vpn/';
+        $imgAdded = $this->checkFileAndUpload('vpn_logo', $path);
+        if ($imgAdded->getResultStatus() == 'ok') {
             $data['vpn_logo'] = $imgAdded->getResultData();
         }
 
         $updatedRow = $this->updateRow($id, $data);
         if(count($updatedRow) > 0){
-            $updatedRow = ManyToMany::editManyToOne($this->keyManyToManyFields, $updatedRow, $id, $data['os']);
+            $updatedRow = ManyToMany::editManyToOne($this->keyManyToManyFields, $updatedRow, $id, $data);
         } else {
-            return Result::setResult('error', 'Ошибка<br/>' . $imgAdded->getMessage(), $data);
+            return Result::setResult('error', 'Ошибка<br/>' . $imgAdded->getResultMessage(), $data);
         }
 
-        return Result::setResult('ok', 'Изменено<br/>'.$imgAdded->getMessage(), $updatedRow);
+        return Result::setResult('ok', 'Изменено<br/>'.$imgAdded->getResultMessage(), $updatedRow);
     }
 
-    public function deleteRow($id) : object{
+    public function deleteRow($data) : object{
+
+        $id = $data['id'];
+        $this->deleteName = $data['lang_name'];
+
+        $path = V_PLUGIN_INCLUDES_DIR . 'images/vpn/';
+        $deleteImgResult = $this->checkFileAndUnlink($data, 'vpn_logo', $path);
 
         if($this->removeRow($id) !== ''){
-            return Result::setResult('error', 'Ошибка<br/>', '');
+            return Result::setResult('error', 'Ошибка<br/>'.$deleteImgResult, '');
         }
-        return Result::setResult('ok', 'Удалено<br/>', '');
+        return Result::setResult('ok', 'Удалено<br/>'.$deleteImgResult, '');
     }
 
 }

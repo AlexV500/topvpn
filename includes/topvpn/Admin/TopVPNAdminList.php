@@ -18,12 +18,14 @@ class TopVPNAdminList extends AdminList {
         $this->selectLanguageAdm();
         $this->switchMultiLangMode();
         $this->initAllLanguageAdm('LangModel', 'topvpn_lang');
+        $this->setOrderColumn('position');
+        $this->setOrderDirection('ASC');
         $this->initRowsCount($this->activeMode);
         $this->setPaginationCount();
         $this->initPaginationConfig();
-        $this->setModelPaginationConfig();
-        $this->initRowsData($this->activeMode);
         $this->checkPositionAction();
+        $this->initRowsData($this->activeMode);
+
       //  $this->setActiveMode();
 
         $this->setColumnDisplayNames(array(
@@ -36,7 +38,9 @@ class TopVPNAdminList extends AdminList {
             'positionUp'     => __( 'Позиция', 'topvpn' ),
             'positionDown'   => __( 'Позиция', 'topvpn' ),
             'status'       => __( 'Статус', 'topvpn' ),
-            'edit'         => __( 'Редактировать', 'topvpn' ),
+            'created'       => __( 'Создано<br/>(Г-м-д)', 'topvpn' ),
+            'updated'       => __( 'Изменено<br/>(Г-м-д)', 'topvpn' ),
+            'edit'         => __( 'Редакт.', 'topvpn' ),
             'delete'       => __( 'Удалить', 'topvpn' ),
         ));
         return $this;
@@ -48,7 +52,7 @@ class TopVPNAdminList extends AdminList {
         $output .= AdminHtmlFormInputs::renderAdminHead('Список VPN');
         $output .= AdminHtmlFormInputs::renderAdminLanguageSelector($this->getAllLanguageAdm(), $this->getLanguageSysNameGet());
         $output .= '<table id="" class="wp-list-table widefat fixed" cellspacing="0">';
-        $output .= AdminHtmlFormInputs::renderAdminHeadOfTableList($this->getColumnDisplayNames());
+        $output .= AdminHtmlFormInputs::renderAdminHeadOfTableList($this->getColumnDisplayNames(), 'topvpnlist');
         $output .= '<tbody>';
 
         if ( $this->getRowsCount() > 0 ) {
@@ -65,20 +69,22 @@ class TopVPNAdminList extends AdminList {
                 $output .= $result['id'];
                 $output .= "</td>";
 
-                $output .= "<td class='topvpnName'>" . stripslashes( wp_filter_nohtml_kses( $result['topvpn_name'] ) ) . $name_suffix . "</td>";
-                $output .= "<td class='topvpnSysName'>" . stripslashes( wp_filter_nohtml_kses( $result['topvpn_sys_name'] ) ) . $name_suffix . "</td>";
+                $output .= "<td class='topvpnName'>" . stripslashes( wp_filter_nohtml_kses( $result['vpn_name'] ) ) . $name_suffix . "</td>";
+                $output .= "<td class='topvpnSysName'>" . stripslashes( wp_filter_nohtml_kses( $result['vpn_sys_name'] ) ) . $name_suffix . "</td>";
                 $output .= "<td class='rating'>".$result['rating']."</td>";
+                $output .= "<td class='price'>".$result['price']."</td>";
                 $output .= "<td class='lang'>".$result['lang']."</td>";
                 // $output .= "<td class='position'>".$result['position']."</td>";
 
-                $output .= "<td class='position'><a href='" . $this->getCurrentURL() . "&position_set=up&topvpn_id=" . $result['id'] . "'>Вверх</a></td>";
-                $output .= "<td class='position'><a href='" . $this->getCurrentURL() . "&position_set=down&topvpn_id=" . $result['id'] . "'>Вниз</a></td>";
+                $output .= "<td class='position'><a href='" . $this->getCurrentURL() . "&position_set=up&item_id=" . $result['id'] . "'>Вверх</a></td>";
+                $output .= "<td class='position'><a href='" . $this->getCurrentURL() . "&position_set=down&item_id=" . $result['id'] . "'>Вниз</a></td>";
 
                 $output .= "<td class='status'>".$this->getStatusTitle($result['active'])."</td>";
-
-                $output .= "<td class='edit'><a href='" . add_query_arg( 'paged', $this->getPaged(), $this->getCurrentURL() ) . "&action=edit&topvpn_id=" . $result['id'] . "' alt='" . __( 'Редактировать', 'topvpn') . "'><img src='". V_PLUGIN_URL ."images/edit.png'/></a></td>";
+                $output .= "<td class='created'>".$result['created']."</td>";
+                $output .= "<td class='updated'>".$result['updated']."</td>";
+                $output .= "<td class='edit'><a href='" . add_query_arg( 'paged', $this->getPaged(), $this->getCurrentURL() ) . "&action=edit&item_id=" . $result['id'] . "' alt='" . __( 'Редактировать', 'topvpn') . "'><img src='". V_CORE_URL ."admin/images/edit.png'/></a></td>";
                 $output .= "<td class='remove'>" .
-                    "<a href='" . $this->getCurrentURL() . "&action=delete&topvpn_id=" . $result['id'] . "' alt='" . __( 'Удалить', 'topvpn') . "'><img src='". V_PLUGIN_URL ."images/remove.png'/></a>" . "</td>";
+                    "<a href='" . $this->getCurrentURL() . "&action=delete&item_id=" . $result['id'] . "' alt='" . __( 'Удалить', 'topvpn') . "'><img src='". V_CORE_URL ."admin/images/remove.png'/></a>" . "</td>";
 
                 $output .= '</tr>';
 

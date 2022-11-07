@@ -16,8 +16,8 @@ class OSAdminAdd extends AdminPostAction{
                 'os_name' => '',
                 'os_sys_name' => '',
                 'os_logo' => '',
-                'position' => '',
-                'active' => '',
+              //  'position' => '',
+                'active' => 1,
                 'created' => '',
             ]
         );
@@ -27,11 +27,11 @@ class OSAdminAdd extends AdminPostAction{
             $result = $this->getModel()->addRow($this->postData);
             if ($result->getResultStatus() == 'ok'){
                 $this->setOk('OSModel', 'OS добавлен успешно!');
-                $this->setResultMessages('OSModel','ok', $this->getOk());
+                $this->setResultMessages('OSModel','ok', $this->getOk('OSModel'));
             }
             if ($result->getResultStatus() == 'error'){
                 $this->setError('OSModel', $result->getResultMessage());
-                $this->setResultMessages('OSModel','error', $this->getError());
+                $this->setResultMessages('OSModel','error', $this->getError('OSModel'));
             }
         }
         return $this;

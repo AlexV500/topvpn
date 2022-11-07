@@ -10,7 +10,7 @@ class LangAdminEdit extends AdminPostAction{
 
     public function init()
     {
-        $this->setId(HTTP::getGet('lang_id'));
+        $this->setId(HTTP::getGet('item_id'));
         $data = $this->getModel()->getRowById($this->getId());
         $this->setFormFills(
             [
@@ -31,11 +31,11 @@ class LangAdminEdit extends AdminPostAction{
             $result = $this->getModel()->editRow($this->getId(), $this->postData);
             if ($result->getResultStatus() == 'ok'){
                 $this->setOk('LangModel', 'Lang '.$this->getFormFill('lang_name').' изменен успешно!');
-                $this->setResultMessages('LangModel','ok', $this->getOk());
+                $this->setResultMessages('LangModel','ok', $this->getOk('LangModel'));
             }
             if ($result->getResultStatus() == 'error'){
                 $this->setError('LangModel', $result->getResultMessage());
-                $this->setResultMessages('LangModel','error', $this->getError());
+                $this->setResultMessages('LangModel','error', $this->getError('LangModel'));
             }
         }
         return $this;

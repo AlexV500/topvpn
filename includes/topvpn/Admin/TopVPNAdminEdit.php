@@ -14,11 +14,11 @@ class TopVPNAdminEdit extends AdminPostAction
 
     public function init() : object{
 
-        $this->setId(HTTP::getGet('topvpn_id'));
-        $this->initAllLanguageAdm('LangModel', 'languages');
-        $osModel = new OSModel('os');
+        $this->setId(HTTP::getGet('item_id'));
+        $this->initAllLanguageAdm('LangModel', 'topvpn_lang');
+        $osModel = new OSModel('topvpn_os');
         $data = $this->getModel()->getRowById($this->getId());
-        $this->os = $osModel->getAllRows(true, true, false);
+        $this->os = $osModel->getAllRows(true,  false);
         $this->osChecked = $osModel->getOSByVPNId( $this->getId());
         $this->setFormFills(
             [
@@ -51,11 +51,11 @@ class TopVPNAdminEdit extends AdminPostAction
             $result = $this->getModel()->editRow($this->getId(), $this->postData);
             if ($result->getResultStatus() == 'ok'){
                 $this->setOk('TopVPNModel', 'VPN '.$this->getFormFill('vpn_name').' изменен успешно!');
-                $this->setResultMessages('TopVPNModel','ok', $this->getOk());
+                $this->setResultMessages('TopVPNModel','ok', $this->getOk('TopVPNModel'));
             }
             if ($result->getResultStatus() == 'error'){
                 $this->setError('TopVPNModel', $result->getResultMessage());
-                $this->setResultMessages('TopVPNModel','error', $this->getError());
+                $this->setResultMessages('TopVPNModel','error', $this->getError('TopVPNModel'));
             }
         }
         return $this;
@@ -81,10 +81,12 @@ class TopVPNAdminEdit extends AdminPostAction
         $output .= AdminHtmlFormInputs::textarea('Полное описание', 'description', $this->getFormFill('description'), '');
         $output .= AdminHtmlFormInputs::input('Прайс','price', $this->getFormFill('price'),'namefield','');
         $output .= AdminHtmlFormInputs::input('Економия','save_from_price', $this->getFormFill('save_from_price'),'namefield','');
-        $output .= AdminHtmlFormInputs::renderAdminLanguageSelector($this->getAllLanguageAdm(), $this->getLanguageSysNameGet());
+        $output .= AdminHtmlFormInputs::renderAdminLanguageSelectorField($this->getAllLanguageAdm(), $this->getLanguageSysNameGet());
         $output .= AdminHtmlFormInputs::selectManyToOne('Поддерживаемые операционные системы', 'os', $this->getFormFillArray('os'), ['image_name' => 'logo', 'image_path' => 'logo', 'checked' => $this->osChecked], '');
+        $output .= '<input type="hidden" name="vpn_logo" value="">';
         $output .= '<input type="hidden" name="updated" value="">';
         $output .= '<input type="hidden" name="edit_vpn" value="1">';
+        $output .= AdminHtmlFormInputs::renderAdminFormSubmitButton('Редактировать');
         $output .= '</form>';
         $this->render = $output;
         return $this;

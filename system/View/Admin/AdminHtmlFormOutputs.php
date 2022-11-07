@@ -3,23 +3,28 @@
 
 class AdminHtmlFormOutputs{
 
-    public static function renderResultMessages( array $messages) : string{
+    public static function renderResultMessages( array $data) : string{
 
         $output = '';
+        echo '<pre>';
+        print_r($data);
+        echo '</pre>';
 
-        foreach ($messages as $type => $message) {
+        foreach ($data as $type => $array) {
 
-            foreach ($message as $status => $text){
+            foreach ($array as $key => $messages){
 
-                if($status == 'ok'){
-                    $output .= '<div class="resultMessageOk">';
-                    $output .= $text;
-                    $output .= '</div>';
-                }
-                if($status == 'error'){
-                    $output .= '<div class="resultMessageError">';
-                    $output .= $text;
-                    $output .= '</div>';
+                foreach ($messages as $status => $text) {
+                    if ($status == 'ok') {
+                        $output .= '<div class="resultMessageOk">';
+                        $output .= $text;
+                        $output .= '</div>';
+                    }
+                    if ($status == 'error') {
+                        $output .= '<div class="resultMessageError">';
+                        $output .= $text;
+                        $output .= '</div>';
+                    }
                 }
             }
         }

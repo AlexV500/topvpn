@@ -11,7 +11,7 @@ class OSModel extends AbstractModel{
         $this->unsetMultiLangMode();
     }
 
-    public function addRow($data)
+    public function addRow($data) : object
     {
         $validate = (new Validator)->checkLength($data['os_name'], 3, 30, 'os_name', true)
             ->checkLength($data['os_sys_name'], 3, 30, 'os_sys_name', true);
@@ -20,18 +20,19 @@ class OSModel extends AbstractModel{
             return Result::setResult('error', $validate->getResultMessage(), $data);
         }
 
-        $imgAdded = $this->checkFileAndUpload('os_logo', 'OSLogo');
-        if ($imgAdded->getStatus() == 'ok') {
+        $path = V_PLUGIN_INCLUDES_DIR . '/images/os/';
+        $imgAdded = $this->checkFileAndUpload('os_logo', $path);
+        if ($imgAdded->getResultStatus() == 'ok') {
             $data['os_logo'] = $imgAdded->getResultData();
         }
         $recordedRow = $this->insertRow($data);
         if ($recordedRow['last_insert_id'] == 0) {
-            return Result::setResult('error', 'Ошибка<br/>' . $imgAdded->getMessage(), $data);
+            return Result::setResult('error', 'Ошибка<br/>' . $imgAdded->getResultMessage(), $data);
         }
-        return Result::setResult('ok', 'Добавлено<br/>' . $imgAdded->getMessage(), $recordedRow);
+        return Result::setResult('ok', 'Добавлено<br/>' . $imgAdded->getResultMessage(), $recordedRow);
     }
 
-    public function editRow($id, $data)
+    public function editRow($id, $data) : object
     {
         $validate = (new Validator)->checkLength($data['os_name'], 3, 30, 'os_name', true)
             ->checkLength($data['os_sys_name'], 3, 30, 'os_sys_name', true);
@@ -39,32 +40,38 @@ class OSModel extends AbstractModel{
         if($validate->getResultStatus() == 'error'){
             return Result::setResult('error', $validate->getResultMessage(), $data);
         }
-
-        $imgAdded = $this->checkFileAndUpload('os_logo', 'OSLogo');
-        if ($imgAdded->getStatus() == 'ok') {
+        $path = V_PLUGIN_INCLUDES_DIR . '/images/os/';
+        $imgAdded = $this->checkFileAndUpload('os_logo', $path);
+        if ($imgAdded->getResultStatus() == 'ok') {
             $data['os_logo'] = $imgAdded->getResultData();
         }
 
         $updatedRow = $this->updateRow($id, $data);
 
-        return Result::setResult('ok', 'Изменено<br/>'.$imgAdded->getMessage(), $updatedRow);
+        return Result::setResult('ok', 'Изменено<br/>'.$imgAdded->getResultMessage(), $updatedRow);
     }
 
-    public function deleteRow($id){
+    public function deleteRow($data) : object{
+
+        $id = $data['id'];
+        $this->deleteName = $data['lang_name'];
+
+        $path = V_PLUGIN_INCLUDES_DIR . 'images/os/';
+        $deleteImgResult = $this->checkFileAndUnlink($data, 'os_logo', $path);
 
         if($this->removeRow($id) !== ''){
-            return Result::setResult('error', 'Ошибка<br/>', '');
+            return Result::setResult('error', 'Ошибка<br/>'.$deleteImgResult, '');
         }
-        return Result::setResult('ok', 'Удалено<br/>', '');
+        return Result::setResult('ok', 'Удалено<br/>'.$deleteImgResult, '');
     }
 
     public function getOSByVPNId($id)
     {
         $sql = "SELECT $this->dbTable.*
                               FROM $this->dbTable
-                              INNER JOIN {$this->prefix}vpn_os ON ({$this->dbTable}.id={$this->prefix}vpn_os.os_id)  
-                              INNER JOIN {$this->prefix}vpn ON ({$this->prefix}vpn.id = {$this->prefix}vpn_os.vpn_id)   
-                              WHERE {$this->prefix}vpn.id = $id";
+                              INNER JOIN {$this->prefix}topvpn_vpn_os ON ({$this->dbTable}.id={$this->prefix}topvpn_vpn_os.os_id)  
+                              INNER JOIN {$this->prefix}topvpn_vpn ON ({$this->prefix}topvpn_vpn.id = {$this->prefix}topvpn_vpn_os.vpn_id)   
+                              WHERE {$this->prefix}topvpn_vpn.id = $id";
         return $this->wpdb->get_results($sql, ARRAY_A);
     }
 

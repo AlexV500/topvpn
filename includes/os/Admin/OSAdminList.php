@@ -13,12 +13,14 @@ class OSAdminList extends AdminList{
 
     public function init() : object
     {
+        $this->setOrderColumn('position');
+        $this->setOrderDirection('ASC');
         $this->initRowsCount($this->activeMode);
         $this->setPaginationCount();
         $this->initPaginationConfig();
         $this->setModelPaginationConfig();
-        $this->initRowsData($this->activeMode);
         $this->checkPositionAction();
+        $this->initRowsData($this->activeMode);
         $this->setColumnDisplayNames(array(
             'id' => __( 'id', 'topvpn' ),
             'name'         => __( 'OS', 'topvpn' ),
@@ -54,14 +56,14 @@ class OSAdminList extends AdminList{
 
                 $output .= "<td class='topvpnName'>" . stripslashes( wp_filter_nohtml_kses( $result['os_name'] ) ) . $name_suffix . "</td>";
                 $output .= "<td class='topvpnSysName'>" . stripslashes( wp_filter_nohtml_kses( $result['os_sys_name'] ) ) . $name_suffix . "</td>";
-                $output .= "<td class='position'><a href='" . $this->getCurrentURL() . "&position_set=up&os_id=" . $result['id'] . "'>Вверх</a></td>";
-                $output .= "<td class='position'><a href='" . $this->getCurrentURL() . "&position_set=down&os_id=" . $result['id'] . "'>Вниз</a></td>";
+                $output .= "<td class='position'><a href='" . $this->getCurrentURL() . "&position_set=up&item_id=" . $result['id'] . "'>Вверх</a></td>";
+                $output .= "<td class='position'><a href='" . $this->getCurrentURL() . "&position_set=down&item_id=" . $result['id'] . "'>Вниз</a></td>";
 
                 $output .= "<td class='status'>".$this->getStatusTitle($result['active'])."</td>";
 
-                $output .= "<td class='edit'><a href='" . add_query_arg( 'paged', $this->getPaged(), $this->getCurrentURL() ) . "&action=edit&os_id=" . $result['id'] . "' alt='" . __( 'Редактировать', 'topvpn') . "'><img src='". V_PLUGIN_URL ."images/edit.png'/></a></td>";
+                $output .= "<td class='edit'><a href='" . add_query_arg( 'paged', $this->getPaged(), $this->getCurrentURL() ) . "&action=edit&item_id=" . $result['id'] . "' alt='" . __( 'Редактировать', 'topvpn') . "'><img src='". V_PLUGIN_URL ."images/edit.png'/></a></td>";
                 $output .= "<td class='remove'>" .
-                    "<a href='" . $this->getCurrentURL() . "&action=delete&os_id=" . $result['id'] . "' alt='" . __( 'Удалить', 'topvpn') . "'><img src='". V_PLUGIN_URL ."images/remove.png'/></a>" . "</td>";
+                    "<a href='" . $this->getCurrentURL() . "&action=delete&item_id=" . $result['id'] . "' alt='" . __( 'Удалить', 'topvpn') . "'><img src='". V_PLUGIN_URL ."images/remove.png'/></a>" . "</td>";
 
                 $output .= '</tr>';
 

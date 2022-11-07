@@ -11,13 +11,16 @@ abstract class AdminPosition{
 
     public function setPosition($id){
 
-        $line = $_GET['line'];
+        $set = '';
+        $positionUp = false;
+        $positionDown = false;
+        $positionSet = $_GET['position_set'];
         $currentURL = HTTP::getCurrentURL();
 
-        if($line == 'up'){
+        if($positionSet == 'up'){
             $positionUp = $this->getModel()->positionUp($id);
         }
-        if($line == 'down'){
+        if($positionSet == 'down'){
             $positionDown = $this->getModel()->positionDown($id);
         }
         if(($positionUp) or ($positionDown)){

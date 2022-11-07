@@ -8,6 +8,8 @@ class HTTP{
         $currentURL = ( is_ssl() ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
         $currentURL = remove_query_arg( 'paged', $currentURL );
         $currentURL = remove_query_arg( 'action', $currentURL );
+        $currentURL = remove_query_arg( 'position_set', $currentURL );
+        $currentURL = remove_query_arg( 'item_id', $currentURL );
         $currentURL = remove_query_arg( 'id', $currentURL );
 
         return esc_url($currentURL);

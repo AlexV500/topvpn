@@ -64,7 +64,7 @@ class ImageUpload{
                 if (!move_uploaded_file($fileTmpName, $path . $name . $format)) {
                     return Result::setResult('error', 'При записи изображения на диск произошла ошибка!', '');
                 }
-                return Result::setResult('ok', 'Картинка успешно загружена!', $name);
+                return Result::setResult('ok', 'Картинка успешно загружена!', $name.$extension);
             }
         } else return Result::setResult('no_file', 'Файлов изображений не было.', '');
     }

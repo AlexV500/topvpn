@@ -7,6 +7,8 @@ abstract class AdminPostAction extends AdminActions{
     protected int $id;
     protected array $formFills;
     protected array $postData;
+    protected string $deleteName;
+    protected string $resultStatus = 'waiting';
 
     public function __construct($model, $dbTable)
     {
@@ -28,10 +30,10 @@ abstract class AdminPostAction extends AdminActions{
         $formFill = [];
         foreach ($this->getFormFills() as $key => $value) {
             if (isset($_POST[$key])) {
-                if ($key == 'position') {
-                    $this->postData['position'] = $this->getModel()->getMaxPosition() + 1;
-                    continue;
-                }
+//                if ($key == 'position') {
+//                    $this->postData['position'] = $this->getModel()->getMaxPosition() + 1;
+//                    continue;
+//                }
                 $this->postData[$key] = $_POST[$key];
                 $formFill[$key] = $_POST[$key];
             }
@@ -48,6 +50,17 @@ abstract class AdminPostAction extends AdminActions{
     protected function getFormFills() : array{
 
         return $this->formFills;
+    }
+
+    protected function setResultStatus(string $resultStatus) : object{
+
+        $this->resultStatus = $resultStatus;
+        return $this;
+    }
+
+    protected function getResultStatus() : string{
+
+        return $this->resultStatus;
     }
 
     protected function getFormFill($key) : string{

@@ -15,10 +15,15 @@ abstract class AdminActions implements IAdminActions {
 
     public function __construct($model, $dbTable){
         $this->model = new $model($dbTable);
+        $this->setCurrentURL();
     }
 
     public function getModel(){
         return $this->model;
+    }
+
+    public function changeModelConf($model){
+        $this->model = $model;
     }
 
     public function getLanguageSysNameGet(){
@@ -38,7 +43,7 @@ abstract class AdminActions implements IAdminActions {
     }
 
     protected function initAllLanguageAdm( string $languageModel, string $dbTable) : object{
-        $this->allLanguageAdm = (new $languageModel($dbTable))->getAllRows(true, true, false);
+        $this->allLanguageAdm = (new $languageModel($dbTable))->getAllRows(true, false);
         return $this;
     }
 
@@ -88,7 +93,7 @@ abstract class AdminActions implements IAdminActions {
         return $this->ok[$type];
     }
 
-    protected function setError($type, $error) : object{
+    protected function setError( string $type, string $error) : object{
         $this->errors[$type] = $error;
         return $this;
     }
@@ -97,7 +102,7 @@ abstract class AdminActions implements IAdminActions {
         return $this->errors[$type];
     }
 
-    protected function setResultMessages($type, $status, $message) : object{
+    protected function setResultMessages( string $type, string $status, string $message) : object{
         $this->resultMessages[$type][] = [$status => $message];
         return $this;
     }

@@ -4,8 +4,7 @@ require_once V_CORE_LIB . 'View/Admin/AdminHtmlFormInputs.php';
 require_once V_CORE_LIB . 'View/Admin/AdminHtmlFormOutputs.php';
 require_once V_PLUGIN_INCLUDES_DIR . 'os/Model/OSModel.php';
 
-class OSAdminDelete extends AdminPostAction
-{
+class OSAdminDelete extends AdminPostAction{
 
     public function init() : object {
         $this->setId(HTTP::getGet('os_id'));
@@ -33,14 +32,14 @@ class OSAdminDelete extends AdminPostAction
     public function render() : object
     {
         $output = '';
-        $output .= AdminHtmlFormInputs::renderAdminHead('Удалить OS '.HTTP::getGet('os_name'));
+        $output .= AdminHtmlFormInputs::renderAdminHead('Удалить OS '.$this->deleteName);
         $output .= AdminHtmlFormOutputs::renderResultMessages($this->getResultMessages());
         $output .= '<form id="delete_os" enctype="" action="" method="post">';
         $output .= '<div class="topvpn delete">' .
             '<div class="field">' .
             '<label class="field-label first required">' .
             '<span class="label">' .
-            __( 'Вы действительно хотите удалить OS?', 'topvpn' ) .
+            __( 'Вы действительно хотите удалить OS ' . $this->deleteName . '?', 'topvpn' ) .
             '</span>' .
             '</label>' .
             '</div>' .
@@ -50,7 +49,6 @@ class OSAdminDelete extends AdminPostAction
             '<input type="hidden" value="deleteOSAdm" name="delete_os"/>' .
             '<input type="hidden" value="'.$this->getId().'" name="os_id"/>' .
             '<input type="hidden" value="delete" name="action"/>';
-        $output .=
         $output .= '</form>';
         $this->render = $output;
         return $this;

@@ -66,7 +66,7 @@ class AdminHtmlFormInputs
             $checked = array_column($params['checked'], 'id');
         }
 
-        if (count($formFill) > 0) {
+        if ((count($formFill) > 0) && ($formFill[0] !== '_empty_')) {
             $formFill = array_chunk($formFill, ceil(count($formFill) / 2));
 
             $output .= '<table>';
@@ -106,6 +106,8 @@ class AdminHtmlFormInputs
             }
             $output .= '</tr>';
             $output .= '</table>';
+        } else {
+            $output .= '<input type="hidden" name="' . $name . '[]" value="_empty_">';
         }
         return $output;
     }
@@ -174,16 +176,16 @@ class AdminHtmlFormInputs
         return $output;
     }
 
-    public static function renderAdminHeadOfTableList(array $columnDisplayNames): string
+    public static function renderAdminHeadOfTableList(array $columnDisplayNames, string $tag = ''): string
     {
-
         $output = '';
         $output .= '<thead>';
         $output .= '<tr>';
 
         foreach ($columnDisplayNames as $key => $columnDisplayName) {
 
-            $class = $key;
+            $divider = ($tag == '') ? '' : '-';
+            $class = $tag.$divider.$key;
             $output .= "<th scope='col' class='$class'>$columnDisplayName</th>";
         }
 
@@ -202,8 +204,15 @@ class AdminHtmlFormInputs
         return $output;
     }
 
-    public static function renderAdminFormSubmitButton($value){
-        $output = '<input class="button button-primary" type="submit" value="' . $value . '"/>';
+    public static function renderAdminFormSubmitButton($value) : string{
+        $output = '<div class="field">' .
+            '<label class="field-label">' .
+            '<span class="label">' .
+            __( '', 'fxreviews' ) .
+            '</span>' .
+            '</label>' .
+            '</div>';
+        $output .= '<input class="button button-primary" type="submit" value="' . $value . '"/>';
         return $output;
     }
 

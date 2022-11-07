@@ -4,23 +4,28 @@ require_once V_CORE_LIB .  '/Model/DTO/DBRelationTableDTO.php';
 
 class ManyToMany {
 
+    public $wpdb;
+    public string $prefix;
     private string $pivotTableName;
     private string $thisPkeyRowName;
     private string $thatPkeyRowName;
 
     public function __construct($DBRelationTableDTO){
-        $this->pivotTableName = $DBRelationTableDTO->getPivotTableName();
+        global $wpdb;
+        $this->wpdb = &$wpdb;
+        $this->prefix = $wpdb->prefix;
+        $this->pivotTableName = $this->prefix.$DBRelationTableDTO->getPivotTableName();
         $this->thisPkeyRowName = $DBRelationTableDTO->getThisPkeyRowName();
         $this->thatPkeyRowName = $DBRelationTableDTO->getThatPkeyRowName();
     }
 
-    public static function addManyToOne($keyManyToManyFields, $recordedRow, $manyItemsToThisOne){
+    public static function addManyToOne( array $keyManyToManyFields, array $recordedRow, array $manyItemsToThisOnePostData){
         if(count($keyManyToManyFields) > 0){
-            foreach ($keyManyToManyFields as $keyManyToOneField){
-                $DBRelationTableDTO = new DBRelationTableDTO($keyManyToOneField['pivot_table_name'], $keyManyToOneField['this_key_name'], $keyManyToOneField['that_key_name']);
+            foreach ($keyManyToManyFields as $keyManyToOne => $keyManyToOneData){
+                $DBRelationTableDTO = new DBRelationTableDTO($keyManyToOneData['pivot_table_name'], $keyManyToOneData['this_key_name'], $keyManyToOneData['that_key_name']);
                 $manyToOne = new self($DBRelationTableDTO);
-                $manyToOneData = $manyToOne->_addManyToOne($recordedRow['last_insert_id'], $manyItemsToThisOne[$keyManyToOneField]);
-                $recordedRow[$keyManyToOneField] = $manyToOneData;
+                $manyToOneData = $manyToOne->_addManyToOne($recordedRow['last_insert_id'], $manyItemsToThisOnePostData[$keyManyToOne]);
+                $recordedRow[$keyManyToOne] = $manyToOneData;
             }
         } return $recordedRow;
     }
@@ -42,41 +47,49 @@ class ManyToMany {
     private function addThisRowThatRowLinks($thisId, $manyItemsToThisOne) : bool
     {
         $thatIdArray = [];
-        foreach ($manyItemsToThisOne as $thatId) {
-            $thatIdArray[] = $thatId;
-            if (!$this->recordToThisOneThatManyLink($thisId, $thatId)) {
-                array_pop($thatIdArray);
-                $this->removeBackUpThisOneThatManyLinks($thisId, $thatIdArray);
-                return false;
+        if(count($manyItemsToThisOne) > 0) {
+            foreach ($manyItemsToThisOne as $thatId) {
+                $thatIdArray[] = $thatId;
+                if (!$this->recordToThisOneThatManyLink($thisId, $thatId)) {
+                    array_pop($thatIdArray);
+                    $this->removeBackUpThisOneThatManyLinks($thisId, $thatIdArray);
+                    return false;
+                }
             }
-        } return true;
+            return true;
+        } return false;
     }
 
 
     //-----------------EDIT------------------
 
-    public static function editManyToOne($keyManyToManyFields, $recordedRow, $thisId, $manyItemsToThisOnePostData){
-        if(count($keyManyToManyFields) > 0){
-            foreach ($keyManyToManyFields as $keyManyToOneField){
-                $DBRelationTableDTO = new DBRelationTableDTO($keyManyToOneField['pivot_table_name'], $keyManyToOneField['this_key_name'], $keyManyToOneField['that_key_name']);
+    public static function editManyToOne(array $keyManyToManyFields, array $recordedRow, int $thisId, array $manyItemsToThisOnePostData)
+    {
+        if (count($keyManyToManyFields) > 0) {
+            foreach ($keyManyToManyFields as $keyManyToOne => $keyManyToOneData) {
+                $DBRelationTableDTO = new DBRelationTableDTO($keyManyToOneData['pivot_table_name'], $keyManyToOneData['this_key_name'], $keyManyToOneData['that_key_name']);
                 $manyToOne = new self($DBRelationTableDTO);
-                $manyToOneData = $manyToOne->_editManyToOne($thisId, $manyItemsToThisOnePostData);
-                if(count($manyToOneData) > 0){
-                    $recordedRow[$keyManyToOneField] = $manyToOneData;
-                }
+
+                $manyToOneData = $manyToOne->_editManyToOne($thisId, $manyItemsToThisOnePostData[$keyManyToOne]);
+                $recordedRow[$keyManyToOne] = $manyToOneData;
+
             }
-        } return $recordedRow;
+        }
+        return $recordedRow;
     }
 
-    private function _editManyToOne($thisId, $manyItemsToThisOnePostData) : array{
+    private function _editManyToOne($thisId, $manyItemsToThisOne): array
+    {
         $returnedData = [];
-        if($this->refreshThisRowThatRowLinks($thisId, $manyItemsToThisOnePostData)) {
-            $returnedData = $this->getThatManyToThisOneLinks($thisId);
+        if (is_array($manyItemsToThisOne) && (count($manyItemsToThisOne)) > 0) {
+            if ($this->refreshThisRowThatRowLinks($thisId, $manyItemsToThisOne)) {
+                $returnedData = $this->getThatManyToThisOneLinks($thisId);
+            }
         }
         return $returnedData;
     }
 
-    private function refreshThisRowThatRowLinks($thisId, $manyItemsToThisOnePostData) : bool{
+    private function refreshThisRowThatRowLinks($thisId, $manyItemsToThisOne) : bool{
 
         $thatManyToThisOneLinks = $this->getThatManyToThisOneLinks($thisId);
         $manyItemsToThisOneIds = [];
@@ -90,10 +103,10 @@ class ManyToMany {
                 }
             }
 
-            if (empty($manyItemsToThisOnePostData)) {
+            if (empty($manyItemsToThisOne)) {
                 return TRUE;
             }
-            if (empty(array_diff($manyItemsToThisOnePostData, $manyItemsToThisOneIds))&&(empty(array_diff($manyItemsToThisOneIds, $manyItemsToThisOnePostData)))) {
+            if (empty(array_diff($manyItemsToThisOne, $manyItemsToThisOneIds))&&(empty(array_diff($manyItemsToThisOneIds, $manyItemsToThisOne)))) {
                 return TRUE;
             }
             if (!$this->_deleteManyToOne($thisId)){
@@ -101,7 +114,7 @@ class ManyToMany {
             }
         }
 //
-        if(!$this->addThisRowThatRowLinks($thisId, $manyItemsToThisOnePostData)){
+        if(!$this->addThisRowThatRowLinks($thisId, $manyItemsToThisOne)){
             return false;
         }
 

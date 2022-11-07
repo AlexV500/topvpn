@@ -11,7 +11,7 @@ class LangModel extends AbstractModel{
         $this->unsetMultiLangMode();
     }
 
-    public function addRow($data)
+    public function addRow($data) : object
     {
         $validate = (new Validator)->checkLength($data['lang_name'], 3, 30, 'lang_name', true)
             ->checkLength($data['lang_sys_name'], 2, 10, 'lang_sys_name', true);
@@ -20,18 +20,19 @@ class LangModel extends AbstractModel{
             return Result::setResult('error', $validate->getResultMessage(), $data);
         }
 
-        $imgAdded = $this->checkFileAndUpload('lang_logo', 'languageLogo');
-        if ($imgAdded->getStatus() == 'ok') {
+        $path = V_PLUGIN_INCLUDES_DIR . '/images/lang/';
+        $imgAdded = $this->checkFileAndUpload('lang_logo', $path);
+        if ($imgAdded->getResultStatus() == 'ok') {
             $data['lang_logo'] = $imgAdded->getResultData();
         }
         $recordedRow = $this->insertRow($data);
         if ($recordedRow['last_insert_id'] == 0) {
-            return Result::setResult('error', 'Ошибка<br/>' . $imgAdded->getMessage(), $data);
+            return Result::setResult('error', 'Ошибка<br/>' . $imgAdded->getResultMessage(), $data);
         }
-        return Result::setResult('ok', 'Добавлено<br/>' . $imgAdded->getMessage(), $recordedRow);
+        return Result::setResult('ok', 'Язык добавлен успешно!<br/>' . $imgAdded->getResultMessage(), $recordedRow);
     }
 
-    public function editRow($id, $data)
+    public function editRow($id, $data) : object
     {
         $validate = (new Validator)->checkLength($data['lang_name'], 3, 30, 'lang_name', true)
             ->checkLength($data['lang_sys_name'], 3, 30, 'lang_sys_name', true);
@@ -40,22 +41,29 @@ class LangModel extends AbstractModel{
             return Result::setResult('error', $validate->getResultMessage(), $data);
         }
 
-        $imgAdded = $this->checkFileAndUpload('lang_logo', 'langLogo');
+        $path = V_PLUGIN_INCLUDES_DIR . '/images/lang/';
+        $imgAdded = $this->checkFileAndUpload('lang_logo', $path);
         if ($imgAdded->getStatus() == 'ok') {
             $data['lang_logo'] = $imgAdded->getResultData();
         }
 
         $updatedRow = $this->updateRow($id, $data);
 
-        return Result::setResult('ok', 'Изменено<br/>'.$imgAdded->getMessage(), $updatedRow);
+        return Result::setResult('ok', 'Язык изменен успешно!<br/>'.$imgAdded->getResultMessage(), $updatedRow);
     }
 
-    public function deleteRow($id){
+    public function deleteRow( array $data) : object{
+
+        $id = $data['id'];
+        $this->deleteName = $data['lang_name'];
+
+        $path = V_PLUGIN_INCLUDES_DIR . 'images/lang/';
+        $deleteImgResult = $this->checkFileAndUnlink($data, 'lang_logo', $path);
 
         if($this->removeRow($id) !== ''){
-            return Result::setResult('error', 'Ошибка<br/>', '');
+            return Result::setResult('error', 'Ошибка<br/>'.$deleteImgResult, '');
         }
-        return Result::setResult('ok', 'Удалено<br/>', '');
+        return Result::setResult('ok', 'Удалено<br/>'.$deleteImgResult, '');
     }
 
 }

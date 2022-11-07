@@ -5,7 +5,7 @@ class OSAdminManager{
 
     public static function init(){
 
-        $action = HTTP::getRequestParam('action');
+        $action = HTTP::getGet('action');
 
         switch ($action){
             case '':
