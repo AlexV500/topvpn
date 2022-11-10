@@ -20,16 +20,19 @@ class OSModel extends AbstractModel{
             return Result::setResult('error', $validate->getResultMessage(), $data);
         }
 
-        $path = V_PLUGIN_INCLUDES_DIR . '/images/os/';
+        $path = V_PLUGIN_INCLUDES_DIR . 'images/os/';
         $imgAdded = $this->checkFileAndUpload('os_logo', $path);
         if ($imgAdded->getResultStatus() == 'ok') {
             $data['os_logo'] = $imgAdded->getResultData();
         }
+        $this->resultMessages->addResultMessage($this->getNameOfClass(), $imgAdded->getResultStatus(), $imgAdded->getResultMessage());
         $recordedRow = $this->insertRow($data);
         if ($recordedRow['last_insert_id'] == 0) {
-            return Result::setResult('error', 'Ошибка<br/>' . $imgAdded->getResultMessage(), $data);
+            $this->resultMessages->addResultMessage($this->getNameOfClass(), 'error', 'Ошибка записи в Б.Д.');
+            return Result::setResult('error', $this->resultMessages->getResultMessages($this->getNameOfClass()), $data);
         }
-        return Result::setResult('ok', 'Добавлено<br/>' . $imgAdded->getResultMessage(), $recordedRow);
+        $this->resultMessages->addResultMessage($this->getNameOfClass(), 'ok', 'OS добавлен успешно!');
+        return Result::setResult('ok', $this->resultMessages->getResultMessages($this->getNameOfClass()), $recordedRow);
     }
 
     public function editRow($id, $data) : object
@@ -40,29 +43,33 @@ class OSModel extends AbstractModel{
         if($validate->getResultStatus() == 'error'){
             return Result::setResult('error', $validate->getResultMessage(), $data);
         }
-        $path = V_PLUGIN_INCLUDES_DIR . '/images/os/';
+        $path = V_PLUGIN_INCLUDES_DIR . 'images/os/';
         $imgAdded = $this->checkFileAndUpload('os_logo', $path);
-        if ($imgAdded->getResultStatus() == 'ok') {
-            $data['os_logo'] = $imgAdded->getResultData();
+        if ($imgAdded->getResultStatus() !== 'no_file') {
+            if ($imgAdded->getResultStatus() == 'ok') {
+                $data['os_logo'] = $imgAdded->getResultData();
+            }
+            $this->resultMessages->addResultMessage($this->getNameOfClass(), $imgAdded->getResultStatus(), $imgAdded->getResultMessage());
         }
-
         $updatedRow = $this->updateRow($id, $data);
 
-        return Result::setResult('ok', 'Изменено<br/>'.$imgAdded->getResultMessage(), $updatedRow);
+        $this->resultMessages->addResultMessage($this->getNameOfClass(), 'ok', 'OS '. $updatedRow['os_name'] .' изменен  успешно!');
+        return Result::setResult('ok', $this->resultMessages->getResultMessages($this->getNameOfClass()), $updatedRow);
     }
 
     public function deleteRow($data) : object{
 
         $id = $data['id'];
-        $this->deleteName = $data['lang_name'];
 
         $path = V_PLUGIN_INCLUDES_DIR . 'images/os/';
         $deleteImgResult = $this->checkFileAndUnlink($data, 'os_logo', $path);
-
+        $this->resultMessages->addResultMessage($this->getNameOfClass(), $deleteImgResult->getResultStatus(), $deleteImgResult->getResultMessage());
         if($this->removeRow($id) !== ''){
-            return Result::setResult('error', 'Ошибка<br/>'.$deleteImgResult, '');
+            $this->resultMessages->addResultMessage($this->getNameOfClass(), 'error', 'Ошибка удаления Б.Д.');
+            return Result::setResult('error', $this->resultMessages->getResultMessages($this->getNameOfClass()), '');
         }
-        return Result::setResult('ok', 'Удалено<br/>'.$deleteImgResult, '');
+        $this->resultMessages->addResultMessage($this->getNameOfClass(), 'ok', $data['os_name'].' удален успешно');
+        return Result::setResult('ok', $this->resultMessages->getResultMessages($this->getNameOfClass()), '');
     }
 
     public function getOSByVPNId($id)

@@ -19,15 +19,8 @@ class TopVPNAdminDelete extends AdminPostAction{
 
         if ( isset( $_POST['delete_vpn'] )){
             $result = $this->getModel()->deleteRow($data);
-            $this->setResultStatus($result->getResultStatus());
-            if ($result->getResultStatus() == 'ok'){
-                $this->setOk('TopVPNModel', $result->getResultMessage());
-                $this->setResultMessages('TopVPNModel','ok', $this->getOk('TopVPNModel'));
-            }
-            if ($result->getResultStatus() == 'error'){
-                $this->setError('TopVPNModel', $result->getResultMessage());
-                $this->setResultMessages('TopVPNModel','error', $this->getError('TopVPNModel'));
-            }
+            $this->setResultMessages('TopVPNModel', $result->getResultStatus(), $result->getResultMessage());
+            $this->setResultStatus('done');
         }
         return $this;
     }

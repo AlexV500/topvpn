@@ -1,5 +1,9 @@
 <?php
 require_once V_CORE_LIB . 'Utils/ImageUpload.php';
+require_once V_CORE_LIB . 'Utils/ErrorStatus.php';
+require_once V_CORE_LIB . 'Utils/Result.php';
+require_once V_CORE_LIB . 'Utils/ResultMessages.php';
+
 
 abstract class AbstractModel
 {
@@ -13,8 +17,8 @@ abstract class AbstractModel
     protected string $orderDirection = 'ASC';
     public string $rowCount;
     public string $offset;
-    public array $errorStatus;
-
+    public object $errorStatus;
+    public object $resultMessages;
 
     protected function __construct(string $dbTable)
     {
@@ -22,25 +26,28 @@ abstract class AbstractModel
         $this->wpdb = &$wpdb;
         $this->prefix = $wpdb->prefix;
         $this->dbTable = $this->prefix.$dbTable;
+        $this->errorStatus = new ErrorStatus();
+        $this->resultMessages = new ResultMessages();
     }
 
-    public function setErrorStatus( string $type, bool $status = false) : object
+    public function getNameOfClass() : string
     {
-        $this->errorStatus[$type] = $status;
-        return $this;
+        return static::class;
     }
 
-    public function getErrorStatus(string $type){
-
-        return $this->errorStatus[$type];
+    public function getDbTable() : string
+    {
+        return $this->dbTable;
     }
 
     public function switchMultiLangMode( string $lang) : object
     {
         if($lang !== ''){
             $this->setMultiLangMode();
+            $this->setLang($lang);
         } else {
             $this->unsetMultiLangMode();
+            $this->setLang('');
         }
         return $this;
     }
@@ -136,6 +143,34 @@ abstract class AbstractModel
         return $this->wpdb->get_results($sql, ARRAY_A);
     }
 
+    public function getAllRowsFromCustomTable( string $dbTable, bool $activeMode = true, bool $paginationMode = true)
+    {
+        $orderSql = '';
+        $paginatSql = '';
+        $dbTable = $this->prefix.$dbTable;
+        $orderSql = 'ORDER BY '.$this->orderColumn.' ' . $this->orderDirection;
+
+        if ($paginationMode) {
+            $paginatSql = 'LIMIT ' . $this->countAllRows($activeMode) . ' OFFSET ' . $this->offset;
+        }
+
+        if ($this->multiLangMode) {
+            if ($activeMode) {
+                $sql = "SELECT * FROM `{$dbTable}` WHERE active=1 AND lang = '{$this->lang}' $orderSql $paginatSql";
+            } else {
+                $sql = "SELECT * FROM `{$dbTable}` WHERE lang = '{$this->lang}' $orderSql $paginatSql";
+            }
+        } else {
+            if ($activeMode) {
+                $sql = "SELECT * FROM `{$dbTable}` WHERE active=1 $orderSql $paginatSql";
+            } else {
+                $sql = "SELECT * FROM `{$dbTable}` $orderSql $paginatSql";
+            }
+        }
+
+        return $this->wpdb->get_results($sql, ARRAY_A);
+    }
+
 
     public function countAllRows($activeMode = true){
 
@@ -150,6 +185,27 @@ abstract class AbstractModel
                 $query = "SELECT COUNT(*) FROM `{$this->dbTable}` WHERE active=1";
             } else {
                 $query = "SELECT COUNT(*) FROM `{$this->dbTable}`";
+            }
+        }
+
+        return $this->wpdb->get_var($query);
+    }
+
+    public function countAllRowsFromCustomTable( string $dbTable, $activeMode = true){
+
+        $dbTable = $this->prefix.$dbTable;
+
+        if($this->multiLangMode) {
+            if ($activeMode) {
+                $query = "SELECT COUNT(*) FROM `{$dbTable}` WHERE active=1 AND lang = '{$this->lang}'";
+            } else {
+                $query = "SELECT COUNT(*) FROM `{$dbTable}` WHERE lang = '{$this->lang}'";
+            }
+        } else {
+            if ($activeMode) {
+                $query = "SELECT COUNT(*) FROM `{$dbTable}` WHERE active=1";
+            } else {
+                $query = "SELECT COUNT(*) FROM `{$dbTable}`";
             }
         }
 
@@ -211,7 +267,7 @@ abstract class AbstractModel
 //        }
         $pairs = [];
         $returnData = [];
-        $this->setErrorStatus('updateRow');
+        $this->errorStatus->setErrorStatus('updateRow');
 
         foreach ($fields as $field => $val) {
             if (is_array($val)) {
@@ -237,7 +293,7 @@ abstract class AbstractModel
                         $returnData[$key] = $val;
                     }
                 }
-            } else $this->setErrorStatus('updateRow', true);
+            } else $this->errorStatus->setErrorStatus('updateRow', true);
         }
         return $returnData;
     }
@@ -318,7 +374,7 @@ abstract class AbstractModel
 
         $this->updateRow($nextOrPrevRow['id'], $fields2, false);
 
-        if($this->getErrorStatus('updateRow')){
+        if($this->errorStatus->getErrorStatus('updateRow')){
             return false;
         }
 
@@ -329,36 +385,67 @@ abstract class AbstractModel
         return ImageUpload::Upload($fieldName, $path);
     }
 
-    public function checkFileAndUnlink(array $data, string $fieldName, string $path): string
+    public function checkFileAndUnlink(array $data, string $fieldName, string $path): object
     {
-
         $ok = false;
         $file = '';
-        $this->setErrorStatus('no_file');
-        $this->setErrorStatus('no_column_record');
-
-        if (isset($data[$fieldName])) {
+        $message = '';
+        $this->errorStatus->setErrorStatus('no_file');
+        $this->errorStatus->setErrorStatus('no_column_record');
+        $data[$fieldName] = trim($data[$fieldName]);
+        if (isset($data[$fieldName]) && $data[$fieldName] !== '') {
             $file = $path . $data[$fieldName];
             if (file_exists($file)) {
                 unlink($file);
                 $ok = true;
             } else {
-                $this->setErrorStatus('no_file', true);
+                $this->errorStatus->setErrorStatus('no_file', true);
+                return Result::setResult('no_file', 'Не найден файл изображения!', '');
             }
-        } else $this->setErrorStatus('no_column_record', true);
+            $this->errorStatus->setErrorStatus('no_column_record', true);
+        } else return Result::setResult('error', 'Не найдено название изображения в колонке записи в б.д.!', '');
 
+        if($ok) {
+            $message = 'Изображение: ' . $data[$fieldName] . ' удалено успешно!<br/>';
+        }
+        return Result::setResult('ok', $message, '');
+    }
 
-        $return = '';
-        if ($this->getErrorStatus('no_file')) {
-            $return .= 'Не найден файл изображения!<br/>';
+    public function getFiles($path){
+        $files = scandir($path);
+        $files = array_diff($files, ['..', '.']);
+        return $files;
+    }
+
+    public function unlinkAllUnusedImages( string $dbTable, string $fieldName, string $path){
+
+        $countAllRows = $this->countAllRowsFromCustomTable($dbTable,false);
+        $rows = $this->getAllRowsFromCustomTable($dbTable,false, false);
+
+        $files = $this->getFiles($path);
+        if(!$files){
+            return Result::setResult('error', 'Ошибка!', '');
         }
-        if ($this->getErrorStatus('no_column_record')) {
-            $return .= 'Не найдено название изображения в колонке записи в б.д.!<br/>';
+        $fileNames = array_column($rows, $fieldName);
+        if(($countAllRows > 0)&&(count($files) > 0)) {
+            foreach ($files as $file) {
+                if (!in_array($file, $fileNames)) {
+                    $file = $path . $file;
+                    if (file_exists($file)) {
+                        unlink($file);
+                    }
+                }
+            }
         }
 
-        if ($ok) {
-            $return .= 'Изображение: ' . $file . ' удалено успешно!<br/>';
+        if(($countAllRows == 0)&&(count($files) > 0)) {
+            foreach ($files as $file) {
+                $file = $path . $file;
+                if (file_exists($file)) {
+                    unlink($file);
+                }
+            }
         }
-        return $return;
+        return Result::setResult('ok', 'Процедура проведена!', '');
     }
 }

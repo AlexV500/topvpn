@@ -49,7 +49,7 @@ class AdminHtmlFormInputs
         return $output;
     }
 
-    public static function selectManyToOne($label, $name, array $formFill, array $params, $required = ''): string
+    public static function selectManyToOne($label, $name, array $rows, array $params, $required = ''): string
     {
 
         $img = '';
@@ -66,20 +66,20 @@ class AdminHtmlFormInputs
             $checked = array_column($params['checked'], 'id');
         }
 
-        if ((count($formFill) > 0) && ($formFill[0] !== '_empty_')) {
-            $formFill = array_chunk($formFill, ceil(count($formFill) / 2));
+        if ((count($rows) > 0)) {
+            $rows = array_chunk($rows, ceil(count($rows) / 2));
 
             $output .= '<table>';
             $output .= '<tr>';
-            foreach ($formFill as $i => $items) {
+            foreach ($rows as $i => $items) {
                 $output .= '<td width="25%">';
                 $output .= '<ul class="list-unstyled">';
 
                 foreach ($items as $item):
 
                     if ((isset($params['image_name'])) && (isset($params['image_path']))) {
-                        $logo = V_PLUGIN_URL . $params['image_path'] . $item[$params['image_name']];
-                        $img = '<img src="' . $logo . '" alt="">';
+                        $logo = V_PLUGIN_URL .'images/'. $params['image_path'] . $item[$params['image_name']];
+                        $img = '<img src="' . $logo . '" alt="" width="20px" height="20px">';
                     }
                     $formChecked = '';
                     if(isset($params['checked'])) {
@@ -130,11 +130,10 @@ class AdminHtmlFormInputs
 
     public static function renderAdminLanguageSelector(array $getAllLanguageAdm, string $languageSysName): string
     {
-
         $output = '';
         $output .= '<form id="add-topvpn" enctype="" action="" method="post">';
         $output .= '<select name="languageSysName">';
-        $output .= '<option value="">Выбрать язык</option>';
+        $output .= '<option value="no_lang">Выбрать язык</option>';
         foreach ($getAllLanguageAdm as $language) {
             $selected = $language['lang_sys_name'] == $languageSysName ? ' selected="selected" ' : '';
             $output .= '<option ' . $selected . ' value="' . $language['lang_sys_name'] . '">' . $language['lang_name'] . '</option>';
@@ -224,6 +223,21 @@ class AdminHtmlFormInputs
         $pagination = new Pagination($paginationCount, null, $rowsCount);
         $output .= '<div class="tablenav bottom">';
         $output .= $pagination->pagination('bottom');
+        $output .= '</div>';
+        return $output;
+    }
+
+    public static function renderAdminManageForm(string $countFromTable, string $countFiles): string
+    {
+        $output = '';
+        $output .= '<form id="delete-img-topvpn" enctype="" action="" method="post">';
+        $output .= '<div class="manage">';
+        $output .= 'Записей в базе данных: '.$countFromTable.'<br/>';
+        $output .= 'Файлов изображений(логотипов) '.$countFiles.'<br/>';
+        $output .= '<input type="hidden" value="deleteLostImages" name="deleteLostImages"/>';
+        if($countFiles > $countFromTable)
+        $output .= '<br/><input class="button button-primary" type="submit" value="' . __('Удалить лишние изображения', 'topvpn') . '"/>
+                    </form><br/>';
         $output .= '</div>';
         return $output;
     }

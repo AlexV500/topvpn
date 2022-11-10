@@ -92,14 +92,14 @@ class Pagination{
             'first-page' . $disable_first,
             esc_attr__( 'Go to the first page' ),
             esc_url( remove_query_arg( $this->_pagination_args['paged_var'], $current_url ) ),
-            '&laquo;'
+            'Перв.'
         );
 
         $page_links[] = sprintf( "<a class='%s' title='%s' href='%s'>%s</a>",
             'prev-page' . $disable_first,
             esc_attr__( 'Go to the previous page' ),
             esc_url( add_query_arg( $this->_pagination_args['paged_var'], max( 1, $current-1 ), $current_url ) ),
-            '&lsaquo;'
+            'Пред.'
         );
 
         if ( 'bottom' == $which )
@@ -119,14 +119,14 @@ class Pagination{
             'next-page' . $disable_last,
             esc_attr__( 'Go to the next page' ),
             esc_url( add_query_arg( $this->_pagination_args['paged_var'], min( $total_pages, $current+1 ), $current_url ) ),
-            '&rsaquo;'
+            'След.'
         );
 
         $page_links[] = sprintf( "<a class='%s' title='%s' href='%s'>%s</a>",
             'last-page' . $disable_last,
             esc_attr__( 'Go to the last page' ),
             esc_url( add_query_arg( $this->_pagination_args['paged_var'], $total_pages, $current_url ) ),
-            '&raquo;'
+            'Посл.'
         );
 
         $output .= "\n" . join( "\n", $page_links );

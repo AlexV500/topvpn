@@ -519,8 +519,47 @@ li.add-ons:hover {
     display: block;
 }
 
+.alert {
+    width: 99%;
+    padding: 12px 16px;
+    border-radius: 4px;
+    border-style: solid;
+    border-width: 1px;
+    margin-bottom: 12px;
+    font-size: 16px;
+}
+
+.alert.alert-success {
+    background-color: rgba(227, 253, 235, 1);
+    border-color: rgba(38, 179, 3, 1);
+    color: rgba(60, 118, 61, 1);
+}
+
+.alert.alert-info {
+    background-color: rgba(217, 237, 247, 1);
+    color: rgba(49, 112, 143, 1);
+    border-color: rgba(126, 182, 193, 1);
+}
+
+
+.alert.alert-warning {
+    background-color: rgba(252, 248, 227, 1);
+    border-color: rgba(177, 161, 129, 1);
+    color: rgba(138, 109, 59, 1);
+}
+
+.alert.alert-danger {
+    background-color: rgba(248, 215, 218, 1);
+    border-color: rgba(220, 53, 69, 1);
+    color: rgba(114, 28, 36,1);
+}
+
+
 .wp-list-table .topvpnlist-id{
     width: 2%;
+}
+.wp-list-table .topvpnlist-logo{
+    width: 10%;
 }
 .wp-list-table .topvpnlist-name{
     width: 10%;
@@ -529,19 +568,17 @@ li.add-ons:hover {
     width: 10%;
 }
 .wp-list-table .topvpnlist-rating{
-    width: 6%;
+    width: 5%;
 }
-.wp-list-table .topvpnlist-price{
-    width: 6%;
-}
+
 .wp-list-table .topvpnlist-lang{
-    width: 7%;
+    width: 8%;
 }
 .wp-list-table .topvpnlist-positionUp{
-    width: 7%;
+    width: 5%;
 }
 .wp-list-table .topvpnlist-positionDown{
-    width: 7%;
+    width: 5%;
 }
 .wp-list-table .topvpnlist-status{
     width: 5%;
@@ -557,4 +594,72 @@ li.add-ons:hover {
 }
 .wp-list-table .topvpnlist-delete{
     width: 5%;
+}
+
+
+.wp-list-table .langlist-id{
+    width: 2%;
+}
+.wp-list-table .langlist-logo{
+    width: 7%;
+}
+.wp-list-table .langlist-name{
+    width: 13%;
+}
+.wp-list-table .langlist-sysName{
+    width: 20%;
+}
+.wp-list-table .langlist-positionUp{
+    width: 12%;
+}
+.wp-list-table .langlist-positionDown{
+    width: 12%;
+}
+.wp-list-table .langlist-status{
+    width: 10%;
+}
+.wp-list-table .langlist-created{
+    width: 14%;
+}
+.wp-list-table .langlist-edit{
+    width: 10%;
+}
+.wp-list-table .langlist-delete{
+    width: 10%;
+}
+
+
+.wp-list-table .oslist-id{
+    width: 2%;
+}
+.wp-list-table .oslist-logo{
+    width: 7%;
+}
+.wp-list-table .oslist-name{
+    width: 13%;
+}
+.wp-list-table .oslist-sysName{
+    width: 20%;
+}
+.wp-list-table .oslist-positionUp{
+    width: 12%;
+}
+.wp-list-table .oslist-positionDown{
+    width: 12%;
+}
+.wp-list-table .oslist-status{
+    width: 10%;
+}
+.wp-list-table .oslist-created{
+    width: 14%;
+}
+.wp-list-table .oslist-edit{
+    width: 10%;
+}
+.wp-list-table .oslist-delete{
+    width: 10%;
+}
+
+.message-error{
+    color: red;
 }

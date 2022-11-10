@@ -10,13 +10,13 @@ class OSAdminEdit extends AdminPostAction {
 
     public function init() : object
     {
-        $this->setId(HTTP::getGet('os_id'));
+        $this->setId(HTTP::getGet('item_id'));
         $data = $this->getModel()->getRowById($this->getId());
         $this->setFormFills(
             [
                 'os_name' => $data['os_name'],
                 'os_sys_name' => $data['os_sys_name'],
-                'os_logo' => $data['logo'],
+                'os_logo' => $data['os_logo'],
                 'active' => $data['active'],
                 'updated' => $data['updated'],
             ]
@@ -29,14 +29,8 @@ class OSAdminEdit extends AdminPostAction {
                 $this->setFormFills($formFill);
             }
             $result = $this->getModel()->editRow($this->getId(), $this->postData);
-            if ($result->getResultStatus() == 'ok'){
-                $this->setOk('OSModel', 'OS '.$this->getFormFill('os_name').' изменен успешно!');
-                $this->setResultMessages('OSModel','ok', $this->getOk());
-            }
-            if ($result->getResultStatus() == 'error'){
-                $this->setError('OSModel', $result->getResultMessage());
-                $this->setResultMessages('OSModel','error', $this->getError());
-            }
+            $this->setResultMessages('OSModel', $result->getResultStatus(), $result->getResultMessage());
+
         }
         return $this;
     }
@@ -46,13 +40,14 @@ class OSAdminEdit extends AdminPostAction {
         $output = '';
         $output .= AdminHtmlFormInputs::renderAdminHead('Добавить OS');
         $output .= AdminHtmlFormOutputs::renderResultMessages($this->getResultMessages());
-        $output .= '<form id="edit_os" enctype="" action="" method="post">';
+        $output .= '<form id="edit_os" enctype="multipart/form-data" action="" method="post">';
         $output .= AdminHtmlFormInputs::input('Название OS','os_name', $this->getFormFill('os_name'),'namefield','required');
         $output .= AdminHtmlFormInputs::input('Системное название OS','os_sys_name', $this->getFormFill('os_name'),'namefield','required');
         $output .= AdminHtmlFormInputs::file('Логотип','os_logo', 'namefield','required');
-        $output .= AdminHtmlFormInputs::select('Активный', 'active', [1 => 'Да', 0 => 'Нет'], $this->getFormFill('active'), '');
+        $output .= AdminHtmlFormInputs::select('Активный', 'active', $this->getFormFill('active'), [1 => 'Да', 0 => 'Нет'], '');
         $output .= '<input type="hidden" name="updated" value="">';
         $output .= '<input type="hidden" name="1" value="edit_os">';
+        $output .= AdminHtmlFormInputs::renderAdminFormSubmitButton('Редактировать');
         $output .= '</form>';
         $this->render = $output;
         return $this;

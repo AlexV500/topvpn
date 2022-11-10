@@ -9,12 +9,15 @@ abstract class AdminActions implements IAdminActions {
     protected array $allLanguageAdm;
     protected string $currentURL;
     protected array $resultMessages = [];
+    protected string $logoPath;
     protected array $ok;
     protected array $errors;
     protected string $render;
+    protected string $dbTable;
 
     public function __construct($model, $dbTable){
         $this->model = new $model($dbTable);
+        $this->dbTable = $dbTable;
         $this->setCurrentURL();
     }
 
@@ -24,6 +27,17 @@ abstract class AdminActions implements IAdminActions {
 
     public function changeModelConf($model){
         $this->model = $model;
+    }
+
+    public function getLogoPath() : string
+    {
+        return $this->logoPath;
+    }
+
+    public function setLogoPath( string $path) : object
+    {
+        $this->logoPath = $path;
+        return $this;
     }
 
     public function getLanguageSysNameGet(){
@@ -60,11 +74,19 @@ abstract class AdminActions implements IAdminActions {
 
         if ( isset( $_POST['selectLanguageAdm'] )){
             $languageSysNamePost = $_POST['languageSysName'];
-            $_SESSION['fxlang'] = $languageSysNamePost;
+            if($languageSysNamePost == 'no_lang'){
+                $_SESSION['fxlang'] = 'no_lang';
+            } else {
+                $_SESSION['fxlang'] = $languageSysNamePost;
+            }
         }
 
         if(isset($_SESSION['fxlang'])){
-            $this->languageSysNameGet = $_SESSION['fxlang'];
+            if($_SESSION['fxlang'] == 'no_lang') {
+                $this->languageSysNameGet = '';
+            } else {
+                $this->languageSysNameGet = $_SESSION['fxlang'];
+            }
         } else {
             $this->languageSysNameGet = '';
         }

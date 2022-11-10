@@ -10,6 +10,7 @@ class TopVPNAdminEdit extends AdminPostAction
 {
     protected array $postData;
     protected array $os;
+    protected array $osData;
     protected array $osChecked;
 
     public function init() : object{
@@ -17,14 +18,15 @@ class TopVPNAdminEdit extends AdminPostAction
         $this->setId(HTTP::getGet('item_id'));
         $this->initAllLanguageAdm('LangModel', 'topvpn_lang');
         $osModel = new OSModel('topvpn_os');
+
         $data = $this->getModel()->getRowById($this->getId());
-        $this->os = $osModel->getAllRows(true,  false);
+        $this->osData = $osModel->getAllRows(true,  false);
+        $this->os = $this->osData;
         $this->osChecked = $osModel->getOSByVPNId( $this->getId());
         $this->setFormFills(
             [
                 'vpn_name' => $data['vpn_name'],
                 'vpn_sys_name' => $data['vpn_sys_name'],
-                'vpn_logo' => $data['vpn_logo'],
                 'country' => $data['country'],
                 'referal_link' => $data['referal_link'],
                 'referal_link_mobile' => $data['referal_link_mobile'],
@@ -49,14 +51,8 @@ class TopVPNAdminEdit extends AdminPostAction
                 $this->setFormFills($formFill);
             }
             $result = $this->getModel()->editRow($this->getId(), $this->postData);
-            if ($result->getResultStatus() == 'ok'){
-                $this->setOk('TopVPNModel', 'VPN '.$this->getFormFill('vpn_name').' изменен успешно!');
-                $this->setResultMessages('TopVPNModel','ok', $this->getOk('TopVPNModel'));
-            }
-            if ($result->getResultStatus() == 'error'){
-                $this->setError('TopVPNModel', $result->getResultMessage());
-                $this->setResultMessages('TopVPNModel','error', $this->getError('TopVPNModel'));
-            }
+            $this->osChecked = $osModel->getOSByVPNId( $this->getId());
+            $this->setResultMessages('TopVPNModel',$result->getResultStatus(), $result->getResultMessage());
         }
         return $this;
     }
@@ -66,7 +62,7 @@ class TopVPNAdminEdit extends AdminPostAction
         $output = '';
         $output .= AdminHtmlFormInputs::renderAdminHead('Редактировать VPN '.$this->getFormFill('vpn_name'));
         $output .= AdminHtmlFormOutputs::renderResultMessages($this->getResultMessages());
-        $output .= '<form id="edit_vpn" enctype="" action="" method="post">';
+        $output .= '<form id="edit_vpn" enctype="multipart/form-data" action="" method="post">';
         $output .= AdminHtmlFormInputs::input('Название VPN','vpn_name', $this->getFormFill('vpn_name'),'namefield','required');
         $output .= AdminHtmlFormInputs::input('Системное название VPN','vpn_sys_name', $this->getFormFill('vpn_name'),'namefield','required');
         $output .= AdminHtmlFormInputs::file('Логотип','vpn_logo', 'namefield','required');
@@ -82,8 +78,8 @@ class TopVPNAdminEdit extends AdminPostAction
         $output .= AdminHtmlFormInputs::input('Прайс','price', $this->getFormFill('price'),'namefield','');
         $output .= AdminHtmlFormInputs::input('Економия','save_from_price', $this->getFormFill('save_from_price'),'namefield','');
         $output .= AdminHtmlFormInputs::renderAdminLanguageSelectorField($this->getAllLanguageAdm(), $this->getLanguageSysNameGet());
-        $output .= AdminHtmlFormInputs::selectManyToOne('Поддерживаемые операционные системы', 'os', $this->getFormFillArray('os'), ['image_name' => 'logo', 'image_path' => 'logo', 'checked' => $this->osChecked], '');
-        $output .= '<input type="hidden" name="vpn_logo" value="">';
+        $output .= AdminHtmlFormInputs::selectManyToOne('Поддерживаемые операционные системы', 'os', $this->osData, ['image_name' => 'os_logo', 'image_path' => 'os/', 'checked' => $this->osChecked], '');
+    //    $output .= '<input type="hidden" name="vpn_logo" value="">';
         $output .= '<input type="hidden" name="updated" value="">';
         $output .= '<input type="hidden" name="edit_vpn" value="1">';
         $output .= AdminHtmlFormInputs::renderAdminFormSubmitButton('Редактировать');

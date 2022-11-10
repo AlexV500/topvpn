@@ -25,14 +25,7 @@ class OSAdminAdd extends AdminPostAction{
         if ( isset( $_POST['add_os'] )){
             $this->setPostData();
             $result = $this->getModel()->addRow($this->postData);
-            if ($result->getResultStatus() == 'ok'){
-                $this->setOk('OSModel', 'OS добавлен успешно!');
-                $this->setResultMessages('OSModel','ok', $this->getOk('OSModel'));
-            }
-            if ($result->getResultStatus() == 'error'){
-                $this->setError('OSModel', $result->getResultMessage());
-                $this->setResultMessages('OSModel','error', $this->getError('OSModel'));
-            }
+            $this->setResultMessages('OSModel',$result->getResultStatus(), $result->getResultMessage());
         }
         return $this;
     }

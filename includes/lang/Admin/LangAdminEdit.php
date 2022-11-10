@@ -16,7 +16,7 @@ class LangAdminEdit extends AdminPostAction{
             [
                 'lang_name' => $data['lang_name'],
                 'lang_sys_name' => $data['lang_sys_name'],
-                'lang_logo' => $data['logo'],
+                'lang_logo' => $data['lang_logo'],
                 'active' => $data['active'],
                 'updated' => $data['updated'],
             ]
@@ -29,14 +29,7 @@ class LangAdminEdit extends AdminPostAction{
                 $this->setFormFills($formFill);
             }
             $result = $this->getModel()->editRow($this->getId(), $this->postData);
-            if ($result->getResultStatus() == 'ok'){
-                $this->setOk('LangModel', 'Lang '.$this->getFormFill('lang_name').' изменен успешно!');
-                $this->setResultMessages('LangModel','ok', $this->getOk('LangModel'));
-            }
-            if ($result->getResultStatus() == 'error'){
-                $this->setError('LangModel', $result->getResultMessage());
-                $this->setResultMessages('LangModel','error', $this->getError('LangModel'));
-            }
+            $this->setResultMessages('LangModel',$result->getResultStatus(), $result->getResultMessage());
         }
         return $this;
     }
@@ -46,12 +39,13 @@ class LangAdminEdit extends AdminPostAction{
         $output = '';
         $output .= AdminHtmlFormInputs::renderAdminHead('Добавить Язык');
         $output .= AdminHtmlFormOutputs::renderResultMessages($this->getResultMessages());
-        $output .= '<form id="edit_lang" enctype="" action="" method="post">';
+        $output .= '<form id="edit_lang" enctype="multipart/form-data" action="" method="post">';
         $output .= AdminHtmlFormInputs::input('Название Языка','lang_name', $this->getFormFill('lang_name'),'namefield','required');
         $output .= AdminHtmlFormInputs::input('Системное название Языка','lang_sys_name', $this->getFormFill('lang_name'),'namefield','required');
         $output .= AdminHtmlFormInputs::file('Флаг','lang_logo', 'namefield','required');
-        $output .= AdminHtmlFormInputs::select('Активный', 'active', [1 => 'Да', 0 => 'Нет'], $this->getFormFill('active'), '');
+        $output .= AdminHtmlFormInputs::select('Активный', 'active', $this->getFormFill('active'), [1 => 'Да', 0 => 'Нет'], '');
         $output .= '<input type="hidden" name="updated" value="">';
+        $output .= AdminHtmlFormInputs::renderAdminFormSubmitButton('Редактировать');
         $output .= '</form>';
         $this->render = $output;
         return $this;

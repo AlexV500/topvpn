@@ -6,8 +6,7 @@ require_once V_PLUGIN_INCLUDES_DIR . 'topvpn/Model/TopVPNModel.php';
 require_once V_PLUGIN_INCLUDES_DIR . 'os/Model/OSModel.php';
 require_once V_PLUGIN_INCLUDES_DIR . 'lang/Model/LangModel.php';
 
-class TopVPNAdminAdd extends AdminPostAction
-{
+class TopVPNAdminAdd extends AdminPostAction{
 
     protected array $os;
 
@@ -40,17 +39,10 @@ class TopVPNAdminAdd extends AdminPostAction
         );
 
         if ( isset( $_POST['add_vpn'] )){
-            print_r($_POST);
+        //    print_r($_POST);
             $this->setPostData();
             $result = $this->getModel()->addRow($this->postData);
-            if ($result->getResultStatus() == 'ok'){
-                $this->setOk('TopVPNModel', 'VPN добавлен успешно!');
-                $this->setResultMessages('TopVPNModel','ok', $this->getOk('TopVPNModel'));
-            }
-            if ($result->getResultStatus() == 'error'){
-                $this->setError('TopVPNModel', $result->getResultMessage());
-                $this->setResultMessages('TopVPNModel','error', $this->getError('TopVPNModel'));
-            }
+            $this->setResultMessages('TopVPNModel',$result->getResultStatus(), $result->getResultMessage());
         }
         return $this;
     }

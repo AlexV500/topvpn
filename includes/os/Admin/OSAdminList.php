@@ -21,13 +21,17 @@ class OSAdminList extends AdminList{
         $this->setModelPaginationConfig();
         $this->checkPositionAction();
         $this->initRowsData($this->activeMode);
+        $this->setLogoPath(V_PLUGIN_INCLUDES_DIR . 'images/os/');
+        $this->unlinkAllUnusedImagesPostHandler('os_logo');
         $this->setColumnDisplayNames(array(
             'id' => __( 'id', 'topvpn' ),
+            'logo' => __('Логотип', 'topvpn'),
             'name'         => __( 'OS', 'topvpn' ),
             'sysName'      => __( 'Системное имя', 'topvpn' ),
             'positionUp'     => __( 'Позиция', 'topvpn' ),
             'positionDown'   => __( 'Позиция', 'topvpn' ),
             'status'       => __( 'Статус', 'topvpn' ),
+            'created'       => __( 'Создано (Г-м-д)', 'topvpn' ),
             'edit'         => __( 'Редактировать', 'topvpn' ),
             'delete'       => __( 'Удалить', 'topvpn' ),
         ));
@@ -39,9 +43,9 @@ class OSAdminList extends AdminList{
         $output = '';
         $output .= AdminHtmlFormInputs::renderAdminHead('Список OS');
         $output .= '<table id="" class="wp-list-table widefat fixed" cellspacing="0">';
-        $output .= AdminHtmlFormInputs::renderAdminHeadOfTableList($this->getColumnDisplayNames());
-        if ( $this->getRowsCount() > 0 ) {
-            for ( $i = 0; $i < $this->getRowsCount(); $i++ ) {
+        $output .= AdminHtmlFormInputs::renderAdminHeadOfTableList($this->getColumnDisplayNames(), 'oslist');
+        if ( count($this->getRowsData()) > 0 ) {
+            for ( $i = 0; $i < count($this->getRowsData()); $i++ ) {
 
                 $result = $this->getRowsData()[$i];
 
@@ -53,17 +57,18 @@ class OSAdminList extends AdminList{
                 $output .= "<td class='topvpn-id'>";
                 $output .= $result['id'];
                 $output .= "</td>";
-
+                $output .= "<td class='topvpnLogo'><img src='". V_CORE_URL .'includes/images/os/'.$result['os_logo']."' width='21px' height='21px'></td>";
                 $output .= "<td class='topvpnName'>" . stripslashes( wp_filter_nohtml_kses( $result['os_name'] ) ) . $name_suffix . "</td>";
                 $output .= "<td class='topvpnSysName'>" . stripslashes( wp_filter_nohtml_kses( $result['os_sys_name'] ) ) . $name_suffix . "</td>";
                 $output .= "<td class='position'><a href='" . $this->getCurrentURL() . "&position_set=up&item_id=" . $result['id'] . "'>Вверх</a></td>";
                 $output .= "<td class='position'><a href='" . $this->getCurrentURL() . "&position_set=down&item_id=" . $result['id'] . "'>Вниз</a></td>";
 
                 $output .= "<td class='status'>".$this->getStatusTitle($result['active'])."</td>";
+                $output .= "<td class='created'>".$result['created']."</td>";
 
-                $output .= "<td class='edit'><a href='" . add_query_arg( 'paged', $this->getPaged(), $this->getCurrentURL() ) . "&action=edit&item_id=" . $result['id'] . "' alt='" . __( 'Редактировать', 'topvpn') . "'><img src='". V_PLUGIN_URL ."images/edit.png'/></a></td>";
+                $output .= "<td class='edit'><a href='" . add_query_arg( 'paged', $this->getPaged(), $this->getCurrentURL() ) . "&action=edit&item_id=" . $result['id'] . "' alt='" . __( 'Редактировать', 'topvpn') . "'><img src='". V_CORE_URL ."admin/images/edit.png'/></a></td>";
                 $output .= "<td class='remove'>" .
-                    "<a href='" . $this->getCurrentURL() . "&action=delete&item_id=" . $result['id'] . "' alt='" . __( 'Удалить', 'topvpn') . "'><img src='". V_PLUGIN_URL ."images/remove.png'/></a>" . "</td>";
+                    "<a href='" . $this->getCurrentURL() . "&action=delete&item_id=" . $result['id'] . "' alt='" . __( 'Удалить', 'topvpn') . "'><img src='". V_CORE_URL ."admin/images/remove.png'/></a>" . "</td>";
 
                 $output .= '</tr>';
 
@@ -77,6 +82,7 @@ class OSAdminList extends AdminList{
 
         $output .= AdminHtmlFormInputs::renderAdminPagination($this->getRowsCount(), $this->getPaginationCount());
         $output .= AdminHtmlFormInputs::renderAdminFormButton('Добавить новую OS', 'Добавить новую OS', 'button add', $this->getCurrentURL(), '&action=add');
+        $output .= AdminHtmlFormInputs::renderAdminManageForm($this->countAllRowsFromCustomTable('os_logo'), $this->countFiles());
         $this->render = $output;
         return $this;
     }

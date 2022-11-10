@@ -7,7 +7,7 @@ trait initPagination{
     protected int $paged;
     protected bool $paginate;
 
-    public function setPaginationCount($count = 20) : object{
+    public function setPaginationCount($count = 10) : object{
         $this->paginationCount = $count;
         return $this;
     }

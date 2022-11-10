@@ -19,14 +19,8 @@ class LangAdminDelete extends AdminPostAction{
 
         if ( isset( $_POST['delete_lang'] )){
             $result = $this->getModel()->deleteRow($data);
-            if ($result->getResultStatus() == 'ok'){
-                $this->setOk('LangModel', $result->getResultMessage());
-                $this->setResultMessages('LangModel','ok', $this->getOk('LangModel'));
-            }
-            if ($result->getResultStatus() == 'error'){
-                $this->setError('LangModel', $result->getResultMessage());
-                $this->setResultMessages('LangModel','error', $this->getError('LangModel'));
-            }
+            $this->setResultMessages('LangModel',$result->getResultStatus(), $result->getResultMessage());
+            $this->setResultStatus('done');
         }
         return $this;
     }
@@ -37,22 +31,26 @@ class LangAdminDelete extends AdminPostAction{
         $output = '';
         $output .= AdminHtmlFormInputs::renderAdminHead('Удалить Язык '.$this->deleteName);
         $output .= AdminHtmlFormOutputs::renderResultMessages($this->getResultMessages());
-        $output .= '<form id="delete_lang" enctype="" action="" method="post">';
-        $output .= '<div class="topvpn delete">' .
-            '<div class="field">' .
-            '<label class="field-label first required">' .
-            '<span class="label">' .
-            __( 'Вы действительно хотите удалить Язык ' . $this->deleteName . '?', 'topvpn' ) .
-            '</span>' .
-            '</label>' .
-            '</div>' .
-            '<div class="mb-20"></div>'.
-            '<input class="button button-primary" type="submit" value="' . __( 'Удалить', 'topvpn' ) . '"/>' .
-            '<a class="cancel button" href="' . $this->getCurrentURL() . '">' . __( 'Отмена', 'topvpn' ) . '</a>' .
-            '<input type="hidden" value="deleteLangAdm" name="delete_lang"/>' .
-            '<input type="hidden" value="'.$this->getId().'" name="item_id"/>' .
-            '<input type="hidden" value="delete" name="action"/>';
-        $output .= '</form>';
+        if ($this->getResultStatus() == 'waiting') {
+            $output .= '<form id="delete_lang" enctype="" action="" method="post">';
+            $output .= '<div class="topvpn delete">' .
+                '<div class="field">' .
+                '<label class="field-label first required">' .
+                '<span class="label">' .
+                __('Вы действительно хотите удалить Язык ' . $this->deleteName . '?', 'topvpn') .
+                '</span>' .
+                '</label>' .
+                '</div>' .
+                '<div class="mb-20"></div>' .
+                '<input class="button button-primary" type="submit" value="' . __('Удалить', 'topvpn') . '"/>' .
+                '<a class="cancel button" href="' . $this->getCurrentURL() . '">' . __('Отмена', 'topvpn') . '</a>' .
+                '<input type="hidden" value="deleteLangAdm" name="delete_lang"/>' .
+                '<input type="hidden" value="' . $this->getId() . '" name="item_id"/>' .
+                '<input type="hidden" value="delete" name="action"/>';
+            $output .= '</form>';
+        } else {
+            $output .= '<a class="cancel button" href="' . $this->getCurrentURL() . '">' . __('Назад', 'topvpn') . '</a>';
+        }
         $this->render = $output;
         return $this;
     }

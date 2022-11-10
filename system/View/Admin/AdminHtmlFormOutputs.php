@@ -6,9 +6,9 @@ class AdminHtmlFormOutputs{
     public static function renderResultMessages( array $data) : string{
 
         $output = '';
-        echo '<pre>';
-        print_r($data);
-        echo '</pre>';
+//        echo '<pre>';
+//        print_r($data);
+//        echo '</pre>';
 
         foreach ($data as $type => $array) {
 
@@ -16,12 +16,12 @@ class AdminHtmlFormOutputs{
 
                 foreach ($messages as $status => $text) {
                     if ($status == 'ok') {
-                        $output .= '<div class="resultMessageOk">';
+                        $output .= '<div class="alert alert-success" role="alert">';
                         $output .= $text;
                         $output .= '</div>';
                     }
                     if ($status == 'error') {
-                        $output .= '<div class="resultMessageError">';
+                        $output .= '<div class="alert alert-danger" role="alert">';
                         $output .= $text;
                         $output .= '</div>';
                     }

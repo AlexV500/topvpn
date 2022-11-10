@@ -13,6 +13,11 @@ class ImageUpload{
             $errorCode = $_FILES[$fieldName]['error'];
 // Проверим на ошибки
             if ($errorCode !== UPLOAD_ERR_OK || !is_uploaded_file($fileTmpName)) {
+
+                if($errorCode == 'UPLOAD_ERR_NO_FILE'){
+                    return Result::setResult('no_file', 'Файлов изображений не было.', '');
+                }
+
                 // Массив с названиями ошибок
                 $errorMessages = [
                     UPLOAD_ERR_INI_SIZE   => 'Размер файла превысил значение upload_max_filesize в конфигурации PHP.',

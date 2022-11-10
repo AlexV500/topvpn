@@ -25,15 +25,16 @@ class TopVPNAdminList extends AdminList {
         $this->initPaginationConfig();
         $this->checkPositionAction();
         $this->initRowsData($this->activeMode);
-
+        $this->setLogoPath(V_PLUGIN_INCLUDES_DIR . 'images/vpn/');
+        $this->unlinkAllUnusedImagesPostHandler('vpn_logo');
       //  $this->setActiveMode();
 
         $this->setColumnDisplayNames(array(
             'id' => __( 'id', 'topvpn' ),
+            'logo' => __('Логотип', 'topvpn'),
             'name'         => __( 'VPN', 'topvpn' ),
             'sysName'      => __( 'Системное имя', 'topvpn' ),
             'rating'       => __( 'Рейтинг', 'topvpn' ),
-            'price'        => __( 'Прайс', 'topvpn' ),
             'lang'         => __( 'Язык', 'topvpn' ),
             'positionUp'     => __( 'Позиция', 'topvpn' ),
             'positionDown'   => __( 'Позиция', 'topvpn' ),
@@ -50,13 +51,14 @@ class TopVPNAdminList extends AdminList {
 
         $output = '';
         $output .= AdminHtmlFormInputs::renderAdminHead('Список VPN');
+        $output .= AdminHtmlFormOutputs::renderResultMessages($this->getResultMessages());
         $output .= AdminHtmlFormInputs::renderAdminLanguageSelector($this->getAllLanguageAdm(), $this->getLanguageSysNameGet());
         $output .= '<table id="" class="wp-list-table widefat fixed" cellspacing="0">';
         $output .= AdminHtmlFormInputs::renderAdminHeadOfTableList($this->getColumnDisplayNames(), 'topvpnlist');
         $output .= '<tbody>';
 
-        if ( $this->getRowsCount() > 0 ) {
-            for ( $i = 0; $i < $this->getRowsCount(); $i++ ) {
+        if ( count($this->getRowsData()) > 0 ) {
+            for ( $i = 0; $i < count($this->getRowsData()); $i++ ) {
 
                 $result = $this->getRowsData()[$i];
 
@@ -68,11 +70,10 @@ class TopVPNAdminList extends AdminList {
                 $output .= "<td class='topvpn-id'>";
                 $output .= $result['id'];
                 $output .= "</td>";
-
+                $output .= "<td class='topvpnLogo'><img src='". V_CORE_URL .'includes/images/vpn/'.$result['vpn_logo']."' width='100px' height='21px'></td>";
                 $output .= "<td class='topvpnName'>" . stripslashes( wp_filter_nohtml_kses( $result['vpn_name'] ) ) . $name_suffix . "</td>";
                 $output .= "<td class='topvpnSysName'>" . stripslashes( wp_filter_nohtml_kses( $result['vpn_sys_name'] ) ) . $name_suffix . "</td>";
                 $output .= "<td class='rating'>".$result['rating']."</td>";
-                $output .= "<td class='price'>".$result['price']."</td>";
                 $output .= "<td class='lang'>".$result['lang']."</td>";
                 // $output .= "<td class='position'>".$result['position']."</td>";
 
@@ -88,7 +89,6 @@ class TopVPNAdminList extends AdminList {
 
                 $output .= '</tr>';
 
-
             }
         } else {
             $output .= '<tr><td colspan="' . $this->getRowsCount() . '">' . __('Нет результатов.', 'topvpn' ) . '</td></tr>';
@@ -98,7 +98,8 @@ class TopVPNAdminList extends AdminList {
         $output .= '</table>';
 
         $output .= AdminHtmlFormInputs::renderAdminPagination($this->getRowsCount(), $this->getPaginationCount());
-        $output .= AdminHtmlFormInputs::renderAdminFormButton('Добавить новый VPN', 'Добавить новый VPN', 'button add', $this->getCurrentURL(), '&action=add');
+        $output .= AdminHtmlFormInputs::renderAdminFormButton('Добавить новый VPN', 'Добавить новый VPN', 'button button-primary', $this->getCurrentURL(), '&action=add');
+        $output .= AdminHtmlFormInputs::renderAdminManageForm($this->countAllRowsFromCustomTable('vpn_logo'), $this->countFiles());
         $this->render = $output;
         return $this;
     }

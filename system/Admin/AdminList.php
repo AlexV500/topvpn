@@ -33,6 +33,27 @@ abstract class AdminList extends AdminActions {
         return $this;
     }
 
+    public function countAllRowsFromCustomTable($fieldName){
+
+        $countAllRows = $this->getModel()->countAllRowsFromCustomTable($this->dbTable, false);
+        $rows = $this->getModel()->getAllRowsFromCustomTable($this->dbTable, false, false);
+        if($countAllRows > 0){
+            $fileNames = array_column($rows, $fieldName);
+            return count(array_diff($fileNames, array('')));
+        } else return 'В Б.Д. пока нету записей!';
+    }
+
+    public function countFiles(){
+
+        $path = $this->getLogoPath();
+        $files = $this->getModel()->getFiles($path);
+        if(!$files){
+            return 'Ошибка!';
+        } else {
+            return count($files);
+        }
+    }
+
     protected function checkPositionAction() : bool{
 
         $set = '';
@@ -62,5 +83,13 @@ abstract class AdminList extends AdminActions {
         return true;
     }
 
+    protected function unlinkAllUnusedImagesPostHandler( string $fieldName){
+
+        if ( isset( $_POST['deleteLostImages'] )) {
+            $path = $this->getLogoPath();
+            $result = $this->getModel()->UnlinkAllUnusedImages($this->dbTable, 'vpn_logo', $path);
+            $this->setResultMessages('TopVPNAdminList',$result->getResultStatus(), $result->getResultMessage());
+        } return $this;
+    }
 
 }

@@ -25,14 +25,7 @@ class LangAdminAdd extends AdminPostAction{
         if ( isset( $_POST['add_lang'] )){
             $this->setPostData();
             $result = $this->getModel()->addRow($this->postData);
-            if ($result->getResultStatus() == 'ok'){
-                $this->setOk('LangModel', $result->getResultMessage());
-                $this->setResultMessages('LangModel','ok', $this->getOk('LangModel'));
-            }
-            if ($result->getResultStatus() == 'error'){
-                $this->setError('LangModel', $result->getResultMessage());
-                $this->setResultMessages('LangModel','error', $this->getError('LangModel'));
-            }
+            $this->setResultMessages('LangModel',$result->getResultStatus(), $result->getResultMessage());
         }
         return $this;
     }

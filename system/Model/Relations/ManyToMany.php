@@ -1,6 +1,8 @@
 <?php
 
-require_once V_CORE_LIB .  '/Model/DTO/DBRelationTableDTO.php';
+require_once V_CORE_LIB . '/Model/DTO/DBRelationTableDTO.php';
+require_once V_CORE_LIB . 'Utils/Result.php';
+require_once V_CORE_LIB . 'Utils/ResultMessages.php';
 
 class ManyToMany {
 
@@ -81,6 +83,7 @@ class ManyToMany {
     private function _editManyToOne($thisId, $manyItemsToThisOne): array
     {
         $returnedData = [];
+
         if (is_array($manyItemsToThisOne) && (count($manyItemsToThisOne)) > 0) {
             if ($this->refreshThisRowThatRowLinks($thisId, $manyItemsToThisOne)) {
                 $returnedData = $this->getThatManyToThisOneLinks($thisId);
@@ -109,7 +112,7 @@ class ManyToMany {
             if (empty(array_diff($manyItemsToThisOne, $manyItemsToThisOneIds))&&(empty(array_diff($manyItemsToThisOneIds, $manyItemsToThisOne)))) {
                 return TRUE;
             }
-            if (!$this->_deleteManyToOne($thisId)){
+            if ($this->_deleteManyToOne($thisId) !== 'ok'){
                 return false;
             }
         }
@@ -121,30 +124,65 @@ class ManyToMany {
         return true;
     }
 
-    public static function deleteManyToOne($keyManyToManyFields, $recordedRow, $thisId, $manyItemsToThisOnePostData)
+    public static function deleteManyToOne($keyManyToManyFields, $thisId)
     {
+        $returnMessages = [];
+        $resultMessages = new ResultMessages();
         $count = count($keyManyToManyFields);
+        $status = 'ok';
         if ($count > 0) {
             foreach ($keyManyToManyFields as $keyManyToOneField) {
                 $DBRelationTableDTO = new DBRelationTableDTO($keyManyToOneField['pivot_table_name'], $keyManyToOneField['this_key_name'], $keyManyToOneField['that_key_name']);
                 $manyToOne = new self($DBRelationTableDTO);
-                $deleted[$keyManyToOneField['pivot_table_name'].':'.$thisId.'=>'.$keyManyToOneField] = $manyToOne->_deleteManyToOne($thisId);
+                $countLinksBefore = $manyToOne->countThatManyToThisOneLinks($thisId);
+                $deleted = $manyToOne->_deleteManyToOne($thisId);
+                $countLinksAfter = $manyToOne->countThatManyToThisOneLinks($thisId);
+                $returnMessages[] =[$keyManyToOneField['pivot_table_name'].': Кол. ссылок до удаления: '.$countLinksBefore.', Кол. ссылок после удаления: '.$countLinksAfter, $deleted];
             }
         }
+        if(count($returnMessages) > 0) {
+            foreach ($returnMessages as $key => $value) {
+                if (($value[1] == 'ok')or($value[1] == 'no_links')) {
+                    $resultMessages->addResultMessage('ManyToMany', 'ok', $value[0]);
+                }
+                else {
+                    $status = 'error';
+                    $resultMessages->addResultMessage('ManyToMany', 'error', $value[0]);
+                }
+            }
+            $result = Result::setResult($status, $resultMessages->getResultMessages('ManyToMany'), '');
+        }
+        else {
+            $resultMessages->addResultMessage('ManyToMany', 'error', 'Ошибка');
+            $result = Result::setResult('error', 'Ошибка', '');
+        }
+        return $result;
     }
 
-    private function _deleteManyToOne($thisId) : int
+    private function _deleteManyToOne($thisId) : string
     {
+     //   $this->setErrorStatus('_deleteManyToOne');
+        $thatManyToThisOneLinks = $this->getThatManyToThisOneLinks($thisId);
+        if($this->countThatManyToThisOneLinks($thisId) == 0){
+            return 'no_links';
+        }
         $deleted = $this->removeThisOneThatManyLinks($thisId);
         if($deleted == ''){
-            return 'Ok';
+            return 'ok';
         } else {
+       //     $this->setErrorStatus('_deleteManyToOne', 'Не удалена ссылка '. $deleted);
             return $deleted;
         }
     }
 
     //------------------------------------------------------
 
+
+    private function countThatManyToThisOneLinks($thisId) : int{
+
+        $sql = "SELECT COUNT(*) FROM `{$this->pivotTableName}` WHERE $this->thisPkeyRowName = $thisId ORDER BY id";
+        return $this->wpdb->get_var($sql);
+    }
 
     private function getThatManyToThisOneLinks($thisId) : array{
 
