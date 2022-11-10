@@ -232,7 +232,7 @@ class AdminHtmlFormInputs
         $output = '';
         $output .= '<form id="delete-img-topvpn" enctype="" action="" method="post">';
         $output .= '<div class="manage">';
-        $output .= 'Записей в базе данных: '.$countFromTable.'<br/>';
+        $output .= 'Записи изображений в б.д.: '.$countFromTable.'<br/>';
         $output .= 'Файлов изображений(логотипов) '.$countFiles.'<br/>';
         $output .= '<input type="hidden" value="deleteLostImages" name="deleteLostImages"/>';
         if($countFiles > $countFromTable)

@@ -32,7 +32,7 @@ class OSAdminList extends AdminList{
             'positionDown'   => __( 'Позиция', 'topvpn' ),
             'status'       => __( 'Статус', 'topvpn' ),
             'created'       => __( 'Создано (Г-м-д)', 'topvpn' ),
-            'edit'         => __( 'Редактировать', 'topvpn' ),
+            'edit'         => __( 'Редакт.', 'topvpn' ),
             'delete'       => __( 'Удалить', 'topvpn' ),
         ));
         return $this;
@@ -66,9 +66,9 @@ class OSAdminList extends AdminList{
                 $output .= "<td class='status'>".$this->getStatusTitle($result['active'])."</td>";
                 $output .= "<td class='created'>".$result['created']."</td>";
 
-                $output .= "<td class='edit'><a href='" . add_query_arg( 'paged', $this->getPaged(), $this->getCurrentURL() ) . "&action=edit&item_id=" . $result['id'] . "' alt='" . __( 'Редактировать', 'topvpn') . "'><img src='". V_CORE_URL ."admin/images/edit.png'/></a></td>";
+                $output .= "<td class='edit'><a href='" . add_query_arg( 'paged', $this->getPaged(), $this->getCurrentURL() ) . "&action=edit&item_id=" . $result['id'] . "' alt='" . __( 'Редакт.', 'topvpn') . "'><img src='". V_CORE_URL ."admin/images/edit2.png'/></a></td>";
                 $output .= "<td class='remove'>" .
-                    "<a href='" . $this->getCurrentURL() . "&action=delete&item_id=" . $result['id'] . "' alt='" . __( 'Удалить', 'topvpn') . "'><img src='". V_CORE_URL ."admin/images/remove.png'/></a>" . "</td>";
+                    "<a href='" . $this->getCurrentURL() . "&action=delete&item_id=" . $result['id'] . "' alt='" . __( 'Удалить', 'topvpn') . "'><img src='". V_CORE_URL ."admin/images/remove2.png'/></a>" . "</td>";
 
                 $output .= '</tr>';
 
@@ -81,7 +81,7 @@ class OSAdminList extends AdminList{
         $output .= '</table>';
 
         $output .= AdminHtmlFormInputs::renderAdminPagination($this->getRowsCount(), $this->getPaginationCount());
-        $output .= AdminHtmlFormInputs::renderAdminFormButton('Добавить новую OS', 'Добавить новую OS', 'button add', $this->getCurrentURL(), '&action=add');
+        $output .= AdminHtmlFormInputs::renderAdminFormButton('Добавить новую OS', 'Добавить новую OS', 'button button-primary', $this->getCurrentURL(), '&action=add');
         $output .= AdminHtmlFormInputs::renderAdminManageForm($this->countAllRowsFromCustomTable('os_logo'), $this->countFiles());
         $this->render = $output;
         return $this;

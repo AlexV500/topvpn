@@ -9,17 +9,19 @@ require_once V_PLUGIN_INCLUDES_DIR . 'lang/Model/LangModel.php';
 class TopVPNAdminAdd extends AdminPostAction{
 
     protected array $os;
+    protected array $osData;
+    protected array $osChecked = [];
 
     public function init() : object{
 
         $this->initAllLanguageAdm('LangModel', 'topvpn_lang');
         $osModel = new OSModel('topvpn_os');
-        $os = $osModel->getAllRows(true, false);
+        $this->osData = $osModel->getAllRows(true,  false);
         $this->setFormFills(
             [
                 'vpn_name' => '',
                 'vpn_sys_name' => '',
-                'vpn_logo' => '',
+            //    'vpn_logo' => '',
                 'country' => '',
                 'referal_link' => '',
                 'referal_link_mobile' => '',
@@ -29,7 +31,7 @@ class TopVPNAdminAdd extends AdminPostAction{
                 'price' => '',
                 'save_from_price' => '',
                 'lang' => '',
-                'os' => $os,
+                'os' => $this->osData,
                 'short_description' => '',
                 'description' => '',
             //    'position' => '',
@@ -42,7 +44,13 @@ class TopVPNAdminAdd extends AdminPostAction{
         //    print_r($_POST);
             $this->setPostData();
             $result = $this->getModel()->addRow($this->postData);
-            $this->setResultMessages('TopVPNModel',$result->getResultStatus(), $result->getResultMessage());
+            if($result->getResultStatus() == 'ok'){
+                $resultData = $result->getResultData();
+                if($resultData['last_insert_id'] > 0){
+                    $this->osChecked = $osModel->getOSByVPNId( $resultData['last_insert_id']);
+                }
+            }
+            $this->setResultMessages('TopVPNModel', $result->getResultStatus(), $result->getResultMessage());
         }
         return $this;
     }
@@ -54,7 +62,7 @@ class TopVPNAdminAdd extends AdminPostAction{
         $output .= AdminHtmlFormOutputs::renderResultMessages($this->getResultMessages());
         $output .= '<form id="add_vpn" enctype="multipart/form-data" action="admin.php?page=show_topvpnlist&action=add" method="post">';
         $output .= AdminHtmlFormInputs::input('Название VPN','vpn_name', $this->getFormFill('vpn_name'),'namefield','required');
-        $output .= AdminHtmlFormInputs::input('Системное название VPN','vpn_sys_name', $this->getFormFill('vpn_name'),'namefield','required');
+        $output .= AdminHtmlFormInputs::input('Системное название VPN','vpn_sys_name', $this->getFormFill('vpn_sys_name'),'namefield','required');
         $output .= AdminHtmlFormInputs::file('Логотип','vpn_logo', 'namefield','required');
         $output .= AdminHtmlFormInputs::input('Страна основания','country', $this->getFormFill('country'),'namefield','');
         $output .= AdminHtmlFormInputs::input('Партнерская ссылка','referal_link', $this->getFormFill('referal_link'),'namefield','');
@@ -68,8 +76,7 @@ class TopVPNAdminAdd extends AdminPostAction{
         $output .= AdminHtmlFormInputs::input('Прайс','price', $this->getFormFill('price'),'namefield','');
         $output .= AdminHtmlFormInputs::input('Економия','save_from_price', $this->getFormFill('save_from_price'),'namefield','');
         $output .= AdminHtmlFormInputs::renderAdminLanguageSelectorField($this->getAllLanguageAdm(), $this->getLanguageSysNameGet());
-        $output .= AdminHtmlFormInputs::selectManyToOne('Поддерживаемые операционные системы', 'os', $this->getFormFillArray('os'), ['image_name' => 'logo', 'image_path' => 'logo'], '');
-        $output .= '<input type="hidden" name="vpn_logo" value="">';
+        $output .= AdminHtmlFormInputs::selectManyToOne('Поддерживаемые операционные системы', 'os', $this->osData, ['image_name' => 'os_logo', 'image_path' => 'os/', 'checked' => $this->osChecked], '');
         $output .= '<input type="hidden" name="created" value="">';
         $output .= '<input type="hidden" name="add_vpn" value="1">';
         $output .= AdminHtmlFormInputs::renderAdminFormSubmitButton('Добавить');

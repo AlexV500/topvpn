@@ -16,6 +16,7 @@ abstract class AbstractModel
     protected string $orderColumn = 'id';
     protected string $orderDirection = 'ASC';
     public string $rowCount;
+    public string $paginationCount;
     public string $offset;
     public object $errorStatus;
     public object $resultMessages;
@@ -82,6 +83,12 @@ abstract class AbstractModel
         return $this;
     }
 
+    public function setPaginationCount( int $paginationCount) : object
+    {
+        $this->paginationCount = $paginationCount;
+        return $this;
+    }
+
     public function setOffset($offset) : object
     {
         $this->offset = $offset;
@@ -123,7 +130,7 @@ abstract class AbstractModel
         $orderSql = 'ORDER BY '.$this->orderColumn.' ' . $this->orderDirection;
 
         if ($paginationMode) {
-            $paginatSql = 'LIMIT ' . $this->countAllRows($activeMode) . ' OFFSET ' . $this->offset;
+            $paginatSql = 'LIMIT ' . $this->paginationCount . ' OFFSET ' . $this->offset;
         }
 
         if ($this->multiLangMode) {
@@ -151,7 +158,7 @@ abstract class AbstractModel
         $orderSql = 'ORDER BY '.$this->orderColumn.' ' . $this->orderDirection;
 
         if ($paginationMode) {
-            $paginatSql = 'LIMIT ' . $this->countAllRows($activeMode) . ' OFFSET ' . $this->offset;
+            $paginatSql = 'LIMIT ' . $this->paginationCount . ' OFFSET ' . $this->offset;
         }
 
         if ($this->multiLangMode) {

@@ -41,6 +41,7 @@ trait initPagination{
         //   $this->getModel()->setRowCount($this->getRowsCount());
         //   $this->changeModelConf($this->getModel()->setOffset($this->getOffset()));
         $this->model->setOffset($this->getOffset());
+        $this->model->setPaginationCount($this->getPaginationCount());
         return $this;
     }
 }

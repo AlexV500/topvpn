@@ -87,7 +87,7 @@ abstract class AdminList extends AdminActions {
 
         if ( isset( $_POST['deleteLostImages'] )) {
             $path = $this->getLogoPath();
-            $result = $this->getModel()->UnlinkAllUnusedImages($this->dbTable, 'vpn_logo', $path);
+            $result = $this->getModel()->UnlinkAllUnusedImages($this->dbTable, $fieldName, $path);
             $this->setResultMessages('TopVPNAdminList',$result->getResultStatus(), $result->getResultMessage());
         } return $this;
     }

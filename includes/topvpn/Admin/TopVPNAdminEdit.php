@@ -21,7 +21,6 @@ class TopVPNAdminEdit extends AdminPostAction
 
         $data = $this->getModel()->getRowById($this->getId());
         $this->osData = $osModel->getAllRows(true,  false);
-        $this->os = $this->osData;
         $this->osChecked = $osModel->getOSByVPNId( $this->getId());
         $this->setFormFills(
             [
@@ -39,17 +38,13 @@ class TopVPNAdminEdit extends AdminPostAction
                 'price' => $data['price'],
                 'save_from_price' => $data['save_from_price'],
                 'lang' => $data['lang'],
-                'os' => $this->os,
+                'os' => $this->osData,
                 'updated' => '',
             ]
         );
 
         if ( isset( $_POST['edit_vpn'] )){
-            foreach ($this->getFormFills() as $key => $value){
-                $this->postData[$key] = $_POST[$key];
-                $formFill[$key] = $_POST[$key];
-                $this->setFormFills($formFill);
-            }
+            $this->setPostData();
             $result = $this->getModel()->editRow($this->getId(), $this->postData);
             $this->osChecked = $osModel->getOSByVPNId( $this->getId());
             $this->setResultMessages('TopVPNModel',$result->getResultStatus(), $result->getResultMessage());
@@ -64,7 +59,7 @@ class TopVPNAdminEdit extends AdminPostAction
         $output .= AdminHtmlFormOutputs::renderResultMessages($this->getResultMessages());
         $output .= '<form id="edit_vpn" enctype="multipart/form-data" action="" method="post">';
         $output .= AdminHtmlFormInputs::input('Название VPN','vpn_name', $this->getFormFill('vpn_name'),'namefield','required');
-        $output .= AdminHtmlFormInputs::input('Системное название VPN','vpn_sys_name', $this->getFormFill('vpn_name'),'namefield','required');
+        $output .= AdminHtmlFormInputs::input('Системное название VPN','vpn_sys_name', $this->getFormFill('vpn_sys_name'),'namefield','required');
         $output .= AdminHtmlFormInputs::file('Логотип','vpn_logo', 'namefield','required');
         $output .= AdminHtmlFormInputs::input('Страна основания','country', $this->getFormFill('country'),'namefield','');
         $output .= AdminHtmlFormInputs::input('Партнерская ссылка','referal_link', $this->getFormFill('referal_link'),'namefield','');

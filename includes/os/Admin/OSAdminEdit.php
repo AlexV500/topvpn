@@ -16,18 +16,14 @@ class OSAdminEdit extends AdminPostAction {
             [
                 'os_name' => $data['os_name'],
                 'os_sys_name' => $data['os_sys_name'],
-                'os_logo' => $data['os_logo'],
+            //    'os_logo' => $data['os_logo'],
                 'active' => $data['active'],
                 'updated' => $data['updated'],
             ]
         );
 
         if ( isset( $_POST['edit_os'] )){
-            foreach ($this->getFormFills() as $key => $value){
-                $this->postData[$key] = $_POST[$key];
-                $formFill[$key] = $_POST[$key];
-                $this->setFormFills($formFill);
-            }
+            $this->setPostData();
             $result = $this->getModel()->editRow($this->getId(), $this->postData);
             $this->setResultMessages('OSModel', $result->getResultStatus(), $result->getResultMessage());
 
@@ -38,15 +34,15 @@ class OSAdminEdit extends AdminPostAction {
     public function render() : object
     {
         $output = '';
-        $output .= AdminHtmlFormInputs::renderAdminHead('Добавить OS');
+        $output .= AdminHtmlFormInputs::renderAdminHead('Редактировать OS '.$this->getFormFill('os_name'));
         $output .= AdminHtmlFormOutputs::renderResultMessages($this->getResultMessages());
         $output .= '<form id="edit_os" enctype="multipart/form-data" action="" method="post">';
         $output .= AdminHtmlFormInputs::input('Название OS','os_name', $this->getFormFill('os_name'),'namefield','required');
-        $output .= AdminHtmlFormInputs::input('Системное название OS','os_sys_name', $this->getFormFill('os_name'),'namefield','required');
+        $output .= AdminHtmlFormInputs::input('Системное название OS','os_sys_name', $this->getFormFill('os_sys_name'),'namefield','required');
         $output .= AdminHtmlFormInputs::file('Логотип','os_logo', 'namefield','required');
         $output .= AdminHtmlFormInputs::select('Активный', 'active', $this->getFormFill('active'), [1 => 'Да', 0 => 'Нет'], '');
         $output .= '<input type="hidden" name="updated" value="">';
-        $output .= '<input type="hidden" name="1" value="edit_os">';
+        $output .= '<input type="hidden" name="edit_os" value="1">';
         $output .= AdminHtmlFormInputs::renderAdminFormSubmitButton('Редактировать');
         $output .= '</form>';
         $this->render = $output;
