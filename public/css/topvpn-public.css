@@ -2,3 +2,420 @@
  * All of the CSS for your public-facing functionality should be
  * included in this file.
  */
+
+.text-logo {
+    padding:0;
+    margin:0;
+    display:inline-block
+}
+.list-header {
+    background-color:#fff;
+    font-weight:700
+}
+.list {
+    background-color:#fff;
+    user-select:none;
+    transition:.1s;
+    border-radius:2px;
+    box-shadow:0 4px 8px 0 rgba(0,0,0,.2),0 6px 20px 0 rgba(0,0,0,.19);
+    border:3px transparent solid;
+    cursor:pointer;
+    color:#000;
+    position:relative
+}
+.list:hover {
+    transform:scale(1.02);
+    z-index:100;
+    border:3px #ffc200 solid;
+    text-decoration:none
+}
+.jumpy:active,
+.nav-link:active,
+.list:active {
+    position:relative;
+    top:1px
+}
+.list-no-zoom {
+    transform:unset!important
+}
+.list-1 {
+    border:3px #ffc200 solid;
+    margin-top:10px!important
+}
+ul.features {
+    margin:12px 0 4px;
+    padding:0;
+    list-style-type:none;
+    font-size:14px
+}
+ul.features li {
+    margin:4px 0
+}
+
+.advertorial-1 {
+    color:#b3b3b3;
+    font-family:arial;
+    font-size:10px;
+    text-transform:uppercase
+}
+.feature-0 {
+    color:red;
+    font-weight:700;
+    text-decoration:underline
+}
+.feature-0:hover {
+    text-decoration:none
+}
+.os-icons-small {
+    width:20px;
+    margin:0 5px
+}
+.max-logo {
+    max-width:175px!important
+}
+.list-logo {
+    padding:0 40px
+}
+.advertorial-2 {
+    font-size:18px
+}
+ol {
+    padding:0;
+    margin:0
+}
+ol li {
+    list-style:decimal inside;
+    line-height:1.5
+}
+.discount-60 {
+    font-size:14px;
+    line-height:16px
+}
+.discount-9 {
+    font-size:9px
+}
+.img-limit {
+    background-color:#efefef
+}
+.img-limit img {
+    width:inherit!important
+}
+.action-box {
+    background-color:#efefef
+}
+.text-blue {
+    color:red
+}
+.no-side-padding {
+    padding-right:0;
+    padding-left:0
+}
+.redly {
+    color:red;
+    font-weight:700;
+    text-decoration:underline
+}
+.redly:hover {
+    color:red;
+    font-weight:700;
+    text-decoration:none
+}
+.hrefbtn {
+    background-color:red;
+    padding:12px 30px;
+    color:#fff;
+    border-radius:3px;
+    display:block;
+    text-align:center;
+    font-weight:700;
+    font-size:36px;
+    text-decoration:none;
+    text-transform:uppercase
+}
+.hrefbtn:hover {
+    background-color:#e60000;
+    text-decoration:none;
+    color:#fff
+}
+.hrefbtn:active {
+    position:relative;
+    top:1px
+}
+.hrefpr {
+    color:red;
+    font-weight:700;
+    text-decoration:underline
+}
+.hrefpr:hover {
+    color:#e60000;
+    text-decoration:none
+}
+.white-borders {
+    border-left:6px solid #fff;
+    border-right:6px solid #fff
+}
+#flipdown {
+    display:inline-block
+}
+#flipdown .rotor-group:first-child {
+    display:none
+}
+.img-shadow {
+    border:solid 1px #555;
+    background-color:#eed;
+    box-shadow:0 0 10px rgba(0,0,0,.6)
+}
+.width-200 {
+    max-width:200px
+}
+.hl-box {
+    background:#efefef;
+    padding:15px;
+    margin-bottom:15px
+}
+.hl-box-green {
+    border-left:7px solid #4abe35
+}
+.hl-box-red {
+    border-left:7px solid #dc3545
+}
+.hl-box-purple {
+    border-left:7px solid #8b65c7
+}
+.fdlink {
+    color:red;
+    font-weight:700;
+    text-decoration:underline
+}
+.fdlink:hover {
+    color:red;
+    font-weight:700;
+    text-decoration:none!important
+}
+.segoe {
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol"
+}
+ul.leftbullet li {
+    position:relative;
+    margin-left:4px;
+    margin-bottom:8px
+}
+ul.leftbullet li::before {
+    content:"»";
+    position:absolute;
+    left:-15px;
+    top:-5px;
+    font-weight:700;
+    font-size:20px
+}
+.left-border-yellow {
+    border-left:4px solid #ffc200;
+    padding-left:16px
+}
+.max-width-5 {
+    max-width:5%
+}
+.left-border-blue {
+    border-left:4px solid #00aeef;
+    padding-left:16px
+}
+.left-border-red {
+    border-left:4px solid #ff003d;
+    padding-left:16px
+}
+.left-border-yellow {
+    border-left:4px solid #ffc200;
+    padding-left:16px
+}
+.btn-custom {
+    padding:20px 40px;
+    font-size:20px;
+    text-transform:uppercase;
+    font-weight:700;
+    box-shadow:0 6px 10px 0 rgb(226 22 23 / 20%);
+    background-color:#e2223b
+}
+.width-32 {
+    width:32px
+}
+.text-bottom {
+    font-size:24px
+}
+.weight-100 {
+    font-weight:100!important
+}
+.yanpix {
+    position:absolute;
+    left:-9999px
+}
+.nounderline {
+    text-decoration:none!important
+}
+.left-hand::before {
+    content:"\261B";
+    position:absolute;
+    left:-16px
+}
+.sans-serif {
+    font-family:sans-serif
+}
+.margin-bottom-40 {
+    margin-bottom:40px
+}
+.line-height-14 {
+    line-height:14px
+}
+ul.ticks-exit li {
+    text-align:left;
+    padding-left:25px
+}
+ul.ticks-exit li::before {
+    content:url(../pics/check-mark-16.png);
+    position:absolute;
+    left:15px;
+    font-weight:700
+}
+ul.ticks-exit-jp li::before {
+    content:'■'!important
+}
+.top3row img {
+    width:unset!important
+}
+.image_in_article {
+    max-width:95px;
+    float:left;
+    margin-right:20px
+}
+
+
+.topcircle {
+    font-size:24px;
+    border:4px #25aae1 solid;
+    padding:10px;
+    border-radius:50%
+}
+.d-rank {
+    color:#3eb6c4;
+    font-size:32px;
+    font-weight:500;
+    font-family:sans-serif
+}
+.d-border-lr {
+    border-left:1px solid #f0f0f0;
+    border-right:1px solid #f0f0f0
+}
+.d-arrow {
+    max-width:32px;
+    width:80%
+}
+.d-logo {
+    max-width:225px;
+    width:100%
+}
+.d-score {
+    font-size:36px;
+    width:auto;
+    line-height:1.2;
+    font-weight:700;
+    color:#44484c
+}
+.d-rating {
+    font-size:16px;
+    text-transform:uppercase;
+    line-height:1.2;
+    color:#161616;
+    font-family:serif
+}
+.d-read-review,
+.d-read-review:hover {
+    font-weight:200;
+    color:#778897;
+    font-size:12px;
+    text-transform:uppercase
+}
+
+.max-240 {
+    max-width:240px
+}
+.s16x16 {
+    width:16px;
+    height:16px
+}
+
+.usinglink {
+    font-size: 14px;
+    color: #00f;
+}
+
+.advertorial-1 {
+    color:#b3b3b3;
+    font-family:arial;
+    font-size:10px;
+    text-transform:uppercase
+}
+.feature-0 {
+    color:red;
+    font-weight:700;
+    text-decoration:underline
+}
+.feature-0:hover {
+    text-decoration:none
+}
+.os-icons-small {
+    width:20px;
+    margin:0 5px
+}
+.max-logo {
+    max-width:175px!important
+}
+.list-logo {
+    padding:0 40px
+}
+.advertorial-2 {
+    font-size:18px
+}
+ol {
+    padding:0;
+    margin:0
+}
+ol li {
+    list-style:decimal inside;
+    line-height:1.5
+}
+.discount-60 {
+    font-size:14px;
+    line-height:16px
+}
+.discount-9 {
+    font-size:9px
+}
+.img-limit {
+    background-color:#efefef
+}
+.img-limit img {
+    width:inherit!important
+}
+.action-box {
+    background-color:#efefef
+}
+.text-blue {
+    color:red
+}
+.no-side-padding {
+    padding-right:0;
+    padding-left:0
+}
+.redly {
+    color:red;
+    font-weight:700;
+    text-decoration:underline
+}
+.redly:hover {
+    color:red;
+    font-weight:700;
+    text-decoration:none
+}
+
+.os-icons-small {
+    width: 20px;
+    margin: 0 5px;

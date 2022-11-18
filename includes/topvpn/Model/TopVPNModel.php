@@ -64,6 +64,9 @@ class TopVPNModel extends AbstractModel{
             $this->resultMessages->addResultMessage($this->getNameOfClass(), $imgAdded->getResultStatus(), $imgAdded->getResultMessage());
         }
         $updatedRow = $this->updateRow($id, $data);
+//        echo '<pre>';
+//        print_r($data);
+//        echo '</pre>';
         if(count($updatedRow) > 0){
             $updatedRow = ManyToMany::editManyToOne($this->keyManyToManyFields, $updatedRow, $id, $data);
         } else {

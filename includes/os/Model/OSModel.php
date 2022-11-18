@@ -72,7 +72,7 @@ class OSModel extends AbstractModel{
         return Result::setResult('ok', $this->resultMessages->getResultMessages($this->getNameOfClass()), '');
     }
 
-    public function getOSByVPNId($id)
+    public function getOSByVPNId($id) : array
     {
         $sql = "SELECT $this->dbTable.*
                               FROM $this->dbTable
@@ -81,5 +81,4 @@ class OSModel extends AbstractModel{
                               WHERE {$this->prefix}topvpn_vpn.id = $id";
         return $this->wpdb->get_results($sql, ARRAY_A);
     }
-
 }

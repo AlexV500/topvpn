@@ -8,7 +8,7 @@ class OSAdminEdit extends AdminPostAction {
 
     protected array $postData;
 
-    public function init() : object
+    public function init( array $atts = []) : object
     {
         $this->setId(HTTP::getGet('item_id'));
         $data = $this->getModel()->getRowById($this->getId());

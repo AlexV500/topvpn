@@ -8,7 +8,7 @@ class LangAdminEdit extends AdminPostAction{
 
     protected array $postData;
 
-    public function init()
+    public function init( array $atts = [])
     {
         $this->setId(HTTP::getGet('item_id'));
         $data = $this->getModel()->getRowById($this->getId());

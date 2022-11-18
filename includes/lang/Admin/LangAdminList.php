@@ -7,7 +7,7 @@ require_once V_PLUGIN_INCLUDES_DIR . 'lang/Model/LangModel.php';
 class LangAdminList extends AdminList
 {
 
-    public function init() : object
+    public function init( array $atts = []) : object
     {
         $this->setOrderColumn('position');
         $this->setOrderDirection('ASC');

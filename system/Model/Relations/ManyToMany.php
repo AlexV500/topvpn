@@ -69,6 +69,9 @@ class ManyToMany {
     {
         if (count($keyManyToManyFields) > 0) {
             foreach ($keyManyToManyFields as $keyManyToOne => $keyManyToOneData) {
+                if(!isset($manyItemsToThisOnePostData[$keyManyToOne])){
+                    $manyItemsToThisOnePostData[$keyManyToOne] = [];
+                }
                 $DBRelationTableDTO = new DBRelationTableDTO($keyManyToOneData['pivot_table_name'], $keyManyToOneData['this_key_name'], $keyManyToOneData['that_key_name']);
                 $manyToOne = new self($DBRelationTableDTO);
 
@@ -84,7 +87,7 @@ class ManyToMany {
     {
         $returnedData = [];
 
-        if (is_array($manyItemsToThisOne) && (count($manyItemsToThisOne)) > 0) {
+        if (is_array($manyItemsToThisOne)) {
             if ($this->refreshThisRowThatRowLinks($thisId, $manyItemsToThisOne)) {
                 $returnedData = $this->getThatManyToThisOneLinks($thisId);
             }
@@ -106,7 +109,10 @@ class ManyToMany {
                 }
             }
 
-            if (empty($manyItemsToThisOne)) {
+            if (count($manyItemsToThisOne) == 0) {
+                if ($this->_deleteManyToOne($thisId) !== 'ok'){
+                    return false;
+                }
                 return TRUE;
             }
             if (empty(array_diff($manyItemsToThisOne, $manyItemsToThisOneIds))&&(empty(array_diff($manyItemsToThisOneIds, $manyItemsToThisOne)))) {

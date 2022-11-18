@@ -7,7 +7,7 @@ require_once V_PLUGIN_INCLUDES_DIR . 'os/Model/OSModel.php';
 
 class TopVPNAdminDelete extends AdminPostAction{
 
-    public function init() : object {
+    public function init( array $atts = []) : object {
         $this->setId(HTTP::getGet('item_id'));
         $data = $this->getModel()->getRowById($this->getId());
         $this->deleteName = $data['vpn_name'];

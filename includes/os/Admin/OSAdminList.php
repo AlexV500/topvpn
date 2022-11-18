@@ -11,7 +11,7 @@ class OSAdminList extends AdminList{
         parent::__construct($model, $dbTable);
     }
 
-    public function init() : object
+    public function init( array $atts = []) : object
     {
         $this->setOrderColumn('position');
         $this->setOrderDirection('ASC');

@@ -13,7 +13,7 @@ class TopVPNAdminList extends AdminList {
         parent::__construct($model, $dbTable);
     }
 
-    public function init(){
+    public function init( array $atts = []) : object{
 
         $this->selectLanguageAdm();
         $this->switchMultiLangMode();

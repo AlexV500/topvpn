@@ -76,6 +76,7 @@ class Topvpn {
 
 		$this->load_dependencies();
 		$this->set_locale();
+        $this->define_shortcodes();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
 
@@ -111,6 +112,7 @@ class Topvpn {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-topvpn-i18n.php';
 
+
 		/**
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
@@ -124,6 +126,8 @@ class Topvpn {
 
         require_once plugin_dir_path(dirname(__FILE__)) . 'includes/constants.php';
 
+        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-topvpn-shortcodes.php';
+
         if( is_admin() ) {
 
             require_once V_PLUGIN_INCLUDES_DIR . 'lang/Admin/LangAdminManager.php';
@@ -134,6 +138,10 @@ class Topvpn {
 		$this->loader = new Topvpn_Loader();
 
 	}
+
+    private function define_shortcodes(){
+        TopVPN_Shortcodes::init();
+    }
 
 	/**
 	 * Define the locale for this plugin for internationalization.

@@ -1,33 +1,32 @@
 <?php
 
-require_once V_CORE_LIB . 'Admin/AdminActions/IAdminActions.php';
+require_once V_CORE_LIB . 'Components/Components.php';
 
-abstract class AdminActions implements IAdminActions {
+abstract class AdminActions extends Components{
 
-    protected object $model;
-    protected string $languageSysNameGet = 'en_EN';
+ //   protected object $model;
+
     protected array $allLanguageAdm;
-    protected string $currentURL;
     protected array $resultMessages = [];
     protected string $logoPath;
     protected array $ok;
     protected array $errors;
-    protected string $render;
-    protected string $dbTable;
 
-    public function __construct($model, $dbTable){
-        $this->model = new $model($dbTable);
-        $this->dbTable = $dbTable;
-        $this->setCurrentURL();
+    public function __construct($model, $dbTable)
+    {
+        parent::__construct($model, $dbTable);
     }
 
-    public function getModel(){
-        return $this->model;
-    }
+//    public function __construct($model, $dbTable){
+//        $this->model = new $model($dbTable);
+//        $this->dbTable = $dbTable;
+//        $this->setCurrentURL();
+//    }
+//
+//    public function getModel(){
+//        return $this->model;
+//    }
 
-    public function changeModelConf($model){
-        $this->model = $model;
-    }
 
     public function getLogoPath() : string
     {
@@ -40,16 +39,8 @@ abstract class AdminActions implements IAdminActions {
         return $this;
     }
 
-    public function getLanguageSysNameGet(){
-        return $this->languageSysNameGet;
-    }
-
     public function getAllLanguageAdm(){
         return $this->allLanguageAdm;
-    }
-
-    public function setLang(){
-        return $this->getModel()->setLang($this->languageSysNameGet);
     }
 
     public function switchMultiLangMode(){
@@ -59,15 +50,6 @@ abstract class AdminActions implements IAdminActions {
     protected function initAllLanguageAdm( string $languageModel, string $dbTable) : object{
         $this->allLanguageAdm = (new $languageModel($dbTable))->getAllRows(true, false);
         return $this;
-    }
-
-    protected function setCurrentURL() : object{
-        $this->currentURL = HTTP::getCurrentURL();
-        return $this;
-    }
-
-    protected function getCurrentURL() : string{
-        return $this->currentURL;
     }
 
     protected function selectLanguageAdm() : object{
@@ -131,12 +113,5 @@ abstract class AdminActions implements IAdminActions {
 
     protected function getResultMessages() : array{
         return $this->resultMessages;
-    }
-
-    abstract public function init();
-    abstract public function render();
-
-    public function show(){
-        echo $this->render;
     }
 }

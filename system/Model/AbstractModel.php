@@ -135,13 +135,13 @@ abstract class AbstractModel
 
         if ($this->multiLangMode) {
             if ($activeMode) {
-                $sql = "SELECT * FROM `{$this->dbTable}` WHERE active=1 AND lang = '{$this->lang}' $orderSql $paginatSql";
+                $sql = "SELECT * FROM `{$this->dbTable}` WHERE active='1' AND lang = '{$this->lang}' $orderSql $paginatSql";
             } else {
                 $sql = "SELECT * FROM `{$this->dbTable}` WHERE lang = '{$this->lang}' $orderSql $paginatSql";
             }
         } else {
             if ($activeMode) {
-                $sql = "SELECT * FROM `{$this->dbTable}` WHERE active=1 $orderSql $paginatSql";
+                $sql = "SELECT * FROM `{$this->dbTable}` WHERE active='1' $orderSql $paginatSql";
             } else {
                 $sql = "SELECT * FROM `{$this->dbTable}` $orderSql $paginatSql";
             }
@@ -163,13 +163,13 @@ abstract class AbstractModel
 
         if ($this->multiLangMode) {
             if ($activeMode) {
-                $sql = "SELECT * FROM `{$dbTable}` WHERE active=1 AND lang = '{$this->lang}' $orderSql $paginatSql";
+                $sql = "SELECT * FROM `{$dbTable}` WHERE active='1' AND lang = '{$this->lang}' $orderSql $paginatSql";
             } else {
                 $sql = "SELECT * FROM `{$dbTable}` WHERE lang = '{$this->lang}' $orderSql $paginatSql";
             }
         } else {
             if ($activeMode) {
-                $sql = "SELECT * FROM `{$dbTable}` WHERE active=1 $orderSql $paginatSql";
+                $sql = "SELECT * FROM `{$dbTable}` WHERE active='1' $orderSql $paginatSql";
             } else {
                 $sql = "SELECT * FROM `{$dbTable}` $orderSql $paginatSql";
             }
@@ -183,13 +183,13 @@ abstract class AbstractModel
 
         if($this->multiLangMode) {
             if ($activeMode) {
-                $query = "SELECT COUNT(*) FROM `{$this->dbTable}` WHERE active=1 AND lang = '{$this->lang}'";
+                $query = "SELECT COUNT(*) FROM `{$this->dbTable}` WHERE active='1' AND lang = '{$this->lang}'";
             } else {
                 $query = "SELECT COUNT(*) FROM `{$this->dbTable}` WHERE lang = '{$this->lang}'";
             }
         } else {
             if ($activeMode) {
-                $query = "SELECT COUNT(*) FROM `{$this->dbTable}` WHERE active=1";
+                $query = "SELECT COUNT(*) FROM `{$this->dbTable}` WHERE active='1'";
             } else {
                 $query = "SELECT COUNT(*) FROM `{$this->dbTable}`";
             }
@@ -204,13 +204,13 @@ abstract class AbstractModel
 
         if($this->multiLangMode) {
             if ($activeMode) {
-                $query = "SELECT COUNT(*) FROM `{$dbTable}` WHERE active=1 AND lang = '{$this->lang}'";
+                $query = "SELECT COUNT(*) FROM `{$dbTable}` WHERE active='1' AND lang = '{$this->lang}'";
             } else {
                 $query = "SELECT COUNT(*) FROM `{$dbTable}` WHERE lang = '{$this->lang}'";
             }
         } else {
             if ($activeMode) {
-                $query = "SELECT COUNT(*) FROM `{$dbTable}` WHERE active=1";
+                $query = "SELECT COUNT(*) FROM `{$dbTable}` WHERE active='1'";
             } else {
                 $query = "SELECT COUNT(*) FROM `{$dbTable}`";
             }
@@ -239,6 +239,9 @@ abstract class AbstractModel
             }
             if ($field == 'created'){
                 $val = date( 'Y-m-d H:i:s' , time() );
+            }
+            if ($field == 'updated') {
+                $val = date('Y-m-d H:i:s', time());
             }
             $names[] = $field;
             $masks[] = "'".$val."'";

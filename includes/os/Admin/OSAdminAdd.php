@@ -9,7 +9,7 @@ class OSAdminAdd extends AdminPostAction{
     protected array $postData;
     protected array $os;
 
-    public function init() : object
+    public function init( array $atts = []) : object
     {
         $this->setFormFills(
             [

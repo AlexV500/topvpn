@@ -9,7 +9,7 @@ class LangAdminAdd extends AdminPostAction{
     protected array $postData;
     protected array $lang;
 
-    public function init() : object
+    public function init( array $atts = []) : object
     {
         $this->setFormFills(
             [
