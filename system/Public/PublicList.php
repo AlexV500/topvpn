@@ -11,6 +11,7 @@ abstract class PublicList extends Components{
     use InitRows, InitOrder, InitPagination;
 
     protected bool $activeMode = true;
+    protected string $imgPath = V_CORE_URL .'public/images';
 
     public function __construct($model, $dbTable)
     {

@@ -30,7 +30,12 @@ class TopVPNAdminEdit extends AdminPostAction
                 'referal_link' => $data['referal_link'],
                 'referal_link_mobile' => $data['referal_link_mobile'],
                 'top_status' => $data['top_status'],
+                'top_status_description' => $data['top_status_description'],
                 'features' => $data['features'],
+                'privacy_score' => $data['privacy_score'],
+                'feautures_score' => $data['feautures_score'],
+                'value_for_money_score' => $data['value_for_money_score'],
+                'user_score' => $data['user_score'],
                 'rating' => $data['rating'],
                 'rating_description' => $data['rating_description'],
                 'active' => $data['active'],
@@ -67,7 +72,14 @@ class TopVPNAdminEdit extends AdminPostAction
         $output .= AdminHtmlFormInputs::input('Партнерская ссылка','referal_link', $this->getFormFill('referal_link'),'namefield','');
         $output .= AdminHtmlFormInputs::input('Партнерская моб. ссылка','referal_link_mobile', $this->getFormFill('referal_link_mobile'),'namefield','');
         $output .= AdminHtmlFormInputs::select('Топ статус', 'top_status', $this->getFormFill('top_status'), [0 => 'Нет', 1 => 'Top'], '');
+        $output .= AdminHtmlFormInputs::input('Описание статуса','top_status_description', $this->getFormFill('top_status_description'),'namefield','');
         $output .= AdminHtmlFormInputs::textarea('Features', 'features', $this->getFormFill('features'), '');
+
+        $output .= AdminHtmlFormInputs::input('Privacy score','privacy_score', $this->getFormFill('privacy_score'),'namefield','');
+        $output .= AdminHtmlFormInputs::input('Features score','feautures_score', $this->getFormFill('feautures_score'),'namefield','');
+        $output .= AdminHtmlFormInputs::input('Value for money score','value_for_money_score', $this->getFormFill('value_for_money_score'),'namefield','');
+        $output .= AdminHtmlFormInputs::input('User score','user_score', $this->getFormFill('user_score'),'namefield','');
+
         $output .= AdminHtmlFormInputs::input('Рейтинг','rating', $this->getFormFill('rating'),'namefield','');
         $output .= AdminHtmlFormInputs::input('Описание рейтинга','rating_description', $this->getFormFill('rating_description'),'namefield','');
         $output .= AdminHtmlFormInputs::select('Активный', 'active', $this->getFormFill('active'), [1 => 'Да', 0 => 'Нет'], '');

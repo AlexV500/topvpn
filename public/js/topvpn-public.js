@@ -30,3 +30,85 @@
 	 */
 
 })( jQuery );
+document.addEventListener('DOMContentLoaded', function() {
+	var box = document.getElementsByClassName('box')[0],
+	//	box2 = document.getElementsByClassName('box2')[0],
+		buttonDown = document.getElementsByClassName('toggle')[0];
+	buttonUp = document.getElementsByClassName('toggle')[1];
+
+	buttonBoxDown = document.getElementById('other-brokers-button-down');
+	buttonBoxUp = document.getElementById('other-brokers-button-up');
+
+	buttonBoxUp.classList.add('box-hidden');
+
+	box.classList.add('box-hidden');
+//	box2.classList.add('box-hidden');
+
+	buttonDown.addEventListener('click', function(e) {
+
+		buttonBoxDown.classList.add('box-hidden');
+		buttonBoxUp.classList.remove('box-hidden');
+
+		box.classList.add('box-transition');
+		box.clientWidth; // force layout to ensure the now display: block and opacity: 0 values are taken into account when the CSS transition starts.
+		box.classList.remove('box-hidden');
+
+		// box2.classList.add('box-transition');
+		// box2.clientWidth; // force layout to ensure the now display: block and opacity: 0 values are taken into account when the CSS transition starts.
+		// box2.classList.remove('box-hidden');
+
+
+	}, false);
+
+	buttonUp.addEventListener('click', function(e) {
+
+		buttonBoxUp.classList.add('box-hidden');
+		buttonBoxDown.classList.remove('box-hidden');
+
+		box.classList.remove('box-transition');
+		box.classList.add('box-hidden');
+
+		// box2.classList.remove('box-transition');
+		// box2.classList.add('box-hidden');
+
+	}, false);
+
+
+	box.addEventListener('transitionend', function() {
+		box.classList.remove('box-transition');
+	}, false);
+});
+
+function hideOrShow2() {
+
+	// Select the element with id "theDIV"
+	var x = document.getElementById("theDIV");
+	var x2 = document.getElementById("theDIV2");
+	var brok_desc_row = document.getElementById("brok-desc-row");
+
+	// If selected element is hidden
+	if (x.style.display === "none") {
+
+		// Show the hidden element
+		x.style.display = "block";
+
+		// Else if the selected element is shown
+	} else {
+
+		// Hide the element
+		x.style.display = "none";
+	}
+
+	// If selected element is hidden
+	if (x2.style.display === "none") {
+
+		// Show the hidden element
+		x2.style.display = "block";
+
+		// Else if the selected element is shown
+	} else {
+
+		// Hide the element
+		x2.style.display = "none";
+	}
+}
