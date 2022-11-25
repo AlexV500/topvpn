@@ -2,6 +2,7 @@
 
 require_once V_PLUGIN_INCLUDES_DIR . 'topvpn/Model/TopVPNModel.php';
 require_once V_PLUGIN_INCLUDES_DIR . 'os/Model/OSModel.php';
+require_once V_CORE_LIB . 'View/HTMLOutputs.php';
 require_once V_CORE_LIB . 'Public/PublicList.php';
 
 class TopVPNPublicList extends PublicList{
@@ -91,7 +92,34 @@ class TopVPNPublicList extends PublicList{
 
                 /*---------*/$output .='</div>';
                 /*---------*/$output .='<div class="col-6 col-sm-6 col-lg-3 rating-info-holder d-flex flex-column justify-content-center">';
-                /*------------*/$output .= '<div class="wss-scoreRow-772925660"><div class="wss-multiScoreText-3728111154">Privacy</div><div class="wss-rt_container-1819568874"><div class="MuiCircularProgress-root wss-backCircle-2317161577 MuiCircularProgress-colorPrimary MuiCircularProgress-determinate" style="width:100%;height:auto;transform:rotate(-90deg)" role="progressbar" aria-valuenow="100"><svg class="MuiCircularProgress-svg" viewBox="22 22 44 44"><circle class="MuiCircularProgress-circle MuiCircularProgress-circleDeterminate" style="stroke-dasharray:131.947;stroke-dashoffset:0.000px" cx="44" cy="44" r="21" fill="none" stroke-width="2"></circle></svg></div><div class="MuiCircularProgress-root wss-frontCircle-3891644919 MuiCircularProgress-colorPrimary MuiCircularProgress-determinate" style="width:100%;height:auto;transform:rotate(-90deg)" role="progressbar" aria-valuenow="0"><svg class="MuiCircularProgress-svg" viewBox="22 22 44 44"><circle class="MuiCircularProgress-circle rankCircleOrder:undefined:99 MuiCircularProgress-circleDeterminate" style="stroke-dashoffset: 128.805px; stroke-dasharray: 262.68px;" cx="44" cy="44" r="20.5" fill="none" stroke-width="3"></circle></svg></div><div class="wss-ratingText-1106378931 rankNumberOrder:undefined">9.9</div></div></div><div class="wss-scoreRow-772925660"><div class="wss-multiScoreText-3728111154">Features</div><div class="wss-rt_container-1819568874"><div class="MuiCircularProgress-root wss-backCircle-2317161577 MuiCircularProgress-colorPrimary MuiCircularProgress-determinate" style="width:100%;height:auto;transform:rotate(-90deg)" role="progressbar" aria-valuenow="100"><svg class="MuiCircularProgress-svg" viewBox="22 22 44 44"><circle class="MuiCircularProgress-circle MuiCircularProgress-circleDeterminate" style="stroke-dasharray:131.947;stroke-dashoffset:0.000px" cx="44" cy="44" r="21" fill="none" stroke-width="2"></circle></svg></div><div class="MuiCircularProgress-root wss-frontCircle-3891644919 MuiCircularProgress-colorPrimary MuiCircularProgress-determinate" style="width:100%;height:auto;transform:rotate(-90deg)" role="progressbar" aria-valuenow="0"><svg class="MuiCircularProgress-svg" viewBox="22 22 44 44"><circle class="MuiCircularProgress-circle rankCircleOrder:undefined:98 MuiCircularProgress-circleDeterminate" style="stroke-dashoffset: 128.805px; stroke-dasharray: 261.36px;" cx="44" cy="44" r="20.5" fill="none" stroke-width="3"></circle></svg></div><div class="wss-ratingText-1106378931 rankNumberOrder:undefined">9.8</div></div></div><div class="wss-scoreRow-772925660"><div class="wss-multiScoreText-3728111154">Value for money</div><div class="wss-rt_container-1819568874"><div class="MuiCircularProgress-root wss-backCircle-2317161577 MuiCircularProgress-colorPrimary MuiCircularProgress-determinate" style="width:100%;height:auto;transform:rotate(-90deg)" role="progressbar" aria-valuenow="100"><svg class="MuiCircularProgress-svg" viewBox="22 22 44 44"><circle class="MuiCircularProgress-circle MuiCircularProgress-circleDeterminate" style="stroke-dasharray:131.947;stroke-dashoffset:0.000px" cx="44" cy="44" r="21" fill="none" stroke-width="2"></circle></svg></div><div class="MuiCircularProgress-root wss-frontCircle-3891644919 MuiCircularProgress-colorPrimary MuiCircularProgress-determinate" style="width:100%;height:auto;transform:rotate(-90deg)" role="progressbar" aria-valuenow="0"><svg class="MuiCircularProgress-svg" viewBox="22 22 44 44"><circle class="MuiCircularProgress-circle rankCircleOrder:undefined:95 MuiCircularProgress-circleDeterminate" style="stroke-dashoffset: 128.805px; stroke-dasharray: 257.4px;" cx="44" cy="44" r="20.5" fill="none" stroke-width="3"></circle></svg></div><div class="wss-ratingText-1106378931 rankNumberOrder:undefined">9.5</div></div></div><div class="wss-scoreRow-772925660"><div class="wss-multiScoreText-3728111154">User Score</div><div class="wss-rt_container-1819568874"><div class="MuiCircularProgress-root wss-backCircle-2317161577 MuiCircularProgress-colorPrimary MuiCircularProgress-determinate" style="width:100%;height:auto;transform:rotate(-90deg)" role="progressbar" aria-valuenow="100"><svg class="MuiCircularProgress-svg" viewBox="22 22 44 44"><circle class="MuiCircularProgress-circle MuiCircularProgress-circleDeterminate" style="stroke-dasharray:131.947;stroke-dashoffset:0.000px" cx="44" cy="44" r="21" fill="none" stroke-width="2"></circle></svg></div><div class="MuiCircularProgress-root wss-frontCircle-3891644919 MuiCircularProgress-colorPrimary MuiCircularProgress-determinate" style="width:100%;height:auto;transform:rotate(-90deg)" role="progressbar" aria-valuenow="0"><svg class="MuiCircularProgress-svg" viewBox="22 22 44 44"><circle class="MuiCircularProgress-circle rankCircleOrder:undefined:99 MuiCircularProgress-circleDeterminate" style="stroke-dashoffset: 128.805px; stroke-dasharray: 262.68px;" cx="44" cy="44" r="20.5" fill="none" stroke-width="3"></circle></svg></div><div class="wss-ratingText-1106378931 rankNumberOrder:undefined">9.9</div></div></div>';
+                /*------------*/$output .= '<div class="wss-scoreRow-772925660"><div class="wss-multiScoreText-3728111154">Privacy</div>
+                                            <div class="wss-rt_container-1819568874">
+                                            
+                                            '.HTMLOutputs::renderRate(9.5).'
+                                            </div>
+                                            </div>
+                                            
+                                            <div class="wss-scoreRow-772925660">
+                                            <div class="wss-multiScoreText-3728111154">Features</div>
+                                            <div class="wss-rt_container-1819568874"> 
+                                            '.HTMLOutputs::renderRate(9.8).'
+                                            </div>
+                                            </div>
+                                            
+                                            <div class="wss-scoreRow-772925660">
+                                            <div class="wss-multiScoreText-3728111154">Value for money</div>
+                                            <div class="wss-rt_container-1819568874">
+                                            '.HTMLOutputs::renderRate(9.5).'
+                                            </div>
+                                            </div>
+                                            
+                                            <div class="wss-scoreRow-772925660">
+                                            <div class="wss-multiScoreText-3728111154">User Score</div>
+                                            <div class="wss-rt_container-1819568874">                                           
+                                            
+                                            '.HTMLOutputs::renderRate(9.9).'
+                                            </div>
+                                            </div>';
                 /*---------*/$output .='</div>';
                 /*---------*/$output .='<div class="col-6 col-sm-12 col-lg-3 price-holder d-flex flex-column justify-content-center align-items-center text-center">';
                 /*------------*/$output .='<div class="d-score">';
@@ -194,6 +222,13 @@ class TopVPNPublicList extends PublicList{
             $output .= '</li>';
         }
         $output .= '</ul>';
+        return $output;
+    }
+
+    protected function renderRate(){
+
+        $options = "data-pie='{\"percent\" : 75}'";
+        $output = '<div class="pie" '.$options.'></div>';
         return $output;
     }
 

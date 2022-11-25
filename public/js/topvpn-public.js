@@ -77,6 +77,9 @@ document.addEventListener('DOMContentLoaded', function() {
 	box.addEventListener('transitionend', function() {
 		box.classList.remove('box-transition');
 	}, false);
+
+	const circle = new CircularProgressBar("pie");
+	circle.initial();
 });
 
 function hideOrShow2() {

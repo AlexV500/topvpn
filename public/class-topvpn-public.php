@@ -96,7 +96,9 @@ class Topvpn_Public {
 		 * class.
 		 */
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/topvpn-public.js', array( 'jquery' ), $this->version, false );
+        wp_enqueue_script( 'circular-progress-bar.js', plugin_dir_url( __FILE__ ) . 'js/circular-progress-bar.js', array( 'jquery' ), $this->version, false );
+        wp_enqueue_script( 'topvpn-public', plugin_dir_url( __FILE__ ) . 'js/topvpn-public.js', array( 'circular-progress-bar.js' ), $this->version, false );
+
 
 	}
 
