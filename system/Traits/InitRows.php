@@ -11,8 +11,8 @@ trait InitRows{
         return $this;
     }
 
-    public function initRowsData($activeMode) : object{
-        $this->rowsData = $this->getModel()->getAllRows($activeMode);
+    public function initRowsData($activeMode, bool $paginationMode = true, bool $limitMode = false) : object{
+        $this->rowsData = $this->getModel()->getAllRows($activeMode, $paginationMode, $limitMode);
         return $this;
     }
 

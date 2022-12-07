@@ -17,6 +17,7 @@ abstract class AbstractModel
     protected string $orderDirection = 'ASC';
     public string $rowCount;
     public string $paginationCount;
+    public string $limitCount;
     public string $offset;
     public object $errorStatus;
     public object $resultMessages;
@@ -83,6 +84,12 @@ abstract class AbstractModel
         return $this;
     }
 
+    public function setLimitCount( int $limitCount) : object
+    {
+        $this->limitCount = $limitCount;
+        return $this;
+    }
+
     public function setPaginationCount( int $paginationCount) : object
     {
         $this->paginationCount = $paginationCount;
@@ -122,12 +129,17 @@ abstract class AbstractModel
         return $this->wpdb->get_row("SELECT * FROM `{$this->dbTable}` WHERE $columnName={$cnValue}", ARRAY_A);
     }
 
-    public function getAllRows(bool $activeMode = true, bool $paginationMode = true)
+    public function getAllRows(bool $activeMode = true, bool $paginationMode = true, bool $limitMode = false)
     {
         $orderSql = '';
         $paginatSql = '';
 
         $orderSql = 'ORDER BY '.$this->orderColumn.' ' . $this->orderDirection;
+
+        if ($limitMode) {
+            $paginationMode = false;
+            $paginatSql = 'LIMIT ' . $this->limitCount;
+        }
 
         if ($paginationMode) {
             $paginatSql = 'LIMIT ' . $this->paginationCount . ' OFFSET ' . $this->offset;

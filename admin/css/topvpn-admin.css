@@ -663,3 +663,21 @@ li.add-ons:hover {
 .message-error{
     color: red;
 }
+
+.inp-group{
+    position: relative;
+    margin: 1rem -.75rem 0;
+    border-top: solid #8c8f94;
+    border-left: solid #8c8f94;
+    border-right: solid #8c8f94;
+    border-bottom: solid #8c8f94;
+    padding-top: 0.2rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    padding-bottom: 0.8rem;
+    margin-right: 0;
+    margin-left: -0.5rem;
+    border-width: 1px;
+    border-radius: 4px;
+    width: 304px;
+}

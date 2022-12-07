@@ -18,6 +18,11 @@ abstract class PublicList extends Components{
         parent::__construct($model, $dbTable);
     }
 
+    public function setLimitCount($count = 10) : object{
+        $this->model->setLimitCount($count);
+        return $this;
+    }
+
     public function switchMultiLangMode($atts){
         $lang = '';
         if(isset($atts['lang'])) {

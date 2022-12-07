@@ -41,19 +41,16 @@ class TopVPNPublicList extends PublicList{
                 $logo = $logoPath .'/'. $result['vpn_logo'];
                 $osSystems = $this->osModel->getOSByVPNId($result['id']);
                 $pos = $i + 1;
-                $output .= '<div class="">';
+                $output .= '';
                 if ($i == $this->showCount) {
                     $this->showTrigger = 1;
                     //    $output .= '<div id="theDIV" style="display: none;">';
                     $output .= '<div class="box">';
                 }
-                $output .= '<div class="d-block no-gutters mt-4 pt-4 pb-3 pl-2 pr-2 p-lg-4 list list-1 pm-1">';
+                $output .= '<div class="rating-info d-block no-gutters mt-4 pt-4 pb-3 pl-2 pr-2 p-lg-4 list list-'.$pos.' pm-1">';
                 //TOP STATUS
-                if(trim($result['top_status'] == '1')) {
-                    $output .= '<div class="d-none d-md-block text-left">
-                <div class="ribbon-number-two"><h2> '.$result['top_status_description'].'</h2></div>';
-                    $output .= '</div>';
-                }
+                $output .= $this->renderTopStatus($pos, $result['top_status_description']);
+
                 //TOP STATUS END
 
                 $output .= '<div class="row">';
@@ -61,18 +58,21 @@ class TopVPNPublicList extends PublicList{
 
                 /**/$output .='';/**/
 
-                /*---*/$output .='<div class="col-auto text-center align-center d-none d-lg-flex flex-column justify-content-center">';
-                /*------*/$output .='<div class="arating">'.$pos.'</div>';
-                /*---*/$output .='</div>';
+//                /*---*/$output .='<div class="col-auto text-center align-center d-none d-lg-flex flex-column justify-content-center">';
+//                /*------*/$output .='<div class="arating">'.$pos.'</div>';
+//                /*---*/$output .='</div>';
 
                 /*---*/$output .='<div class="col">';
                 /*------*/$output .='<div class="row">';
-                /*---------*/$output .= '<div class="col-9 col-sm-9 col-lg-2 text-center logo-holder align-center d-flex flex-column justify-content-center">';
+                /*---------*/$output .= '<div class="col-9 col-sm-9 column-1 logo-holder d-flex flex-column justify-content-top">';
                 /*------------*/$output .='<span><img alt="' . $result['vpn_name'] . '" class="img-fluid max-240" src="' . $logo . '" alt="' . $result['vpn_name'] . '" title="' . $result['vpn_name'] . '"></span>';
+                /*------------*/$output .='<p class="new_product_description d-none d-md-block mb-0 mr-lg-1 mr-xl-0 mt-2">';
+                /*------------*/$output .=$result['short_description'];
+                /*------------*/$output .='</p>';
                 /*---------*/$output .='</div>';
 
 
-                /*---------*/$output .='<div class="col-9 col-sm-9 col-lg-4 features-holder mt-3 mt-md-0 mb-4 mb-md-0 text-left">';
+                /*---------*/$output .='<div class="col-9 col-sm-9 column-2 features-holder mt-3 mt-md-0 mb-4 mb-md-0 pl-2 pt-lg-2 pt-xl-0 text-left">';
                 /*------------*/$output .= $this->renderFeatures($result['features']);
 
 
@@ -91,7 +91,7 @@ class TopVPNPublicList extends PublicList{
                 }
 
                 /*---------*/$output .='</div>';
-                /*---------*/$output .='<div class="col-6 col-sm-6 col-lg-3 rating-info-holder d-flex flex-column justify-content-center">';
+                /*---------*/$output .='<div class="col-6 col-sm-6 column-3 rating-info-holder d-flex flex-column justify-content-center">';
                 /*------------*/$output .= '<div class="wss-scoreRow-772925660"><div class="wss-multiScoreText-3728111154">Privacy</div>
                                             <div class="wss-rt_container-1819568874">
                                             
@@ -121,7 +121,7 @@ class TopVPNPublicList extends PublicList{
                                             </div>
                                             </div>';
                 /*---------*/$output .='</div>';
-                /*---------*/$output .='<div class="col-6 col-sm-12 col-lg-3 price-holder d-flex flex-column justify-content-center align-items-center text-center">';
+                /*---------*/$output .='<div class="col-6 col-sm-12 column-4 price-holder d-flex flex-column justify-content-center align-items-center text-center">';
                 /*------------*/$output .='<div class="d-score">';
                 /*---------------*/$output .= $result['rating'];
                 /*------------*/$output .='</div>';
@@ -135,7 +135,7 @@ class TopVPNPublicList extends PublicList{
                 /*------------*/$output .='</div>';
                 /*------------*/$output .='<div class="mb-3 prices">';
                 /*---------------*/$output .='<span class="price"><span class="font-12">From</span> '.$result['price'].'&nbsp;USD</span>';
-                /*------------------*/$output .='<button class="btn btn-visit margin-0-auto">Visit Website</button>';
+                /*------------------*/$output .='<button class="btn btn-danger margin-0-auto">Visit Website</button>';
                 /*------------*/$output .='</div>';
                 /*---------*/$output .='</div>';
                 /*------*/$output .= '</div>';
@@ -149,12 +149,12 @@ class TopVPNPublicList extends PublicList{
                 $output .= '</div>';
             }
             $output .= '</div>';
-            $output .= '</div>';
+
             if($count > $this->showCount){
-                $output .= '<div id="other-brokers-button-down" class="pt-5 pb-5">';
+                $output .= '<div id="other-brokers-button-down" class="pt-5">';
                 $output .= '<div class="row justify-content-center">
                 <div class="text-center">
-                    <button class="btn btn-primary mx-auto toggle"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down" viewBox="0 0 16 16">
+                    <button class="btn btn-tertiary mx-auto toggle"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down" viewBox="0 0 16 16">
   <path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z"></path>
 </svg><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down" viewBox="0 0 16 16">
   <path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z"></path>
@@ -172,10 +172,10 @@ class TopVPNPublicList extends PublicList{
             </div><br/>';
 
 
-                $output .= '<div id="other-brokers-button-up" class="pt-5 pb-5">';
+                $output .= '<div id="other-brokers-button-up" class="pt-5">';
                 $output .= '<div class="row justify-content-center">
                 <div class="text-center">
-                    <button class="btn btn-primary mx-auto toggle"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up" viewBox="0 0 16 16">
+                    <button class="btn btn-tertiary mx-auto toggle"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up" viewBox="0 0 16 16">
   <path fill-rule="evenodd" d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z"/>
 </svg><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up" viewBox="0 0 16 16">
   <path fill-rule="evenodd" d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z"/>
@@ -229,6 +229,34 @@ class TopVPNPublicList extends PublicList{
 
         $options = "data-pie='{\"percent\" : 75}'";
         $output = '<div class="pie" '.$options.'></div>';
+        return $output;
+    }
+
+    protected function renderTopStatus( int $pos, string $statusDescr) : string{
+
+        $output = '';
+        $status = '';
+        $class = '';
+        $ribbonClass = '';
+        if(trim($statusDescr) !== ''){
+            $status = '<span class="status-descr">'. $statusDescr .'</span>';
+        }
+        if($pos <= 3) {
+            $class = 'vendor-'.$pos;
+            $ribbonClass = 'ribbon-number-'.$pos;
+        } else {
+            $class = 'vendor-';
+            $ribbonClass = 'ribbon-number';
+        }
+        $output .= '<div class="d-none d-md-block text-left">';
+        $output .= '<div class="'.$class.'">';
+        $output .= '<div class="vendor__position">' . $pos . $status.'</div>';
+        $output .= '</div>';
+
+//        if(trim($statusDescr) !== '') {
+//            $output .= '<div class="'.$ribbonClass.'"><h2>' . $statusDescr . '</h2></div>';
+//        }
+        $output .= '</div>';
         return $output;
     }
 
