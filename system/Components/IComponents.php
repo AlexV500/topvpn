@@ -3,7 +3,7 @@
 interface IComponents
 {
 
-    public function init( array $atts = []);
+    public function init();
 
     public function render();
 

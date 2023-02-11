@@ -4,6 +4,7 @@ require_once V_CORE_LIB . 'View/Admin/AdminHtmlFormInputs.php';
 require_once V_CORE_LIB . 'View/Admin/AdminHtmlFormOutputs.php';
 require_once V_PLUGIN_INCLUDES_DIR . 'topvpn/Model/TopVPNModel.php';
 require_once V_PLUGIN_INCLUDES_DIR . 'os/Model/OSModel.php';
+require_once V_PLUGIN_INCLUDES_DIR . 'device/Model/DeviceModel.php';
 require_once V_PLUGIN_INCLUDES_DIR . 'lang/Model/LangModel.php';
 
 class TopVPNAdminList extends AdminList {
@@ -20,8 +21,9 @@ class TopVPNAdminList extends AdminList {
         $this->initAllLanguageAdm('LangModel', 'topvpn_lang');
         $this->setOrderColumn('position');
         $this->setOrderDirection('ASC');
-        $this->initRowsCount($this->activeMode);
         $this->setPaginationCount();
+        $this->initRows($this->atts);
+        $this->initRowsCount($this->activeMode);
         $this->initPaginationConfig();
         $this->checkPositionAction();
         $this->initRowsData($this->activeMode);

@@ -73,8 +73,9 @@ class Topvpn_Admin {
 		 * class.
 		 */
 
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/topvpn-admin.css', array(), $this->version, 'all' );
-
+		wp_enqueue_style( 'topvpn-admin', plugin_dir_url( __FILE__ ) . 'css/topvpn-admin.css', array(), $this->version, 'all' );
+        wp_enqueue_style( 'font-awesome', plugin_dir_url( __FILE__ ) . 'css/font-awesome.min.css', array(), $this->version, 'all' );
+        wp_enqueue_style( 'iconfont', plugin_dir_url( __FILE__ ) . 'css/iconfont.css', array(), $this->version, 'all' );
 	}
 
 	/**
@@ -126,16 +127,51 @@ class Topvpn_Admin {
 
         $page = add_submenu_page(
             'show_topvpnlist',
+            __( 'Устройства', 'topvpndevice' ),
+            __( 'Устройства', 'topvpndevice' ),
+            'manage_options',
+            'show_devicelist',
+            apply_filters( 'topvpn_add_submenu_page_function', function (){
+                return DeviceAdminManager::init();
+            })
+        );
+        $pages[] = $page;
+
+        $page = add_submenu_page(
+            'show_topvpnlist',
             __( 'Операционные системы', 'topvpnos' ),
             __( 'Операционные системы', 'topvpnos' ),
             'manage_options',
             'show_oslist',
             apply_filters( 'topvpn_add_submenu_page_function', function (){
-                return OsAdminManager::init();
+                return OSAdminManager::init();
             })
         );
         $pages[] = $page;
 
+        $page = add_submenu_page(
+            'show_topvpnlist',
+            __( 'Стриминговые системы', 'topvpnstreaming' ),
+            __( 'Стриминговые системы', 'topvpnstreaming' ),
+            'manage_options',
+            'show_streaminglist',
+            apply_filters( 'topvpn_add_submenu_page_function', function (){
+                return StreamingAdminManager::init();
+            })
+        );
+        $pages[] = $page;
+
+        $page = add_submenu_page(
+            'show_topvpnlist',
+            __( 'Платежные системы', 'topvpnpayments' ),
+            __( 'Платежные системы', 'topvpnpayments' ),
+            'manage_options',
+            'show_paymentslist',
+            apply_filters( 'topvpn_add_submenu_page_function', function (){
+                return PaymentsAdminManager::init();
+            })
+        );
+        $pages[] = $page;
 
         $page = add_submenu_page(
             'show_topvpnlist',
@@ -145,6 +181,18 @@ class Topvpn_Admin {
             'show_topvpnlanguagelist',
             apply_filters( 'topvpn_add_submenu_page_function', function (){
                 return LangAdminManager::init();
+            })
+        );
+        $pages[] = $page;
+
+        $page = add_submenu_page(
+            'show_topvpnlist',
+            __( 'Сниппеты', 'topvpncustomization' ),
+            __( 'Сниппеты', 'topvpncustomization' ),
+            'manage_options',
+            'show_topvpncustomizationlist',
+            apply_filters( 'topvpn_add_submenu_page_function', function (){
+                return CustomizationAdminManager::init();
             })
         );
         $pages[] = $page;

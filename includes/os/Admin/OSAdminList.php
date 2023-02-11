@@ -15,10 +15,10 @@ class OSAdminList extends AdminList{
     {
         $this->setOrderColumn('position');
         $this->setOrderDirection('ASC');
-        $this->initRowsCount($this->activeMode);
         $this->setPaginationCount();
+        $this->initRows($this->atts);
+        $this->initRowsCount($this->activeMode);
         $this->initPaginationConfig();
-        $this->setModelPaginationConfig();
         $this->checkPositionAction();
         $this->initRowsData($this->activeMode);
         $this->setLogoPath(V_PLUGIN_INCLUDES_DIR . 'images/os/');
@@ -57,7 +57,23 @@ class OSAdminList extends AdminList{
                 $output .= "<td class='topvpn-id'>";
                 $output .= $result['id'];
                 $output .= "</td>";
-                $output .= "<td class='topvpnLogo'><img src='". V_CORE_URL .'includes/images/os/'.$result['os_logo']."' width='21px' height='21px'></td>";
+                if (isset($result['os_font_logo_size']) && (trim($result['os_font_logo_size']) !== '')){
+                    $size = 'font-size: '.$result['os_font_logo_size'].';';
+                } else {
+                    $size = 'font-size: 1.4rem;';
+                }
+                if (isset($result['os_font_logo_color']) && (trim($result['os_font_logo_color']) !== '')){
+                    $color = 'color: '.$result['os_font_logo_color'].';';
+                } else {
+                    $color = 'color: #6c737b;';
+                }
+                $style = $color .' '. $size;
+                if($result['os_font_logo'] == ''){
+                    $output .= "<td class='topvpnLogo'><img src='". V_CORE_URL .'includes/images/os/'.$result['os_logo']."' width='21px' height='21px'></td>";
+                } else {
+                    $output .= '<td class="topvpnLogo"><span class="os-font-logo" style="'.$style.'"><i class="'.$result['os_font_logo'].'"></i></td>';
+                }
+
                 $output .= "<td class='topvpnName'>" . stripslashes( wp_filter_nohtml_kses( $result['os_name'] ) ) . $name_suffix . "</td>";
                 $output .= "<td class='topvpnSysName'>" . stripslashes( wp_filter_nohtml_kses( $result['os_sys_name'] ) ) . $name_suffix . "</td>";
                 $output .= "<td class='position'><a href='" . $this->getCurrentURL() . "&position_set=up&item_id=" . $result['id'] . "'>Вверх</a></td>";

@@ -79,7 +79,23 @@ class AdminHtmlFormInputs
 
                     if ((isset($params['image_name'])) && (isset($params['image_path']))) {
                         $logo = V_PLUGIN_URL .'images/'. $params['image_path'] . $item[$params['image_name']];
-                        $img = '<img src="' . $logo . '" alt="" width="20px" height="20px">';
+                        if (isset($params['font_logo_col_name']) && (trim($params['font_logo_col_name']) !== '')){
+                            if (isset($params['font_logo_size_col_name']) && (trim($item[$params['font_logo_size_col_name']]) !== '')){
+                                $size = 'font-size: '.$item[$params['font_logo_size_col_name']].';';
+                            } else {
+                                $size = 'font-size: 1.4rem;';
+                            }
+                            if (isset($params['font_logo_color_col_name']) && (trim($item[$params['font_logo_color_col_name']]) !== '')){
+                                $color = 'color: '.$item[$params['font_logo_color_col_name']].';';
+                            } else {
+                                $color = 'color: #6c737b;';
+                            }
+                            $style = $color .' '. $size;
+                            $img = '<span style="'.$style.'"><i class="'.$item[$params['font_logo_col_name']].'"></i></span>';
+                        } else {
+                            $img = '<img src="' . $logo . '" alt="" width="20px" height="20px">';
+                        }
+
                     }
                     $formChecked = '';
                     if(isset($params['checked'])) {

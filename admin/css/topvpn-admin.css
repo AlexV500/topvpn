@@ -660,6 +660,38 @@ li.add-ons:hover {
     width: 8%;
 }
 
+
+.wp-list-table .paymentslist-id{
+    width: 2%;
+}
+.wp-list-table .paymentslist-logo{
+    width: 7%;
+}
+.wp-list-table .paymentslist-name{
+    width: 17%;
+}
+.wp-list-table .paymentslist-sysName{
+    width: 28%;
+}
+.wp-list-table .paymentslist-positionUp{
+    width: 8%;
+}
+.wp-list-table .paymentslist-positionDown{
+    width: 8%;
+}
+.wp-list-table .paymentslist-status{
+    width: 10%;
+}
+.wp-list-table .paymentslist-created{
+    width: 14%;
+}
+.wp-list-table .paymentslist-edit{
+    width: 6%;
+}
+.wp-list-table .paymentslist-delete{
+    width: 8%;
+}
+
 .message-error{
     color: red;
 }
@@ -680,4 +712,8 @@ li.add-ons:hover {
     border-width: 1px;
     border-radius: 4px;
     width: 304px;
+}
+
+.os-font-logo{
+
 }

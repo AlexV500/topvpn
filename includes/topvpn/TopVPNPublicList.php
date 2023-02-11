@@ -1,45 +1,56 @@
 <?php
 
 require_once V_PLUGIN_INCLUDES_DIR . 'topvpn/Model/TopVPNModel.php';
-require_once V_PLUGIN_INCLUDES_DIR . 'os/Model/OSModel.php';
+require_once V_PLUGIN_INCLUDES_DIR . 'device/Model/DeviceModel.php';
+require_once V_PLUGIN_INCLUDES_DIR . 'streaming/Model/StreamingModel.php';
 require_once V_CORE_LIB . 'View/HTMLOutputs.php';
 require_once V_CORE_LIB . 'Public/PublicList.php';
+require_once V_CORE_LIB . 'Utils/Collection.php';
 
 class TopVPNPublicList extends PublicList{
 
-    protected object $osModel;
     protected int $showTrigger = 0;
     protected int $showCount = 5;
 
-    public function __construct($model, $dbTable)
+    public function __construct($model, $dbTable, $atts = [])
     {
-        parent::__construct($model, $dbTable);
+        parent::__construct($model, $dbTable, $atts);
     }
 
-    public function init( array $atts = []) : object{
+    public function init() : object{
 
-        $this->switchMultiLangMode($atts);
+        $this->addItemToCollection(new DeviceModel('topvpn_device'), 'deviceModel');
+        $this->addItemToCollection(new StreamingModel('topvpn_streaming'), 'streamingModel');
+        $this->switchMultiLangMode();
         $this->setOrderColumn('position');
         $this->setOrderDirection('ASC');
-        $this->initRowsCount($this->activeMode);
         $this->setPaginationCount(8);
+        $this->initRows();
+        $this->addRelationParam('device', $this->getItemFromCollection('deviceModel'), 'device_sys_name');
+        $this->addRelationParam('streaming', $this->getItemFromCollection('streamingModel'), 'streaming_sys_name');
+        $this->initRowsCount($this->activeMode);
         $this->initPaginationConfig();
         $this->initRowsData($this->activeMode);
-        $this->osModel = new OSModel('topvpn_os');
+
         return $this;
     }
 
     public function render() : string {
         $output = '';
-        $logoPath = V_CORE_URL .'includes/images/vpn';
-        $OSLogoPath = V_CORE_URL .'includes/images/os';
         $count = count($this->getRowsData());
+        $output .= '<div class="d-flex justify-content-between">';
+        $output .= '<div class="">Updated: '.HTMLOutputs::updatedAt().'</div>';
+        $output .= '<div class=""><div class="popup" onclick="disclaimerPopup()">Advertiser Disclosure
+  <span class="popuptext" id="myPopup">To keep Top10VPN a free online resource, we receive advertising/referral fees when you buy a VPN through outlinks on this page. This impacts the score, location, prominence and order in which a VPN service appears. Our extensive tests of each VPN, and how it compares with other VPNs in different countries and/or for specific purposes, are also factored in. We do not feature every VPN product on the market. Listings on this page do not imply endorsement. To learn more, see</span>
+</div>
+</div>';
+        $output .= '</div>';
         $output .= '<div class="">';
         if ($count > 0) {
             for ($i = 0; $i < $count; $i++) {
                 $result = $this->getRowsData()[$i];
-                $logo = $logoPath .'/'. $result['vpn_logo'];
-                $osSystems = $this->osModel->getOSByVPNId($result['id']);
+                $logo = VPN_LOGO_PATH . $result['vpn_logo'];
+                $deviceSystems = $this->getItemFromCollection('deviceModel')->getDeviceByVPNId($result['id']);
                 $pos = $i + 1;
                 $output .= '';
                 if ($i == $this->showCount) {
@@ -47,13 +58,13 @@ class TopVPNPublicList extends PublicList{
                     //    $output .= '<div id="theDIV" style="display: none;">';
                     $output .= '<div class="box">';
                 }
-                $output .= '<div class="rating-info d-block no-gutters mt-4 pt-4 pb-3 pl-2 pr-2 p-lg-4 list list-'.$pos.' pm-1">';
+                $output .= '<div class="rating-info d-block no-gutters mt-4 list list-'.$pos.' pm-1">';
                 //TOP STATUS
                 $output .= $this->renderTopStatus($pos, $result['top_status_description']);
 
                 //TOP STATUS END
 
-                $output .= '<div class="row">';
+//                $output .= '<div class="row">';
 
 
                 /**/$output .='';/**/
@@ -62,9 +73,10 @@ class TopVPNPublicList extends PublicList{
 //                /*------*/$output .='<div class="arating">'.$pos.'</div>';
 //                /*---*/$output .='</div>';
 
-                /*---*/$output .='<div class="col">';
+                /*---*/
+                //$output .='<div class="col">';
                 /*------*/$output .='<div class="row">';
-                /*---------*/$output .= '<div class="col-9 col-sm-9 column-1 logo-holder d-flex flex-column justify-content-top">';
+                /*---------*/$output .= '<div class="col-12 col-md-6 column-1 logo-holder d-flex flex-column justify-content-top">';
                 /*------------*/$output .='<span><img alt="' . $result['vpn_name'] . '" class="img-fluid max-240" src="' . $logo . '" alt="' . $result['vpn_name'] . '" title="' . $result['vpn_name'] . '"></span>';
                 /*------------*/$output .='<p class="new_product_description d-none d-md-block mb-0 mr-lg-1 mr-xl-0 mt-2">';
                 /*------------*/$output .=$result['short_description'];
@@ -72,27 +84,53 @@ class TopVPNPublicList extends PublicList{
                 /*---------*/$output .='</div>';
 
 
-                /*---------*/$output .='<div class="col-9 col-sm-9 column-2 features-holder mt-3 mt-md-0 mb-4 mb-md-0 pl-2 pt-lg-2 pt-xl-0 text-left">';
+                /*---------*/$output .='<div class="col-12 col-md-6 column-2 features-holder mt-3 mt-md-0 mb-4 mb-md-0 pl-2 pt-lg-2 pt-xl-0 text-left">';
                 /*------------*/$output .= $this->renderFeatures($result['features']);
 
 
                 /*------------*/$output .='<div class="mt-3">';
                 /*---------------*/$output .= '<span class="available-on-text">Available on:</span>';
-                /*---------------*/foreach ((array)$osSystems as $y => $os) {
-                    /*------------------*/$osLogo = $OSLogoPath .'/'. $os['os_logo'];
-                    /*------------------*/$output .= '<img data-toggle="tooltip" src="' . $osLogo . '" alt="' . $os['os_name'] . '" title="' . $os['os_name'] . '" data-original-title="' . $os['os_name'] . '" class="os-icons-small"> ';
+                /*---------------*/foreach ((array)$deviceSystems as $y => $device) {
+                    /*------------------*/$deviceLogo = DEVICE_LOGO_PATH . $device['device_logo'];
+                                          if(trim($device['device_font_logo']) == ""){
+                                              $output .= '<img data-toggle="tooltip" src="' . $deviceLogo . '" alt="' . $device['device_name'] . '" title="' . $device['device_name'] . '" data-original-title="' . $device['device_name'] . '" class="device-icons-small"> ';
+                                          } else {
+                                              if (isset($device['device_font_logo_size']) && (trim($device['device_font_logo_size']) !== '')){
+                                                  $size = 'font-size: '.$device['device_font_logo_size'].';';
+                                              } else {
+                                                  $size = 'font-size: 1.4rem;';
+                                              }
+                                              if (isset($device['device_font_logo_color']) && (trim($device['device_font_logo_color']) !== '')){
+                                                  $color = 'color: '.$device['device_font_logo_color'].';';
+                                              } else {
+                                                  $color = 'color: #6c737b;';
+                                              }
+                                              $style = $color .' '. $size;
+                                              $output .= '<span class="device-font-logo" data-toggle="tooltip" title="'.$device['device_name'].'" style="'.$style.'"><i class="'.$device['device_font_logo'].'"></i></span>&nbsp';
+                                          }
+                    /*------------------*/
                     /*---------------*/}
 
                 /*------------*/$output .= '</div>';
 
                 if(trim($result['verdict'] !== '')){
-                    /*---------*/$output .= '<div class="mt-3"><img class="padli" src="'.$this->imgPath.'/user-shield-24.png"> <span class="usinglink">'.$result['verdict'].'</span>';
+                    /*---------*/$output .= '<div class="mt-3"><svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" fill="currentColor" class="bi bi-person-heart text-blue" viewBox="0 0 16 16">
+  <path d="M9 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm-9 8c0 1 1 1 1 1h10s1 0 1-1-1-4-6-4-6 3-6 4Zm13.5-8.09c1.387-1.425 4.855 1.07 0 4.277-4.854-3.207-1.387-5.702 0-4.276Z"/>
+</svg> <span class="usinglink">'.$result['verdict'].'</span>';
                     /*---------*/$output .= '</div>';
                 }
 
                 /*---------*/$output .='</div>';
-                /*---------*/$output .='<div class="col-6 col-sm-6 column-3 rating-info-holder d-flex flex-column justify-content-center">';
-                /*------------*/$output .= '<div class="wss-scoreRow-772925660"><div class="wss-multiScoreText-3728111154">Privacy</div>
+                /*---------*/$output .='<div class="col-12 col-md-6 column-3 rating-info-holder d-flex flex-column justify-content-center">';
+
+                /*------------*/$output .= '<div class="wss-scoreRow-772925660">
+                                            <div class="wss-multiScoreText-3728111154">Overall speed:</div>
+                                            <div class="wss-rt_container-1819568874">
+                '.HTMLOutputs::renderRate($result['overall_speed']).'
+                                            </div>
+                                            </div>  
+                
+                <div class="wss-scoreRow-772925660"><div class="wss-multiScoreText-3728111154">Privacy & Logging:</div>
                                             <div class="wss-rt_container-1819568874">
                                             
                                             '.HTMLOutputs::renderRate(9.5).'
@@ -100,28 +138,28 @@ class TopVPNPublicList extends PublicList{
                                             </div>
                                             
                                             <div class="wss-scoreRow-772925660">
-                                            <div class="wss-multiScoreText-3728111154">Features</div>
+                                            <div class="wss-multiScoreText-3728111154">Security & Features:</div>
                                             <div class="wss-rt_container-1819568874"> 
                                             '.HTMLOutputs::renderRate(9.8).'
                                             </div>
                                             </div>
                                             
                                             <div class="wss-scoreRow-772925660">
-                                            <div class="wss-multiScoreText-3728111154">Value for money</div>
+                                            <div class="wss-multiScoreText-3728111154">Value for money:</div>
                                             <div class="wss-rt_container-1819568874">
                                             '.HTMLOutputs::renderRate(9.5).'
                                             </div>
                                             </div>
                                             
                                             <div class="wss-scoreRow-772925660">
-                                            <div class="wss-multiScoreText-3728111154">User Score</div>
+                                            <div class="wss-multiScoreText-3728111154">Ease of Use:</div>
                                             <div class="wss-rt_container-1819568874">                                           
                                             
                                             '.HTMLOutputs::renderRate(9.9).'
                                             </div>
                                             </div>';
                 /*---------*/$output .='</div>';
-                /*---------*/$output .='<div class="col-6 col-sm-12 column-4 price-holder d-flex flex-column justify-content-center align-items-center text-center">';
+                /*---------*/$output .='<div class="col-12 col-md-6 column-4 price-holder d-flex flex-column justify-content-center align-items-center text-center">';
                 /*------------*/$output .='<div class="d-score">';
                 /*---------------*/$output .= $result['rating'];
                 /*------------*/$output .='</div>';
@@ -135,14 +173,15 @@ class TopVPNPublicList extends PublicList{
                 /*------------*/$output .='</div>';
                 /*------------*/$output .='<div class="mb-3 prices">';
                 /*---------------*/$output .='<span class="price"><span class="font-12">From</span> '.$result['price'].'&nbsp;USD</span>';
-                /*------------------*/$output .='<button class="btn btn-danger margin-0-auto">Visit Website</button>';
+                /*------------------*/$output .='<button class="btn btn-tertiary margin-0-auto">Visit Website</button>';
                 /*------------*/$output .='</div>';
                 /*---------*/$output .='</div>';
                 /*------*/$output .= '</div>';
-                /*---*/$output .='</div>';
+                /*---*/
+                //$output .='</div>';
 
                 $output .= '</div>';
-                $output .= '</div>';
+//                $output .= '</div>';
 
             }
             if($this->showTrigger == 1){
@@ -169,7 +208,7 @@ class TopVPNPublicList extends PublicList{
 </svg></button>
                 </div>
             </div>
-            </div><br/>';
+            </div>';
 
 
                 $output .= '<div id="other-brokers-button-up" class="pt-5">';
@@ -190,7 +229,7 @@ class TopVPNPublicList extends PublicList{
 </svg></button>
                 </div>
             </div>
-            </div><br/>';
+            </div>';
             }
         }
         $this->render = $output;
@@ -200,6 +239,7 @@ class TopVPNPublicList extends PublicList{
     protected function renderFeatures(string $features) : string{
 
         $output = '';
+        $featureRed = '';
         $exploded = explode(';', $features);
 //        echo '<pre>';
 //        print_r($exploded);
@@ -213,12 +253,18 @@ class TopVPNPublicList extends PublicList{
             $string = $exploded[$i];
             $substrCount = strspn($string,'[red]');
             if($substrCount == 5){
+                $featureRed = ' feature-red';
                 $string = substr($string, 5);
+                $string = trim($string);
             } else {
+                $featureRed = '';
                 $y = $y + 1;
             }
-            $output .= '<li class="feature-'.$y.'"><img class="padli s16x16" src="'.$this->imgPath.'/tick-3.png">';
-            $output .= $string;
+         //   $output .= '<li class="feature-'.$y.'"><img class="padli s16x16" src="'.$this->imgPath.'/tick-3.png">';
+            $output .= '<li class="feature-'.$y.'">';
+            $output .= HTMLOutputs::renderFeatureIcon();
+            $output .= ' ';
+            $output .= '<span class="'.$featureRed.'">'.$string.'</span>';
             $output .= '</li>';
         }
         $output .= '</ul>';

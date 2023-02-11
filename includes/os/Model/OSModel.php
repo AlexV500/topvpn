@@ -1,9 +1,17 @@
 <?php
 require_once V_CORE_LIB . 'Model/AbstractModel.php';
+require_once V_CORE_LIB . 'Model/Relations/ManyToMany.php';
 require_once V_CORE_LIB . 'Utils/Validator.php';
 require_once V_CORE_LIB . 'Utils/Result.php';
 
 class OSModel extends AbstractModel{
+
+    private array $keyManyToManyFields = [
+        'vpn' =>[
+            'pivot_table_name' => 'topvpn_vpn_os',
+            'this_key_name' => 'os_id',
+            'that_key_name' => 'vpn_id'],
+    ];
 
     public function __construct(string $dbTable)
     {
@@ -13,8 +21,8 @@ class OSModel extends AbstractModel{
 
     public function addRow($data) : object
     {
-        $validate = (new Validator)->checkLength($data['os_name'], 3, 30, 'os_name', true)
-            ->checkLength($data['os_sys_name'], 3, 30, 'os_sys_name', true);
+        $validate = (new Validator)->checkLength($data['os_name'], 2, 30, 'os_name', 'Имя', true)
+            ->checkLength($data['os_sys_name'], 2, 30, 'os_sys_name', 'Системное имя', true);
 
         if ($validate->getResultStatus() == 'error') {
             return Result::setResult('error', $validate->getResultMessage(), $data);
@@ -37,8 +45,8 @@ class OSModel extends AbstractModel{
 
     public function editRow($id, $data) : object
     {
-        $validate = (new Validator)->checkLength($data['os_name'], 3, 30, 'os_name', true)
-            ->checkLength($data['os_sys_name'], 3, 30, 'os_sys_name', true);
+        $validate = (new Validator)->checkLength($data['os_name'], 2, 30, 'os_name', 'Имя', true)
+            ->checkLength($data['os_sys_name'], 2, 30, 'os_sys_name', 'Системное имя', true);
 
         if($validate->getResultStatus() == 'error'){
             return Result::setResult('error', $validate->getResultMessage(), $data);
@@ -64,6 +72,12 @@ class OSModel extends AbstractModel{
         $path = V_PLUGIN_INCLUDES_DIR . 'images/os/';
         $deleteImgResult = $this->checkFileAndUnlink($data, 'os_logo', $path);
         $this->resultMessages->addResultMessage($this->getNameOfClass(), $deleteImgResult->getResultStatus(), $deleteImgResult->getResultMessage());
+        $deleteManyToOne = ManyToMany::deleteManyToOne($this->keyManyToManyFields, $id);
+        if($deleteManyToOne->getResultStatus() == 'error'){
+            return Result::setResult('error', $deleteManyToOne->getResultMessage('ManyToMany'), '');
+        } else {
+            $this->resultMessages->addResultMessage($this->getNameOfClass(), 'ok', $deleteManyToOne->getResultMessage('ManyToMany'));
+        }
         if($this->removeRow($id) !== ''){
             $this->resultMessages->addResultMessage($this->getNameOfClass(), 'error', 'Ошибка удаления Б.Д.');
             return Result::setResult('error', $this->resultMessages->getResultMessages($this->getNameOfClass()), '');

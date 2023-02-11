@@ -130,8 +130,12 @@ class Topvpn {
 
         if( is_admin() ) {
 
+            require_once V_PLUGIN_INCLUDES_DIR . 'customization/Admin/CustomizationAdminManager.php';
             require_once V_PLUGIN_INCLUDES_DIR . 'lang/Admin/LangAdminManager.php';
             require_once V_PLUGIN_INCLUDES_DIR . 'os/Admin/OSAdminManager.php';
+            require_once V_PLUGIN_INCLUDES_DIR . 'device/Admin/DeviceAdminManager.php';
+            require_once V_PLUGIN_INCLUDES_DIR . 'streaming/Admin/StreamingAdminManager.php';
+            require_once V_PLUGIN_INCLUDES_DIR . 'payments/Admin/PaymentsAdminManager.php';
             require_once V_PLUGIN_INCLUDES_DIR . 'topvpn/Admin/TopVPNAdminManager.php';
         }
 

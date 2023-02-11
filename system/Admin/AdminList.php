@@ -2,21 +2,29 @@
 
 require_once V_CORE_LIB . 'Admin/AdminActions/AdminActions.php';
 require_once V_CORE_LIB . 'Utils/PaginationConfig.php';
-require_once V_CORE_LIB . 'Traits/InitRows.php';
 require_once V_CORE_LIB . 'Traits/InitOrder.php';
 require_once V_CORE_LIB . 'Traits/InitPagination.php';
+require_once V_CORE_LIB . 'Model/RowsListObject.php';
 
 abstract class AdminList extends AdminActions {
-    use InitRows, InitOrder, InitPagination;
+    use InitOrder, InitPagination;
 
     protected array $columnDisplayNames;
     protected bool $activeMode = false;
+    protected object $rowsListObject;
+    protected int $rowsCount;
+    protected array $rowsData;
 
     public function __construct($model, $dbTable)
     {
         parent::__construct($model, $dbTable);
+ //       $this->rowsListObject = new RowsListObject($this->model, $this->dbTable);
+//        $this->setCurrentURL();
+    }
 
-        $this->setCurrentURL();
+    public function initRows($atts) : object{
+        $this->rowsListObject = new RowsListObject($atts);
+        return $this;
     }
 
     protected function setColumnDisplayNames(array $columnDisplayNames) : object{
@@ -31,6 +39,26 @@ abstract class AdminList extends AdminActions {
     public function setActiveMode( bool $mode) : object{
         $this->activeMode = $mode;
         return $this;
+    }
+
+    public function initRowsCount($activeMode) : object{
+        $this->rowsListObject->initCountRowsData($this->model, $activeMode);
+        $this->rowsCount = $this->rowsListObject->getRowsCount();
+        return $this;
+    }
+
+    public function initRowsData($activeMode, $paginationMode = true, $limitMode = false) : object{
+        $this->rowsListObject->initRowsData($this->model, $activeMode, $paginationMode, $limitMode);
+        $this->rowsData = $this->rowsListObject->getRowsData();
+        return $this;
+    }
+
+    public function getRowsData(){
+        return $this->rowsData;
+    }
+
+    public function getRowsCount() : int{
+        return $this->rowsCount;
     }
 
     public function countAllRowsFromCustomTable($fieldName){

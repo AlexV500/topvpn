@@ -26,7 +26,7 @@ class OSAdminManager{
                 break;
             case 'delete':
                 require_once V_PLUGIN_INCLUDES_DIR . 'os/Admin/OSAdminDelete.php';
-                (new OSAdminDelete('OSModel', 'topvpn_os'))->init()->render()->show();
+                (new CustomizationAdminDelete('OSModel', 'topvpn_os'))->init()->render()->show();
                 break;
         }
     }

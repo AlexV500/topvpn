@@ -3,23 +3,40 @@ require_once V_CORE_LIB . 'Components/IComponents.php';
 
 abstract class Components implements IComponents{
 
-    protected string $languageSysNameGet = 'en_EN';
+    protected string $languageSysNameGet = 'en_US';
     protected object $model;
     protected string $currentURL;
     protected string $dbTable;
     protected string $render;
+    protected object $relModelCollection;
+    protected array $atts;
 
-    public function __construct($model, $dbTable){
+    public function __construct($model, $dbTable, $atts = []){
+        $this->setAtts($atts);
         $this->model = new $model($dbTable);
         $this->dbTable = $dbTable;
+        $this->relModelCollection = new Collection();
     }
 
     public function getModel(){
         return $this->model;
     }
 
+    public function getDbTable(){
+        return $this->getDbTable();
+    }
+
     public function changeModelConf($model){
         $this->model = $model;
+    }
+
+    public function setAtts($atts) : object{
+        $this->atts = $atts;
+        return $this;
+    }
+
+    public function getAtts(){
+        return $this->atts;
     }
 
     public function setLang(){
@@ -30,16 +47,47 @@ abstract class Components implements IComponents{
         return $this->languageSysNameGet;
     }
 
-    protected function setCurrentURL() : object{
-        $this->currentURL = HTTP::getCurrentURL();
+    public function switchMultiLangMode(){
+        $lang = '';
+        $atts = $this->getAtts();
+        if(isset($atts['lang'])) {
+            $lang = $atts['lang'];
+        }
+        return $this->getModel()->switchMultiLangMode($lang);
+    }
+
+    public function setLimitCount($count = 10) : object{
+        $this->model = $this->model->setLimitCount($count);
         return $this;
     }
 
-    protected function getCurrentURL() : string{
-        return $this->currentURL;
+    public function addItemToCollection( object $obj, string $key){
+        $this->getRelModelCollection()->addItem($obj, $key);
+        return $this;
     }
 
-    abstract public function init( array $atts = []);
+    public function getItemFromCollection(string $key){
+        try {
+            return $this->getRelModelCollection()->getItem($key);
+        } catch (Exception $key) {
+            print "The collection doesn't contain anything called '$key'";
+        }
+    }
+
+    public function getRelModelCollection(){
+        return $this->relModelCollection;
+    }
+
+//    protected function setCurrentURL() : object{
+//        $this->currentURL = HTTP::getCurrentURL();
+//        return $this;
+//    }
+
+    protected function getCurrentURL() : string{
+        return HTTP::getCurrentURL();
+    }
+
+    abstract public function init();
     abstract public function render();
 
     public function show(){

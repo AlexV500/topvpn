@@ -1,31 +1,34 @@
 <?php
 
 require_once V_PLUGIN_INCLUDES_DIR . 'topvpn/Model/TopVPNModel.php';
-require_once V_PLUGIN_INCLUDES_DIR . 'os/Model/OSModel.php';
+require_once V_PLUGIN_INCLUDES_DIR . 'device/Model/DeviceModel.php';
+require_once V_PLUGIN_INCLUDES_DIR . 'streaming/Model/StreamingModel.php';
 require_once V_CORE_LIB . 'Public/PublicList.php';
-
+require_once V_CORE_LIB . 'Utils/Collection.php';
 
 class TopVPNDescPublicList extends PublicList{
 
-    protected object $osModel;
     protected int $showTrigger = 0;
     protected int $showCount = 5;
 
-    public function __construct($model, $dbTable)
+    public function __construct($model, $dbTable, array $atts = [])
     {
-        parent::__construct($model, $dbTable);
+        parent::__construct($model, $dbTable, $atts);
     }
 
-    public function init( array $atts = []) : object{
+    public function init() : object{
 
-        $this->switchMultiLangMode($atts);
+        $this->addItemToCollection(new DeviceModel('topvpn_device'), 'deviceModel');
+        $this->addItemToCollection(new StreamingModel('topvpn_streaming'), 'streamingModel');
+        $this->switchMultiLangMode();
         $this->setOrderColumn('position');
         $this->setOrderDirection('ASC');
+        $this->setLimitCount(5);
+        $this->initRows();
+        $this->addRelationParam('device', $this->getItemFromCollection('deviceModel'), 'device_sys_name');
+        $this->addRelationParam('streaming', $this->getItemFromCollection('streamingModel'), 'streaming_sys_name');
         $this->initRowsCount($this->activeMode);
-        $this->setPaginationCount(5);
-        $this->initPaginationConfig();
-        $this->initRowsData($this->activeMode);
-        $this->osModel = new OSModel('topvpn_os');
+        $this->initRowsData($this->activeMode, false, true);
         return $this;
     }
 
@@ -34,15 +37,14 @@ class TopVPNDescPublicList extends PublicList{
         $output = '';
         $show_count = 3;
         $show_trigger_2 = 0;
-        $logoPath = V_CORE_URL .'includes/images/vpn';
-        $OSLogoPath = V_CORE_URL .'includes/images/os';
+        $deviceLogoPath = DEVICE_LOGO_PATH;
         $count = count($this->getRowsData());
-        $output .= '<div class="">';
+        $output .= '';
         if ($count > 0) {
             for ($i = 0; $i < $count; $i++) {
                 $result = $this->getRowsData()[$i];
-                $logo = $logoPath . '/' . $result['vpn_logo'];
-                $osSystems = $this->osModel->getOSByVPNId($result['id']);
+                $logo = VPN_LOGO_PATH . $result['vpn_logo'];
+                $deviceSystems = $this->getItemFromCollection('deviceModel')->getDeviceByVPNId($result['id']);
                 $pos = $i + 1;
                 if($i == $show_count){
                     // $output .= '<div id="theDIV2" style="display: none;">';

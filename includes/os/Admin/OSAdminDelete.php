@@ -7,7 +7,7 @@ require_once V_PLUGIN_INCLUDES_DIR . 'os/Model/OSModel.php';
 class OSAdminDelete extends AdminPostAction{
 
     public function init( array $atts = []) : object {
-        $this->setId(HTTP::getGet('os_id'));
+        $this->setId(HTTP::getGet('item_id'));
         $data = $this->getModel()->getRowById($this->getId());
         $this->setFormFills(
             [
@@ -16,7 +16,7 @@ class OSAdminDelete extends AdminPostAction{
         );
 
         if ( isset( $_POST['delete_os'] )){
-            $result = $this->getModel()->deleteRow($this->getId());
+            $result = $this->getModel()->deleteRow($data);
             $this->setResultMessages('OSModel', $result->getResultStatus(), $result->getResultMessage());
             $this->setResultStatus('done');
         }
@@ -26,7 +26,7 @@ class OSAdminDelete extends AdminPostAction{
     public function render(): object
     {
         $output = '';
-        $output .= AdminHtmlFormInputs::renderAdminHead('Удалить OS ' . $this->deleteName);
+        $output .= AdminHtmlFormInputs::renderAdminHead('Удалить OS ' . $this->getFormFill('os_name'));
         $output .= AdminHtmlFormOutputs::renderResultMessages($this->getResultMessages());
         if ($this->getResultStatus() == 'waiting') {
             $output .= '<form id="delete_os" enctype="" action="" method="post">';
@@ -34,7 +34,7 @@ class OSAdminDelete extends AdminPostAction{
                 '<div class="field">' .
                 '<label class="field-label first required">' .
                 '<span class="label">' .
-                __('Вы действительно хотите удалить OS ' . $this->deleteName . '?', 'topvpn') .
+                __('Вы действительно хотите удалить OS ' . $this->getFormFill('os_name') . '?', 'topvpn') .
                 '</span>' .
                 '</label>' .
                 '</div>' .

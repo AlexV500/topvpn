@@ -9,7 +9,9 @@ var CircularProgressBar = (function () {
     'use strict';
 
     const defaultOptions = {
-        colorSlice: '#00a1ff',
+        // colorSlice: '#00a1ff',
+        // colorSlice: '#017dd1',
+        colorSlice: '#f57c00',
         fontColor: '#000',
         fontSize: '2.2rem',
         fontWeight: 700,
@@ -181,7 +183,7 @@ var CircularProgressBar = (function () {
             let angle = JSON.parse(circleElement.getAttribute("data-angel"));
             const percent = Math.round(options.percent);
 
-            console.log(percent);
+        //    console.log(percent);
             if (percent == 0) {
                 if (commonConfiguration.number) centerNumber.textContent = "0";
                 circleElement.setAttribute("stroke-dashoffset", "264");

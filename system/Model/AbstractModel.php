@@ -3,7 +3,7 @@ require_once V_CORE_LIB . 'Utils/ImageUpload.php';
 require_once V_CORE_LIB . 'Utils/ErrorStatus.php';
 require_once V_CORE_LIB . 'Utils/Result.php';
 require_once V_CORE_LIB . 'Utils/ResultMessages.php';
-
+require_once V_CORE_LIB . 'Model/DTO/QueryParamsDTO.php';
 
 abstract class AbstractModel
 {
@@ -121,12 +121,63 @@ abstract class AbstractModel
 
     public function getRowByPk($pk, $pkValue)
     {
-        return $this->wpdb->get_row("SELECT * FROM `{$this->dbTable}` WHERE $pk={$pkValue}", ARRAY_A);
+        $multiLangMode = '';
+
+        if ($this->multiLangMode) {
+            $multiLangMode = 'AND ' . $this->dbTable . '.lang =' . '"'.$this->lang.'"';
+        }
+
+        return $this->wpdb->get_row("SELECT * FROM `{$this->dbTable}` WHERE $pk='$pkValue' $multiLangMode", ARRAY_A);
     }
 
-    public function getRowByColumnName($columnName, $cnValue)
+    public function getSqlQueryParams(bool $paginationMode = true, bool $limitMode = false) : object{
+
+        $orderSql = '';
+        $paginatSql = '';
+        $multiLangMode = '';
+        $orderSql = 'ORDER BY ' . $this->orderColumn . ' ' . $this->orderDirection;
+        if ($limitMode) {
+            $paginationMode = false;
+            $paginatSql = 'LIMIT ' . $this->limitCount;
+        }
+        if ($paginationMode) {
+            $paginatSql = 'LIMIT ' . $this->paginationCount . ' OFFSET ' . $this->offset;
+        }
+        if ($this->multiLangMode) {
+            $multiLangMode = 'AND ' . $this->dbTable . '.lang =' . '"'.$this->lang.'"';
+        }
+
+        return new QueryParamsDTO($orderSql, $paginatSql, $multiLangMode);
+    }
+
+    public function getRowsByColumnName($columnName, $cnValue, bool $activeMode = true, bool $paginationMode = false, bool $limitMode = false)
     {
-        return $this->wpdb->get_row("SELECT * FROM `{$this->dbTable}` WHERE $columnName={$cnValue}", ARRAY_A);
+        $orderSql = '';
+        $paginatSql = '';
+
+        if ($paginationMode) {
+            $paginatSql = 'LIMIT ' . $this->paginationCount . ' OFFSET ' . $this->offset;
+        }
+
+        if ($limitMode) {
+            $paginationMode = false;
+            $paginatSql = 'LIMIT ' . $this->limitCount;
+        }
+
+        if ($this->multiLangMode) {
+            if ($activeMode) {
+                $sql = "SELECT * FROM `{$this->dbTable}` WHERE $columnName='$cnValue' AND active='1' AND lang = '{$this->lang}' $orderSql $paginatSql";
+            } else {
+                $sql = "SELECT * FROM `{$this->dbTable}` WHERE $columnName='$cnValue' AND lang = '{$this->lang}' $orderSql $paginatSql";
+            }
+        } else {
+            if ($activeMode) {
+                $sql = "SELECT * FROM `{$this->dbTable}` WHERE $columnName='$cnValue' AND active='1' $orderSql $paginatSql";
+            } else {
+                $sql = "SELECT * FROM `{$this->dbTable}` $columnName='$cnValue' $orderSql $paginatSql";
+            }
+        }
+        return $this->wpdb->get_results($sql, ARRAY_A);
     }
 
     public function getAllRows(bool $activeMode = true, bool $paginationMode = true, bool $limitMode = false)
@@ -256,7 +307,7 @@ abstract class AbstractModel
                 $val = date('Y-m-d H:i:s', time());
             }
             $names[] = $field;
-            $masks[] = "'".$val."'";
+            $masks[] = "'".trim($val)."'";
         }
 
         $namesStr = implode(', ', $names);
@@ -298,6 +349,7 @@ abstract class AbstractModel
             if ($field == 'updated') {
                 $val = date('Y-m-d H:i:s', time());
             }
+            $val = trim($val);
             $pairs[] = "$field='$val'";
         }
 
@@ -328,6 +380,11 @@ abstract class AbstractModel
 
     public function getMaxPosition() : int
     {
+        $query = "SELECT COUNT(*) FROM `{$this->dbTable}`";
+        $count =  $this->wpdb->get_var($query);
+        if($count == 0){
+            return 0;
+        }
         return $this->wpdb->get_var("SELECT MAX(position) as maxPosition FROM `{$this->dbTable}`");
     }
 
@@ -390,7 +447,7 @@ abstract class AbstractModel
 
         $this->updateRow($currentRow['id'], $fields1, false);
 
-        if($this->getErrorStatus('updateRow')){
+        if($this->errorStatus->getErrorStatus('updateRow')){
             return false;
         }
 
@@ -399,7 +456,6 @@ abstract class AbstractModel
         if($this->errorStatus->getErrorStatus('updateRow')){
             return false;
         }
-
         return true;
     }
 

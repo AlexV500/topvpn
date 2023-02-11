@@ -6,7 +6,6 @@ require_once V_PLUGIN_INCLUDES_DIR . 'os/Model/OSModel.php';
 
 class OSAdminEdit extends AdminPostAction {
 
-    protected array $postData;
 
     public function init( array $atts = []) : object
     {
@@ -16,7 +15,9 @@ class OSAdminEdit extends AdminPostAction {
             [
                 'os_name' => $data['os_name'],
                 'os_sys_name' => $data['os_sys_name'],
-            //    'os_logo' => $data['os_logo'],
+                'os_font_logo' => $data['os_font_logo'],
+                'os_font_logo_size' => $data['os_font_logo_size'],
+                'os_font_logo_color' => $data['os_font_logo_color'],
                 'active' => $data['active'],
                 'updated' => $data['updated'],
             ]
@@ -40,6 +41,11 @@ class OSAdminEdit extends AdminPostAction {
         $output .= AdminHtmlFormInputs::input('Название OS','os_name', $this->getFormFill('os_name'),'namefield','required');
         $output .= AdminHtmlFormInputs::input('Системное название OS','os_sys_name', $this->getFormFill('os_sys_name'),'namefield','required');
         $output .= AdminHtmlFormInputs::file('Логотип','os_logo', 'namefield','required');
+        $output .= '<div class="inp-group">';
+        $output .= AdminHtmlFormInputs::input('Логотип(Шрифт)','os_font_logo', $this->getFormFill('os_font_logo'),'namefield','');
+        $output .= AdminHtmlFormInputs::input('Логотип(Размер шрифта)','os_font_logo_size', $this->getFormFill('os_font_logo_size'),'namefield','');
+        $output .= AdminHtmlFormInputs::input('Цвет логотипа','os_font_logo_color', $this->getFormFill('os_font_logo_color'),'namefield','');
+        $output .= '</div>';
         $output .= AdminHtmlFormInputs::select('Активный', 'active', $this->getFormFill('active'), [1 => 'Да', 0 => 'Нет'], '');
         $output .= '<input type="hidden" name="updated" value="">';
         $output .= '<input type="hidden" name="edit_os" value="1">';

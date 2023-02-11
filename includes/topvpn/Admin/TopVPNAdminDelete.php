@@ -3,7 +3,6 @@ require_once V_CORE_LIB . 'Admin/AdminPostAction.php';
 require_once V_CORE_LIB . 'View/Admin/AdminHtmlFormInputs.php';
 require_once V_CORE_LIB . 'View/Admin/AdminHtmlFormOutputs.php';
 require_once V_PLUGIN_INCLUDES_DIR . 'topvpn/Model/TopVPNModel.php';
-require_once V_PLUGIN_INCLUDES_DIR . 'os/Model/OSModel.php';
 
 class TopVPNAdminDelete extends AdminPostAction{
 

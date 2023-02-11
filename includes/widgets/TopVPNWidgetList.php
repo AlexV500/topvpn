@@ -4,18 +4,19 @@ require_once V_CORE_LIB . 'Public/PublicList.php';
 
 class TopVPNWidgetList extends PublicList{
 
-    public function __construct($model, $dbTable)
+    public function __construct($model, $dbTable, $atts = [])
     {
-        parent::__construct($model, $dbTable);
+        parent::__construct($model, $dbTable, $atts);
     }
 
-    public function init( array $atts = []) : object{
+    public function init() : object{
 
-        $lang = get_locale();
-        $this->switchMultiLangMode($atts);
+
+        $this->switchMultiLangMode();
         $this->setOrderColumn('position');
         $this->setOrderDirection('ASC');
         $this->setLimitCount(5);
+        $this->initRows();
         $this->initRowsCount($this->activeMode);
         $this->initRowsData($this->activeMode, false, true);
         return $this;
@@ -30,18 +31,19 @@ class TopVPNWidgetList extends PublicList{
         $output .= '</div>';
         $output .= '<div class="card-body">';
         $count = count($this->getRowsData());
-        $output .= '<ul class="list-group list-group-flush">';
+        $output .= '<ul class="sidebar-widget list-group list-group-flush">';
         if ($count > 0) {
             for ($i = 0; $i < $count; $i++) {
                 $result = $this->getRowsData()[$i];
                 $logo = $logoPath . '/' . $result['vpn_logo'];
                 $pos = $i + 1;
-                $output .= '<li class="list-group-item d-flex justify-content-start">';
+                $output .= '<li class="list-group-item">';
                 $output .= '<div class="row">';
-                $output .= '<div class="col-6">';
-                $output .= '<span><img alt="' . $result['vpn_name'] . '" class="img-fluid max-240" src="' . $logo . '" alt="' . $result['vpn_name'] . '" title="' . $result['vpn_name'] . '"></span>';
+                $output .= '<div class="col-5">';
+                $output .= '<span><img alt="' . $result['vpn_name'] . '"src="' . $logo . '" width="100px" height="21px" alt="' . $result['vpn_name'] . '" title="' . $result['vpn_name'] . '"></span>';
+                $output .= HTMLOutputs::renderRating($result['rating'], 0);
                 $output .= '</div>';
-                $output .= '<div class="col-6">';
+                $output .= '<div class="col-7">';
                 $output .= $result['vpn_name'];
                 $output .= '</div>';
                 $output .= '</div>';

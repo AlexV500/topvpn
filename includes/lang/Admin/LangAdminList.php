@@ -11,10 +11,10 @@ class LangAdminList extends AdminList
     {
         $this->setOrderColumn('position');
         $this->setOrderDirection('ASC');
-        $this->initRowsCount($this->activeMode);
         $this->setPaginationCount();
+        $this->initRows($this->atts);
+        $this->initRowsCount($this->activeMode);
         $this->initPaginationConfig();
-        $this->setModelPaginationConfig();
         $this->checkPositionAction();
         $this->initRowsData($this->activeMode);
         $this->setLogoPath(V_PLUGIN_INCLUDES_DIR . 'images/lang/');

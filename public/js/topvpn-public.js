@@ -31,6 +31,7 @@
 
 })( jQuery );
 document.addEventListener('DOMContentLoaded', function() {
+
 	var box = document.getElementsByClassName('box')[0],
 		box2 = document.getElementsByClassName('box2')[0],
 		buttonDown = document.getElementsByClassName('toggle')[0],
@@ -39,48 +40,57 @@ document.addEventListener('DOMContentLoaded', function() {
 	buttonBoxDown = document.getElementById('other-brokers-button-down'),
 	buttonBoxUp = document.getElementById('other-brokers-button-up');
 
-	buttonBoxUp.classList.add('box-hidden');
-
-	box.classList.add('box-hidden');
-	box2.classList.add('box-hidden');
-
-	buttonDown.addEventListener('click', function(e) {
-
-		buttonBoxDown.classList.add('box-hidden');
-		buttonBoxUp.classList.remove('box-hidden');
-
-		box.classList.add('box-transition');
-		box.clientWidth; // force layout to ensure the now display: block and opacity: 0 values are taken into account when the CSS transition starts.
-		box.classList.remove('box-hidden');
-
-		box2.classList.add('box-transition');
-		box2.clientWidth; // force layout to ensure the now display: block and opacity: 0 values are taken into account when the CSS transition starts.
-		box2.classList.remove('box-hidden');
-
-
-	}, false);
-
-	buttonUp.addEventListener('click', function(e) {
-
+	if(box && box2 && buttonBoxDown && buttonBoxUp){
 		buttonBoxUp.classList.add('box-hidden');
-		buttonBoxDown.classList.remove('box-hidden');
-
-		box.classList.remove('box-transition');
 		box.classList.add('box-hidden');
-
-		box2.classList.remove('box-transition');
 		box2.classList.add('box-hidden');
 
-	}, false);
+
+		buttonDown.addEventListener('click', function(e) {
+
+			buttonBoxDown.classList.add('box-hidden');
+			buttonBoxUp.classList.remove('box-hidden');
+
+			box.classList.add('box-transition');
+			box.clientWidth; // force layout to ensure the now display: block and opacity: 0 values are taken into account when the CSS transition starts.
+			box.classList.remove('box-hidden');
+
+			box2.classList.add('box-transition');
+			box2.clientWidth; // force layout to ensure the now display: block and opacity: 0 values are taken into account when the CSS transition starts.
+			box2.classList.remove('box-hidden');
 
 
-	box.addEventListener('transitionend', function() {
-		box.classList.remove('box-transition');
-	}, false);
+		}, false);
+
+		buttonUp.addEventListener('click', function(e) {
+
+			buttonBoxUp.classList.add('box-hidden');
+			buttonBoxDown.classList.remove('box-hidden');
+
+			box.classList.remove('box-transition');
+			box.classList.add('box-hidden');
+
+			box2.classList.remove('box-transition');
+			box2.classList.add('box-hidden');
+
+		}, false);
+
+
+		box.addEventListener('transitionend', function() {
+			box.classList.remove('box-transition');
+		}, false);
+	}
+
+
 
 	const circle = new CircularProgressBar("pie");
 	circle.initial();
 });
+
+function disclaimerPopup() {
+	var popup = document.getElementById("myPopup");
+	popup.classList.toggle("show");
+}
 
 function hideOrShow2() {
 

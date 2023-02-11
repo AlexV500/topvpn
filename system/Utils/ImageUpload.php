@@ -61,7 +61,7 @@ class ImageUpload{
 
                 // Сгенерируем расширение файла на основе типа картинки
                 $extension = image_type_to_extension($image[2]);
-
+                echo $image[2] . ' => ' .$extension;
                 // Сократим .jpeg до .jpg
                 $format = str_replace('jpeg', 'jpg', $extension);
 
@@ -69,7 +69,7 @@ class ImageUpload{
                 if (!move_uploaded_file($fileTmpName, $path . $name . $format)) {
                     return Result::setResult('error', 'При записи изображения на диск произошла ошибка!', '');
                 }
-                return Result::setResult('ok', 'Картинка успешно загружена!', $name.$extension);
+                return Result::setResult('ok', 'Картинка успешно загружена!', $name.$format);
             }
         } else return Result::setResult('no_file', 'Файлов изображений не было.', '');
     }
