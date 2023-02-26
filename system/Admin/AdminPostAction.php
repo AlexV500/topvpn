@@ -4,7 +4,7 @@ require_once V_CORE_LIB . 'Admin/AdminActions/AdminActions.php';
 
 abstract class AdminPostAction extends AdminActions{
 
-    protected int $id;
+
     protected array $formFills;
     protected array $postData;
     protected string $deleteName;
@@ -15,25 +15,16 @@ abstract class AdminPostAction extends AdminActions{
         parent::__construct($model, $dbTable);
     }
 
-    protected function setId($id){
-
-        $this->id = (int) $id;
-    }
-
-    protected function getId(){
-
-        return $this->id;
-    }
-
     protected function setPostData()
     {
         $formFill = [];
         foreach ($this->getFormFills() as $key => $value) {
+            if ($key == 'position') {
+                //     $this->postData['position'] = $this->getModel()->getMaxPosition() + 1;
+                $this->postData['position'] = '';
+                continue;
+            }
             if (isset($_POST[$key])) {
-//                if ($key == 'position') {
-//                    $this->postData['position'] = $this->getModel()->getMaxPosition() + 1;
-//                    continue;
-//                }
                 $this->postData[$key] = $_POST[$key];
                 $formFill[$key] = $_POST[$key];
             }

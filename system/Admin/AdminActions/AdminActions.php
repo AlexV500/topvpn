@@ -5,7 +5,7 @@ require_once V_CORE_LIB . 'Components/Components.php';
 abstract class AdminActions extends Components{
 
  //   protected object $model;
-
+    protected int $id;
     protected array $allLanguageAdm;
     protected array $resultMessages = [];
     protected string $logoPath;
@@ -27,6 +27,16 @@ abstract class AdminActions extends Components{
 //        return $this->model;
 //    }
 
+
+    protected function setId($id){
+
+        $this->id = (int) $id;
+    }
+
+    protected function getId(){
+
+        return $this->id;
+    }
 
     public function getLogoPath() : string
     {

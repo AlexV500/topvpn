@@ -43,8 +43,9 @@ class TopVPNWidgetList extends PublicList{
                 $output .= '<span><img alt="' . $result['vpn_name'] . '"src="' . $logo . '" width="100px" height="21px" alt="' . $result['vpn_name'] . '" title="' . $result['vpn_name'] . '"></span>';
                 $output .= HTMLOutputs::renderRating($result['rating'], 0);
                 $output .= '</div>';
-                $output .= '<div class="col-7">';
-                $output .= $result['vpn_name'];
+                $output .= '<div class="col-7 pt-2">';
+                $output .= '<a class="btn btn-warning btn-xsm" href="" role="button">View more...</a>&nbsp';
+                $output .= '<a class="btn btn-tertiary btn-xsm" href="" role="button">Visit site</a>';
                 $output .= '</div>';
                 $output .= '</div>';
                 $output .= '</li>';

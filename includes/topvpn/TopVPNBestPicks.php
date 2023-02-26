@@ -41,7 +41,9 @@ class TopVPNBestPicks extends PublicList{
         /*------*/$output .= '<div class="feature">';
         /*---------*/ $output .= '<div class="entry-logo"><a href="' . $this->bestVPN['rating'][0]['vpn_sys_name'] . '/" alt="Logo"><img src="' . VPN_LOGO_PATH . $this->bestVPN['rating'][0]['vpn_logo'] . '" height="35px" alt="Logo"></a></div>';
         /*---------*/ $output .= '<h5>Best VPN by user rating</h5>';
-        /*---------*/ $output .= '<a class="tt-read-more" href="' . $this->bestVPN['rating'][0]['vpn_sys_name'] .'">Go To Review <i class="fa fa-arrow-right"></i></a>';
+        /*---------*/ // $output .= '<a class="tt-read-more" href="' . $this->bestVPN['rating'][0]['vpn_sys_name'] .'">Go To Review <i class="fa fa-arrow-right"></i></a>';
+        /*---------*/ $output .= '<a class="btn btn-warning btn-xsm" href="' . $this->bestVPN['rating'][0]['vpn_sys_name'] .'" role="button">View more...</a>&nbsp';
+        /*---------*/ $output .= '<a class="btn btn-tertiary btn-xsm" href="" role="button">Visit site</a>';
         /*------*/$output .= '</div>';
         /*---*/$output .= '</div>';
 
@@ -49,7 +51,9 @@ class TopVPNBestPicks extends PublicList{
         /*------*/$output .= '<div class="feature">';
         /*---------*/ $output .= '<div class="entry-logo"><a href="' . $this->bestVPN['feautures_score'][0]['vpn_sys_name'] . '/" alt="Logo"><img src="' . VPN_LOGO_PATH . $this->bestVPN['feautures_score'][0]['vpn_logo'] . '" height="35px" alt="Logo"></a></div>';
         /*---------*/ $output .= '<h5>Best VPN by feature score</h5>';
-        /*---------*/ $output .= '<a class="tt-read-more" href="' . $this->bestVPN['feautures_score'][0]['vpn_sys_name'] .'">Go To Review <i class="fa fa-arrow-right"></i></a>';
+        /*---------*/ // $output .= '<a class="tt-read-more" href="' . $this->bestVPN['feautures_score'][0]['vpn_sys_name'] .'">Go To Review <i class="fa fa-arrow-right"></i></a>';
+        /*---------*/ $output .= '<a class="btn btn-warning btn-xsm" href="' . $this->bestVPN['feautures_score'][0]['vpn_sys_name'] .'" role="button">View more...</a>&nbsp';
+        /*---------*/ $output .= '<a class="btn btn-tertiary btn-xsm" href="" role="button">Visit site</a>';
         /*------*/$output .= '</div>';
         /*---*/$output .= '</div>';
 
@@ -57,7 +61,9 @@ class TopVPNBestPicks extends PublicList{
         /*------*/$output .= '<div class="feature">';
         /*---------*/ $output .= '<div class="entry-logo"><a href="' . $this->bestVPN['value_for_money_score'][0]['vpn_sys_name'] . '/" alt="Logo"><img src="' . VPN_LOGO_PATH . $this->bestVPN['value_for_money_score'][0]['vpn_logo'] . '" height="35px" alt="Logo"></a></div>';
         /*---------*/ $output .= '<h5>Best VPN by Value For Money</h5>';
-        /*---------*/ $output .= '<a class="tt-read-more" href="' . $this->bestVPN['value_for_money_score'][0]['vpn_sys_name'] .'">Go To Review <i class="fa fa-arrow-right"></i></a>';
+        /*---------*/ // $output .= '<a class="tt-read-more" href="' . $this->bestVPN['value_for_money_score'][0]['vpn_sys_name'] .'">Go To Review <i class="fa fa-arrow-right"></i></a>';
+        /*---------*/ $output .= '<a class="btn btn-warning btn-xsm" href="' . $this->bestVPN['value_for_money_score'][0]['vpn_sys_name'] .'" role="button">View more...</a>&nbsp';
+        /*---------*/ $output .= '<a class="btn btn-tertiary btn-xsm" href="" role="button">Visit site</a>';
         /*------*/$output .= '</div>';
         /*---*/$output .= '</div>';
 
@@ -65,7 +71,9 @@ class TopVPNBestPicks extends PublicList{
         /*------*/$output .= '<div class="feature">';
         /*---------*/ $output .= '<div class="entry-logo"><a href="' . $this->bestVPN['privacy_score'][0]['vpn_sys_name'] . '/" alt="Logo"><img src="' . VPN_LOGO_PATH . $this->bestVPN['privacy_score'][0]['vpn_logo'] . '" height="35px" alt="Logo"></a></div>';
         /*---------*/ $output .= '<h5>Best VPN by Privacy Score</h5>';
-        /*---------*/ $output .= '<a class="tt-read-more" href="' . $this->bestVPN['privacy_score'][0]['vpn_sys_name'] .'">Go To Review <i class="fa fa-arrow-right"></i></a>';
+        /*---------*/ // $output .= '<a class="tt-read-more" href="' . $this->bestVPN['privacy_score'][0]['vpn_sys_name'] .'">Go To Review <i class="fa fa-arrow-right"></i></a>';
+        /*---------*/ $output .= '<a class="btn btn-warning btn-xsm" href="' . $this->bestVPN['privacy_score'][0]['vpn_sys_name'] .'" role="button">View more...</a>&nbsp';
+        /*---------*/ $output .= '<a class="btn btn-tertiary btn-xsm" href="" role="button">Visit site</a>';
         /*------*/$output .= '</div>';
         /*---*/$output .= '</div>';
 
@@ -73,7 +81,9 @@ class TopVPNBestPicks extends PublicList{
         /*------*/$output .= '<div class="feature">';
         /*---------*/ $output .= '<div class="entry-logo"><a href="' . $this->bestVPN['user_score'][0]['vpn_sys_name'] . '/" alt="Logo"><img src="' . VPN_LOGO_PATH . $this->bestVPN['user_score'][0]['vpn_logo'] . '" height="35px" alt="Logo"></a></div>';
         /*---------*/ $output .= '<h5>Best VPN by User Score</h5>';
-        /*---------*/ $output .= '<a class="tt-read-more" href="' . $this->bestVPN['user_score'][0]['vpn_sys_name'] .'">Go To Review <i class="fa fa-arrow-right"></i></a>';
+        /*---------*/ // $output .= '<a class="tt-read-more" href="' . $this->bestVPN['user_score'][0]['vpn_sys_name'] .'">Go To Review <i class="fa fa-arrow-right"></i></a>';
+        /*---------*/ $output .= '<a class="btn btn-warning btn-xsm" href="' . $this->bestVPN['user_score'][0]['vpn_sys_name'] .'" role="button">View more...</a>&nbsp';
+        /*---------*/ $output .= '<a class="btn btn-tertiary btn-xsm" href="" role="button">Visit site</a>';
         /*------*/$output .= '</div>';
         /*---*/$output .= '</div>';
 

@@ -79,7 +79,7 @@ class TopVPNModel extends AbstractModel{
         }
         $updatedRow = $this->updateRow($id, $data);
 //        echo '<pre>';
-//        print_r($data);
+//        print_r($updatedRow);
 //        echo '</pre>';
         if(count($updatedRow) > 0){
             $updatedRow = ManyToMany::editManyToOne($this->keyManyToManyFields, $updatedRow, $id, $data);
@@ -202,4 +202,24 @@ class TopVPNModel extends AbstractModel{
         return $this->wpdb->num_rows;
     }
 
+
+    public function combineAdditionalData(array $rowsData, array $additionalData): array
+    {
+        foreach ($rowsData as &$rowData) {
+            foreach ($additionalData as $rowAdditional) {
+                if ($rowData['id'] === $rowAdditional['foreign_id']) {
+                    if($rowAdditional['active'] == 1){
+                        $rowData = array_merge($rowData, array_filter([
+                            'top_status_description' => $rowAdditional['top_status_description'] ?? null,
+                            'short_description' => $rowAdditional['short_description'] ?? null,
+                            'rating' => $rowAdditional['rating'] ?? null,
+                            'rating_description' => $rowAdditional['rating_description'] ?? null,
+                        ]));
+                    }
+
+                }
+            }
+        }
+        return $rowsData;
+    }
 }

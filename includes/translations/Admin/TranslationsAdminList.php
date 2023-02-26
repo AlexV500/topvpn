@@ -2,18 +2,17 @@
 require_once V_CORE_LIB . 'Admin/AdminList.php';
 require_once V_CORE_LIB . 'View/Admin/AdminHtmlFormInputs.php';
 require_once V_CORE_LIB . 'View/Admin/AdminHtmlFormOutputs.php';
-require_once V_PLUGIN_INCLUDES_DIR . 'customization/Model/CustomizationModel.php';
+require_once V_PLUGIN_INCLUDES_DIR . 'translations/Model/TranslationsModel.php';
+require_once V_PLUGIN_INCLUDES_DIR . 'lang/Model/LangModel.php';
 
-
-class CustomizationAdminList extends AdminList{
-
-    public function __construct($model, $dbTable)
-    {
-        parent::__construct($model, $dbTable);
-    }
+class TranslationsAdminList extends AdminList
+{
 
     public function init( array $atts = []) : object
     {
+        $this->selectLanguageAdm();
+    //    $this->switchMultiLangMode();
+        $this->initAllLanguageAdm('LangModel', 'topvpn_lang');
         $this->setOrderColumn('position');
         $this->setOrderDirection('ASC');
         $this->setPaginationCount();
@@ -22,14 +21,15 @@ class CustomizationAdminList extends AdminList{
         $this->initPaginationConfig();
         $this->checkPositionAction();
         $this->initRowsData($this->activeMode);
+        $this->setLogoPath(V_PLUGIN_INCLUDES_DIR . 'images/lang/');
         $this->setColumnDisplayNames(array(
             'id' => __( 'id', 'topvpn' ),
-            'name'         => __( 'Customization', 'topvpn' ),
-            'pageUri'      => __( 'URI страницы', 'topvpn' ),
+            'logo' => __('Текст по умолчанию', 'topvpn'),
+            'translations'   => __( 'Переведено на языки', 'topvpn' ),
             'positionUp'     => __( 'Позиция', 'topvpn' ),
             'positionDown'   => __( 'Позиция', 'topvpn' ),
             'status'       => __( 'Статус', 'topvpn' ),
-            'created'       => __( 'Создано (Г-м-д)', 'topvpn' ),
+            'created'      => __( 'Создано (Г-м-д)', 'topvpn' ),
             'edit'         => __( 'Редакт.', 'topvpn' ),
             'delete'       => __( 'Удалить', 'topvpn' ),
         ));
@@ -39,12 +39,11 @@ class CustomizationAdminList extends AdminList{
     public function render() : object
     {
         $output = '';
-        $output .= AdminHtmlFormInputs::renderAdminHead('Список сниппетов');
+        $output .= AdminHtmlFormInputs::renderAdminHead('Список Переводов');
         $output .= '<table id="" class="wp-list-table widefat fixed" cellspacing="0">';
-        $output .= AdminHtmlFormInputs::renderAdminHeadOfTableList($this->getColumnDisplayNames(), 'customizationlist');
+        $output .= AdminHtmlFormInputs::renderAdminHeadOfTableList($this->getColumnDisplayNames(), 'langlist');
         if ( count($this->getRowsData()) > 0 ) {
             for ( $i = 0; $i < count($this->getRowsData()); $i++ ) {
-
                 $result = $this->getRowsData()[$i];
 
                 $name_suffix = '';
@@ -55,9 +54,9 @@ class CustomizationAdminList extends AdminList{
                 $output .= "<td class='topvpn-id'>";
                 $output .= $result['id'];
                 $output .= "</td>";
-
-                $output .= "<td class='topvpnName'>" . stripslashes( wp_filter_nohtml_kses( $result['customization_name'] ) ) . $name_suffix . "</td>";
-                $output .= "<td class='topvpnSysName'>" . stripslashes( wp_filter_nohtml_kses( $result['page_uri'] ) ) . $name_suffix . "</td>";
+           //     $output .= "<td class='topvpnLogo'><img src='". V_CORE_URL ."includes/images/lang/".$result['lang_logo']."' width='16px' height='11px'></td>";
+                $output .= "<td class='topvpnName'>" . stripslashes( wp_filter_nohtml_kses( $result['lang_name'] ) ) . $name_suffix . "</td>";
+                $output .= "<td class='topvpnSysName'>" . stripslashes( wp_filter_nohtml_kses( $result['lang_sys_name'] ) ) . $name_suffix . "</td>";
                 $output .= "<td class='position'><a href='" . $this->getCurrentURL() . "&position_set=up&item_id=" . $result['id'] . "'>Вверх</a></td>";
                 $output .= "<td class='position'><a href='" . $this->getCurrentURL() . "&position_set=down&item_id=" . $result['id'] . "'>Вниз</a></td>";
 
@@ -79,8 +78,18 @@ class CustomizationAdminList extends AdminList{
         $output .= '</table>';
 
         $output .= AdminHtmlFormInputs::renderAdminPagination($this->getRowsCount(), $this->getPaginationCount());
-        $output .= AdminHtmlFormInputs::renderAdminFormButton('Добавить новый сниппет', 'Добавить новый сниппет', 'button button-primary', $this->getCurrentURL(), '&action=add');
+        $output .= AdminHtmlFormInputs::renderAdminFormButton('Добавить новый язык', 'Добавить новый язык', 'button button-primary', $this->getCurrentURL(), '&action=add');
+        $output .= AdminHtmlFormInputs::renderAdminManageForm($this->countAllRowsFromCustomTable('lang_logo'), $this->countFiles());
         $this->render = $output;
         return $this;
+    }
+
+    protected function getTranlationFlags($id){
+
+        $allLanguages = $this->getAllLanguageAdm();
+        foreach ($allLanguages as $language) {
+
+            $output .= '';
+        }
     }
 }

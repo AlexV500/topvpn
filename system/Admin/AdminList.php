@@ -53,6 +53,11 @@ abstract class AdminList extends AdminActions {
         return $this;
     }
 
+    public function addRelationParam($relationName, $relationModel, $relationColumnName) : object{
+        $this->rowsListObject->addRelationParam($relationName, $relationModel, $relationColumnName);
+        return $this;
+    }
+
     public function getRowsData(){
         return $this->rowsData;
     }

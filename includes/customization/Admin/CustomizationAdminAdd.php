@@ -19,7 +19,9 @@ class CustomizationAdminAdd extends AdminPostAction{
                 'page_uri' => '',
                 'lang' => '',
                 'header_content' => '',
+                'header_image' => '',
                 'active' => 1,
+                'position' => '',
                 'created' => '',
             ]
         );
@@ -41,6 +43,7 @@ class CustomizationAdminAdd extends AdminPostAction{
         $output .= AdminHtmlFormInputs::input('Название сниппета','customization_name', $this->getFormFill('customization_name'),'namefield','required');
         $output .= AdminHtmlFormInputs::input('URI страницы','page_uri', $this->getFormFill('page_uri'),'namefield','required');
         $output .= AdminHtmlFormInputs::textarea('Контент шапки', 'header_content', $this->getFormFill('header_content'), '');
+        $output .= AdminHtmlFormInputs::textarea('Изображение шапки', 'header_image', $this->getFormFill('header_image'), '');
         $output .= AdminHtmlFormInputs::renderAdminLanguageSelectorField($this->getAllLanguageAdm(), $this->getLanguageSysNameGet());
         $output .= AdminHtmlFormInputs::select('Активный', 'active', $this->getFormFill('active'), [1 => 'Да', 0 => 'Нет'], '');
         $output .= '<input type="hidden" name="created" value="">';

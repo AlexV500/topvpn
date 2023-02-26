@@ -1,6 +1,6 @@
 <?php
-
 require_once V_PLUGIN_INCLUDES_DIR . 'topvpn/Model/TopVPNModel.php';
+require_once V_PLUGIN_INCLUDES_DIR . 'topvpn/Model/Additional/TopVPNAdditionalModel.php';
 require_once V_PLUGIN_INCLUDES_DIR . 'device/Model/DeviceModel.php';
 require_once V_PLUGIN_INCLUDES_DIR . 'streaming/Model/StreamingModel.php';
 require_once V_CORE_LIB . 'View/HTMLOutputs.php';
@@ -21,6 +21,7 @@ class TopVPNPublicList extends PublicList{
 
         $this->addItemToCollection(new DeviceModel('topvpn_device'), 'deviceModel');
         $this->addItemToCollection(new StreamingModel('topvpn_streaming'), 'streamingModel');
+        $this->addItemToCollection(new TopVPNAdditionalModel('topvpn_vpn_additional'), 'vpnAdditionalModel');
         $this->switchMultiLangMode();
         $this->setOrderColumn('position');
         $this->setOrderDirection('ASC');
@@ -28,6 +29,8 @@ class TopVPNPublicList extends PublicList{
         $this->initRows();
         $this->addRelationParam('device', $this->getItemFromCollection('deviceModel'), 'device_sys_name');
         $this->addRelationParam('streaming', $this->getItemFromCollection('streamingModel'), 'streaming_sys_name');
+        $this->addAdditionalParam('device', $this->getItemFromCollection('vpnAdditionalModel'));
+        $this->addAdditionalParam('streaming', $this->getItemFromCollection('vpnAdditionalModel'));
         $this->initRowsCount($this->activeMode);
         $this->initPaginationConfig();
         $this->initRowsData($this->activeMode);
@@ -40,8 +43,8 @@ class TopVPNPublicList extends PublicList{
         $count = count($this->getRowsData());
         $output .= '<div class="d-flex justify-content-between">';
         $output .= '<div class="">Updated: '.HTMLOutputs::updatedAt().'</div>';
-        $output .= '<div class=""><div class="popup" onclick="disclaimerPopup()">Advertiser Disclosure
-  <span class="popuptext" id="myPopup">To keep Top10VPN a free online resource, we receive advertising/referral fees when you buy a VPN through outlinks on this page. This impacts the score, location, prominence and order in which a VPN service appears. Our extensive tests of each VPN, and how it compares with other VPNs in different countries and/or for specific purposes, are also factored in. We do not feature every VPN product on the market. Listings on this page do not imply endorsement. To learn more, see</span>
+        $output .= '<div class=""><div class="popup" onclick="togglePopup(\'disclaimerPopup\')">Advertiser Disclosure
+  <span class="popuptext" id="disclaimerPopup">To keep Top10VPN a free online resource, we receive advertising/referral fees when you buy a VPN through outlinks on this page. This impacts the score, location, prominence and order in which a VPN service appears. Our extensive tests of each VPN, and how it compares with other VPNs in different countries and/or for specific purposes, are also factored in. We do not feature every VPN product on the market. Listings on this page do not imply endorsement. To learn more, see</span>
 </div>
 </div>';
         $output .= '</div>';
@@ -81,6 +84,7 @@ class TopVPNPublicList extends PublicList{
                 /*------------*/$output .='<p class="new_product_description d-none d-md-block mb-0 mr-lg-1 mr-xl-0 mt-2">';
                 /*------------*/$output .=$result['short_description'];
                 /*------------*/$output .='</p>';
+                /*------------*/$output .= '<a class="tt-read-more" href="' . $result['vpn_sys_name'] .'">Go To Review <i class="fa fa-arrow-right"></i></a>';
                 /*---------*/$output .='</div>';
 
 
@@ -189,8 +193,15 @@ class TopVPNPublicList extends PublicList{
             }
             $output .= '</div>';
 
+            $output .= '<div class="d-flex justify-content-between mt-3">';
+            $output .= '<div class="">Updated: '.HTMLOutputs::updatedAt().'</div>';
+            $output .= '<div class=""><div class="popup" onclick="togglePopup(\'disclaimerPopup2\')">Advertiser Disclosure
+  <span class="popuptext" id="disclaimerPopup2">To keep Top10VPN a free online resource, we receive advertising/referral fees when you buy a VPN through outlinks on this page. This impacts the score, location, prominence and order in which a VPN service appears. Our extensive tests of each VPN, and how it compares with other VPNs in different countries and/or for specific purposes, are also factored in. We do not feature every VPN product on the market. Listings on this page do not imply endorsement. To learn more, see</span>';
+            $output .= '</div>';
+            $output .= '</div>';
+            $output .= '</div>';
             if($count > $this->showCount){
-                $output .= '<div id="other-brokers-button-down" class="pt-5">';
+                $output .= '<div id="other-brokers-button-down" class="mt-3">';
                 $output .= '<div class="row justify-content-center">
                 <div class="text-center">
                     <button class="btn btn-tertiary mx-auto toggle"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down" viewBox="0 0 16 16">
@@ -232,6 +243,7 @@ class TopVPNPublicList extends PublicList{
             </div>';
             }
         }
+
         $this->render = $output;
         return $output;
     }

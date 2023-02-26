@@ -568,11 +568,11 @@ li.add-ons:hover {
     width: 10%;
 }
 .wp-list-table .topvpnlist-rating{
-    width: 5%;
+    width: 4%;
 }
 
 .wp-list-table .topvpnlist-lang{
-    width: 8%;
+    width: 5%;
 }
 .wp-list-table .topvpnlist-positionUp{
     width: 5%;
@@ -590,6 +590,9 @@ li.add-ons:hover {
     width: 11%;
 }
 .wp-list-table .topvpnlist-edit{
+    width: 4%;
+}
+.wp-list-table .topvpnlist-edit-addit{
     width: 4%;
 }
 .wp-list-table .topvpnlist-delete{
@@ -691,6 +694,36 @@ li.add-ons:hover {
 .wp-list-table .paymentslist-delete{
     width: 8%;
 }
+
+
+.wp-list-table .customizationlist-id{
+    width: 2%;
+}
+.wp-list-table .customizationlist-name{
+    width: 24%;
+}
+.wp-list-table .customizationlist-pageUri{
+    width: 30%;
+}
+.wp-list-table .customizationlist-positionUp{
+    width: 8%;
+}
+.wp-list-table .customizationlist-positionDown{
+    width: 8%;
+}
+.wp-list-table .customizationlist-status{
+    width: 10%;
+}
+.wp-list-table .customizationlist-created{
+    width: 14%;
+}
+.wp-list-table .customizationlist-edit{
+    width: 5%;
+}
+.wp-list-table .customizationlist-delete{
+    width: 8%;
+}
+
 
 .message-error{
     color: red;

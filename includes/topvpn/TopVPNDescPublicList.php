@@ -51,12 +51,20 @@ class TopVPNDescPublicList extends PublicList{
                     $show_trigger_2 = 1;
                     $output .= '<div class="box2">';
                 }
-                $output .= '<div class="rating-info d-block no-gutters mt-4 pt-4 pb-3 pl-2 pr-2 p-lg-4 list list-'.$pos.' pm-1">';
-                $output .= '<div class="d-flex justify-content-center align-items-center bg-white">';
-                $output .= '<div class="entry-logo"><a href="' . $result['vpn_sys_name'] . '/" alt="Logo"><img src="' . $logo . '" height="35" alt="Logo"></a>
+                $output .='<div class="row desc-public-list justify-content-between no-gutters mt-4 pt-4 pb-3 pl-2 pr-2 p-lg-3 list list-'.$pos.' pm-1">';
+             //   $output .= '<div class="rating-info d-block no-gutters mt-4 pt-4 pb-3 pl-2 pr-2 p-lg-4 list list-'.$pos.' pm-1">';
+                $output .= '<div class="col-md-12 col-lg-2 d-flex bg-white">';
+                $output .= '<div class="entry-logo"><a href="' . $result['vpn_sys_name'] . '/" alt="Logo"><img src="' . $logo . '" height="35px" alt="Logo"></a>
       '.HTMLOutputs::renderRating($result['rating'], 0);
+                $output .= '<div class="mb-2"></div>';
+                $output .= '<a class="btn btn-warning btn-xsm" href="" role="button">View more...</a>&nbsp';
+                $output .= '<a class="btn btn-tertiary btn-xsm" href="" role="button">Visit site</a>';
                 $output .= '</div>';
                 $output .= '</div>';
+                $output .= '<div class="col-md-12 col-lg-10 d-flex bg-white">';
+                $output .= $result['short_description'];
+                $output .= '</div>';
+            //    $output .= '</div>';
                 $output .= '</div>';
             }
             if($show_trigger_2 == 1){

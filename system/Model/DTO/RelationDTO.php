@@ -38,4 +38,5 @@ class RelationDTO
     public function getRelationColumnName() : string{
         return $this->relationColumnName;
     }
+
 }

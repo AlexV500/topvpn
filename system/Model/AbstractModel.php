@@ -123,11 +123,11 @@ abstract class AbstractModel
     {
         $multiLangMode = '';
 
-        if ($this->multiLangMode) {
-            $multiLangMode = 'AND ' . $this->dbTable . '.lang =' . '"'.$this->lang.'"';
-        }
+//        if ($this->multiLangMode) {
+//            $multiLangMode = 'AND ' . $this->dbTable . '.lang =' . '"'.$this->lang.'"';
+//        }
 
-        return $this->wpdb->get_row("SELECT * FROM `{$this->dbTable}` WHERE $pk='$pkValue' $multiLangMode", ARRAY_A);
+        return $this->wpdb->get_row("SELECT * FROM `{$this->dbTable}` WHERE $pk='$pkValue'", ARRAY_A);
     }
 
     public function getSqlQueryParams(bool $paginationMode = true, bool $limitMode = false) : object{
@@ -242,43 +242,78 @@ abstract class AbstractModel
     }
 
 
-    public function countAllRows($activeMode = true){
+//    public function countAllRows($activeMode = true){
+//
+//        if($this->multiLangMode) {
+//            if ($activeMode) {
+//                $query = "SELECT COUNT(*) FROM `{$this->dbTable}` WHERE active='1' AND lang = '{$this->lang}'";
+//            } else {
+//                $query = "SELECT COUNT(*) FROM `{$this->dbTable}` WHERE lang = '{$this->lang}'";
+//            }
+//        } else {
+//            if ($activeMode) {
+//                $query = "SELECT COUNT(*) FROM `{$this->dbTable}` WHERE active='1'";
+//            } else {
+//                $query = "SELECT COUNT(*) FROM `{$this->dbTable}`";
+//            }
+//        }
+//
+//        return $this->wpdb->get_var($query);
+//    }
 
-        if($this->multiLangMode) {
+//    public function countAllRowsFromCustomTable( string $dbTable, $activeMode = true){
+//
+//        $dbTable = $this->prefix.$dbTable;
+//
+//        if($this->multiLangMode) {
+//            if ($activeMode) {
+//                $query = "SELECT COUNT(*) FROM `{$dbTable}` WHERE active='1' AND lang = '{$this->lang}'";
+//            } else {
+//                $query = "SELECT COUNT(*) FROM `{$dbTable}` WHERE lang = '{$this->lang}'";
+//            }
+//        } else {
+//            if ($activeMode) {
+//                $query = "SELECT COUNT(*) FROM `{$dbTable}` WHERE active='1'";
+//            } else {
+//                $query = "SELECT COUNT(*) FROM `{$dbTable}`";
+//            }
+//        }
+//
+//        return $this->wpdb->get_var($query);
+//    }
+
+    public function countAllRows(bool $activeMode = true)
+    {
+        $query = "SELECT COUNT(*) FROM `{$this->dbTable}`";
+
+        if ($this->multiLangMode) {
+            $query .= " WHERE lang = '{$this->lang}'";
+
             if ($activeMode) {
-                $query = "SELECT COUNT(*) FROM `{$this->dbTable}` WHERE active='1' AND lang = '{$this->lang}'";
-            } else {
-                $query = "SELECT COUNT(*) FROM `{$this->dbTable}` WHERE lang = '{$this->lang}'";
+                $query .= " AND active = '1'";
             }
-        } else {
-            if ($activeMode) {
-                $query = "SELECT COUNT(*) FROM `{$this->dbTable}` WHERE active='1'";
-            } else {
-                $query = "SELECT COUNT(*) FROM `{$this->dbTable}`";
-            }
+        } elseif ($activeMode) {
+            $query .= " WHERE active = '1'";
         }
 
-        return $this->wpdb->get_var($query);
+        return (int) $this->wpdb->get_var($query);
     }
 
-    public function countAllRowsFromCustomTable( string $dbTable, $activeMode = true){
+    public function countAllRowsFromCustomTable(string $table, bool $onlyActive = true)
+    {
+        // Подготовленный запрос
+        $query = $this->wpdb->prepare(
+            "SELECT COUNT(*) FROM {$this->prefix}%s WHERE %s",
+            $table,
+            $onlyActive ? 'active = 1' : '1=1'
+        );
 
-        $dbTable = $this->prefix.$dbTable;
-
-        if($this->multiLangMode) {
-            if ($activeMode) {
-                $query = "SELECT COUNT(*) FROM `{$dbTable}` WHERE active='1' AND lang = '{$this->lang}'";
-            } else {
-                $query = "SELECT COUNT(*) FROM `{$dbTable}` WHERE lang = '{$this->lang}'";
-            }
-        } else {
-            if ($activeMode) {
-                $query = "SELECT COUNT(*) FROM `{$dbTable}` WHERE active='1'";
-            } else {
-                $query = "SELECT COUNT(*) FROM `{$dbTable}`";
-            }
+        // Если используется мультиязычный режим, добавляем условие на язык.
+        if ($this->multiLangMode) {
+            $query .= $this->wpdb->prepare(" AND lang = %s", $this->lang);
         }
 
+        // Выполнение запроса и возврат количества строк
         return $this->wpdb->get_var($query);
     }
     
@@ -295,7 +330,9 @@ abstract class AbstractModel
         $names = [];
         $masks = [];
         $returnData = [];
-
+//        echo '<pre>';
+//        print_r($fields);
+//        echo '</pre>';
         foreach($fields as $field => $val){
             if(is_array($val)){
                 continue;
@@ -305,6 +342,9 @@ abstract class AbstractModel
             }
             if ($field == 'updated') {
                 $val = date('Y-m-d H:i:s', time());
+            }
+            if ($field == 'position') {
+                $val = $this->getMaxPosition() + 1;
             }
             $names[] = $field;
             $masks[] = "'".trim($val)."'";
@@ -326,6 +366,60 @@ abstract class AbstractModel
         }
         $returnData['last_insert_id'] = $this->wpdb->insert_id;
         return $returnData;
+    }
+
+//    public function insertRow(array $fields): array
+//    {
+//
+//        // Обработка полей
+//        $processedFields = $this->processFields($fields);
+//
+//        // Подготовленный запрос
+//        $query = $this->wpdb->prepare(
+//            "INSERT INTO {$this->dbTable} (%s) VALUES (%s)",
+//            implode(',', array_keys($processedFields)),
+//            implode(',', array_fill(0, count($processedFields), '%s'))
+//        );
+//
+//        // Выполнение запроса
+//        $this->wpdb->query($query, array_values($processedFields));
+//
+//        // Получение вставленной строки
+//        $insertedRow = $this->getRowById($this->wpdb->insert_id);
+//
+//        // Сбор данных для возврата
+//        $returnData = [];
+//        foreach ($insertedRow as $key => $val) {
+//            if (array_key_exists($key, $fields)) {
+//                $returnData[$key] = $val;
+//            }
+//        }
+//        $returnData['last_insert_id'] = $this->wpdb->insert_id;
+//        return $returnData;
+//    }
+
+    /**
+     * Обработка полей перед вставкой в базу данных.
+     *
+     * @param array $fields
+     * @return array
+     */
+    private function processFields(array $fields): array
+    {
+        $processedFields = [];
+        foreach ($fields as $field => $value) {
+            switch ($field) {
+                case 'created':
+                case 'updated':
+                    $value = date('Y-m-d H:i:s');
+                    break;
+                case 'position':
+                    $value = $this->getMaxPosition() + 1;
+                    break;
+            }
+            $processedFields[$field] = trim($value);
+        }
+        return $processedFields;
     }
 
     public function updateRow(int $id, array $fields, bool $validationMode = true) : array{

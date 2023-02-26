@@ -44,6 +44,7 @@ class TopVPNAdminList extends AdminList {
             'created'       => __( 'Создано<br/>(Г-м-д)', 'topvpn' ),
             'updated'       => __( 'Изменено<br/>(Г-м-д)', 'topvpn' ),
             'edit'         => __( 'Редакт.', 'topvpn' ),
+            'edit-addit'     => __( 'Р. доп.', 'topvpn' ),
             'delete'       => __( 'Удалить', 'topvpn' ),
         ));
         return $this;
@@ -86,6 +87,7 @@ class TopVPNAdminList extends AdminList {
                 $output .= "<td class='created'>".$result['created']."</td>";
                 $output .= "<td class='updated'>".$result['updated']."</td>";
                 $output .= "<td class='edit'><a href='" . add_query_arg( 'paged', $this->getPaged(), $this->getCurrentURL() ) . "&action=edit&item_id=" . $result['id'] . "' alt='" . __( 'Редактировать', 'topvpn') . "'><img src='". V_CORE_URL ."admin/images/edit2.png'/></a></td>";
+                $output .= "<td class='edit-addit'><a href='" . add_query_arg( 'paged', $this->getPaged(), $this->getCurrentURL() ) . "&action=list_additional&item_id=" . $result['id'] . "' alt='" . __( 'Редакт. доп.', 'topvpn') . "'><img src='". V_CORE_URL ."admin/images/edit2.png'/></a></td>";
                 $output .= "<td class='remove'>" .
                     "<a href='" . $this->getCurrentURL() . "&action=delete&item_id=" . $result['id'] . "' alt='" . __( 'Удалить', 'topvpn') . "'><img src='". V_CORE_URL ."admin/images/remove2.png'/></a>" . "</td>";
 

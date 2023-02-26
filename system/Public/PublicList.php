@@ -15,6 +15,7 @@ abstract class PublicList extends Components{
     protected object $rowsListObject;
     protected int $rowsCount;
     protected array $rowsData;
+    protected bool $combineAdditionalMode = true;
 
     public function __construct($model, $dbTable, $atts)
     {
@@ -34,12 +35,31 @@ abstract class PublicList extends Components{
 
     public function initRowsData($activeMode, $paginationMode = true, $limitMode = false) : object{
         $this->rowsListObject->initRowsData($this->model, $activeMode, $paginationMode, $limitMode);
-        $this->rowsData = $this->rowsListObject->getRowsData();
+        $rowsData = $this->rowsListObject->getRowsData();
+        $additionalData = $this->rowsListObject->getAdditionalData();
+        if($this->combineAdditionalMode){
+            $this->rowsData = $this->getModel()->combineAdditionalData($rowsData, $additionalData);
+        } else {
+            $this->rowsData = $rowsData;
+        }
+
+//        echo '<pre>';
+//        print_r($this->additionalData);
+//        echo '</pre>';
+//        echo '<pre>';
+//        print_r($this->rowsData);
+//        echo '</pre>';
+
         return $this;
     }
 
     public function addRelationParam($relationName, $relationModel, $relationColumnName) : object{
         $this->rowsListObject->addRelationParam($relationName, $relationModel, $relationColumnName);
+        return $this;
+    }
+
+    public function addAdditionalParam($relationName, $relationModel) : object{
+        $this->rowsListObject->addAdditionalParam($relationName, $relationModel);
         return $this;
     }
 
@@ -50,5 +70,4 @@ abstract class PublicList extends Components{
     public function getRowsCount() : int{
         return $this->rowsCount;
     }
-
 }

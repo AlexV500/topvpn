@@ -4,6 +4,7 @@ require_once V_CORE_LIB . 'Utils/Collection.php';
 require_once V_PLUGIN_INCLUDES_DIR . 'topvpn/Model/TopVPNModel.php';
 require_once V_PLUGIN_INCLUDES_DIR . 'device/Model/DeviceModel.php';
 require_once V_PLUGIN_INCLUDES_DIR . 'streaming/Model/StreamingModel.php';
+require_once V_PLUGIN_INCLUDES_DIR . 'payments/Model/PaymentsModel.php';
 
 class TopVPNDescription extends PublicItem{
 
@@ -17,6 +18,7 @@ class TopVPNDescription extends PublicItem{
         $this->switchMultiLangMode();
         $this->addItemToCollection(new DeviceModel('topvpn_device'), 'deviceModel');
         $this->addItemToCollection(new StreamingModel('topvpn_streaming'), 'streamingModel');
+        $this->addItemToCollection(new PaymentsModel('topvpn_payments'), 'paymentsModel');
         $this->initRowData('vpn_sys_name');
         return $this;
     }
@@ -25,6 +27,7 @@ class TopVPNDescription extends PublicItem{
     public function render() : string
     {
         $logo = VPN_LOGO_PATH . $this->getRowData()['vpn_logo'];
+
         $output = '';
 
     //    $output .= $this->getRowData()['short_description'];
@@ -97,9 +100,20 @@ class TopVPNDescription extends PublicItem{
         $output .= '<tr><td>Works In China</td><td>'.$this->getRowData()['work_in_china'].'</td></tr>';
         $output .= '<tr><td>Support</td><td>'.$this->getRowData()['support'].'</td></tr>';
         $output .= '<tr><td>Money Back</td><td>'.$this->getRowData()['money_back'].'</td></tr>';
+        $output .= '<tr><td>Payments</td><td>'.$this->getPayments().'</td></tr>';
         $output .= '</tbody>';
         $output .= '</table>';
 
+        return $output;
+    }
+
+    protected function getPayments(){
+        $output = '';
+        $paymentsSystems = $this->getItemFromCollection('paymentsModel')->getPaymentsByVPNId($this->getRowData()['id']);
+        foreach ((array)$paymentsSystems as $y => $payment) {
+            $logo = PAYEMENTS_LOGO_PATH . $payment['payments_logo'];
+            $output .= '<img data-toggle="tooltip" src="' . $logo . '" alt="' . $payment['payments_name'] . '" title="' . $payment['payments_name'] . '" data-original-title="' . $payment['payments_name'] . '" class="device-icons-small"> ';
+        }
         return $output;
     }
 }

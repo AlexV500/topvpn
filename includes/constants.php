@@ -26,5 +26,5 @@ define( 'V_PLUGIN_URL', plugin_dir_url( V_FILE ) );
 define( 'VPN_LOGO_PATH', V_CORE_URL . 'includes/images/vpn/' );
 define( 'OS_LOGO_PATH', V_CORE_URL . 'includes/images/os/' );
 define( 'DEVICE_LOGO_PATH', V_CORE_URL . 'includes/images/device/' );
-define( 'PAYEMENTS_LOGO_PATH', V_CORE_URL . 'includes/images/payements/' );
+define( 'PAYEMENTS_LOGO_PATH', V_CORE_URL . 'includes/images/payments/' );
 define( 'STREAMING_LOGO_PATH', V_CORE_URL . 'includes/images/streaming/' );

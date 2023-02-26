@@ -185,8 +185,6 @@ class TopVPNAdminAdd extends AdminPostAction{
         $output .= '</div>';
 
 
-
-
         $output .= '<input type="hidden" name="created" value="">';
         $output .= '<input type="hidden" name="updated" value="">';
         $output .= '<input type="hidden" name="add_vpn" value="1">';

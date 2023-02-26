@@ -87,8 +87,9 @@ document.addEventListener('DOMContentLoaded', function() {
 	circle.initial();
 });
 
-function disclaimerPopup() {
-	var popup = document.getElementById("myPopup");
+
+function togglePopup(popupId) {
+	var popup = document.getElementById(popupId);
 	popup.classList.toggle("show");
 }
 
