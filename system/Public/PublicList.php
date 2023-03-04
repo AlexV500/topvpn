@@ -39,6 +39,7 @@ abstract class PublicList extends Components{
         $additionalData = $this->rowsListObject->getAdditionalData();
         if($this->combineAdditionalMode){
             $this->rowsData = $this->getModel()->combineAdditionalData($rowsData, $additionalData);
+            $this->rowsData = $this->getModel()->sortWithAdditionalData($this->rowsData);
         } else {
             $this->rowsData = $rowsData;
         }

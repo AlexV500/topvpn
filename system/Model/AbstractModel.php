@@ -302,15 +302,13 @@ abstract class AbstractModel
     public function countAllRowsFromCustomTable(string $table, bool $onlyActive = true)
     {
         // Подготовленный запрос
+        $condition = $onlyActive ? 'active = 1' : '1=1';
         $query = $this->wpdb->prepare(
-            "SELECT COUNT(*) FROM {$this->prefix}%s WHERE %s",
-            $table,
-            $onlyActive ? 'active = 1' : '1=1'
-        );
+            "SELECT COUNT(*) FROM {$this->prefix}$table WHERE $condition");
 
         // Если используется мультиязычный режим, добавляем условие на язык.
         if ($this->multiLangMode) {
-            $query .= $this->wpdb->prepare(" AND lang = %s", $this->lang);
+            $query .= $this->wpdb->prepare(" AND lang = $this->lang");
         }
 
         // Выполнение запроса и возврат количества строк

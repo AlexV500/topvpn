@@ -44,13 +44,13 @@ class TopVPNAdditionalAdminEdit extends AdminPostAction{
             $result = $this->getModel()->editRow($id, $this->postData);
             $this->setResultMessages('TopVPNAdditionalModel', $result->getResultStatus(), $result->getResultMessage());
         }
-
         return $this;
     }
 
 
 
     public function render() : object{
+
         $vpn = $this->getItemFromCollection('vpnModel')->getRowById($this->getId());
         $header = 'Добавить Доп. Информацию ' .$vpn['vpn_name'];
         $output = '';
@@ -61,6 +61,7 @@ class TopVPNAdditionalAdminEdit extends AdminPostAction{
         $output .= AdminHtmlFormInputs::textarea('Короткое описание', 'short_description', $this->getFormFill('short_description'), '');
         $output .= AdminHtmlFormInputs::input('Рейтинг','rating', $this->getFormFill('rating'),'namefield','');
         $output .= AdminHtmlFormInputs::input('Описание рейтинга','rating_description', $this->getFormFill('rating_description'),'namefield','');
+        $output .= AdminHtmlFormInputs::input('Позиция','add_position', $this->getFormFill('add_position'),'namefield','');
         $output .= AdminHtmlFormInputs::select('Активный', 'active', $this->getFormFill('active'), [1 => 'Да', 0 => 'Нет'], '');
         $output .= '<input type="hidden" name="id" value="'.$this->getFormFill('id').'">';
         $output .= '<input type="hidden" name="created" value="'.$this->getFormFill('created').'">';
@@ -82,6 +83,7 @@ class TopVPNAdditionalAdminEdit extends AdminPostAction{
             'short_description' => $respData['short_description'],
             'rating' => $respData['rating'],
             'rating_description' => $respData['rating_description'],
+            'add_position' => $respData['add_position'],
             'active' => $respData['active'],
             'created' => $respData['created'],
             'updated' => $respData['updated'],
@@ -98,6 +100,7 @@ class TopVPNAdditionalAdminEdit extends AdminPostAction{
             'short_description' => '',
             'rating' => '',
             'rating_description' => '',
+            'add_position' => 0,
             'active' => 1,
             'created' => '',
             'updated' => '',

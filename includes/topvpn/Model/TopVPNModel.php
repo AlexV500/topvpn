@@ -23,7 +23,11 @@ class TopVPNModel extends AbstractModel{
         'payments' =>[
             'pivot_table_name' => 'topvpn_vpn_payments',
             'this_key_name' => 'vpn_id',
-            'that_key_name' => 'payments_id']
+            'that_key_name' => 'payments_id'],
+        'location' =>[
+            'pivot_table_name' => 'topvpn_vpn_location',
+            'this_key_name' => 'vpn_id',
+            'that_key_name' => 'location_id']
     ];
 
     public function __construct(string $dbTable)
@@ -146,7 +150,14 @@ class TopVPNModel extends AbstractModel{
                               WHERE {$this->prefix}topvpn_streaming.id = $id AND {$this->dbTable}.active = 1 $multiLangMode $orderSql $paginatSql";
 
         }
+        if($keyManyToMany == 'location'){
+            $sql = "SELECT $this->dbTable.*
+                              FROM $this->dbTable
+                              INNER JOIN {$this->prefix}topvpn_vpn_location ON ({$this->dbTable}.id={$this->prefix}topvpn_vpn_location.vpn_id)    
+                              INNER JOIN {$this->prefix}topvpn_location ON ({$this->prefix}topvpn_location.id = {$this->prefix}topvpn_vpn_location.location_id)
+                              WHERE {$this->prefix}topvpn_location.id = $id AND {$this->dbTable}.active = 1 $multiLangMode $orderSql $paginatSql";
 
+        }
 
 //        if ($this->multiLangMode) {
 //            $sql = "SELECT $this->dbTable.*
@@ -198,6 +209,14 @@ class TopVPNModel extends AbstractModel{
                               WHERE {$this->prefix}topvpn_streaming.id = $id AND {$this->dbTable}.active = 1 $multiLangMode";
         }
 
+        if($keyManyToMany == 'location') {
+            $sql = "SELECT $this->dbTable.*
+                              FROM $this->dbTable
+                              INNER JOIN {$this->prefix}topvpn_vpn_location ON ({$this->dbTable}.id={$this->prefix}topvpn_vpn_location.vpn_id)    
+                              INNER JOIN {$this->prefix}topvpn_location ON ({$this->prefix}topvpn_location.id = {$this->prefix}topvpn_vpn_location.streaming_id)
+                              WHERE {$this->prefix}topvpn_location.id = $id AND {$this->dbTable}.active = 1 $multiLangMode";
+        }
+
         $this->wpdb->get_results($sql);
         return $this->wpdb->num_rows;
     }
@@ -205,11 +224,24 @@ class TopVPNModel extends AbstractModel{
 
     public function combineAdditionalData(array $rowsData, array $additionalData): array
     {
+        usort($rowsData, function($a, $b) {
+            if($a->position > $b->position) {
+                return 1;
+            }
+            elseif($a->position < $b->position) {
+                return -1;
+            }
+            else {
+                return 0;
+            }
+        });
         foreach ($rowsData as &$rowData) {
+            $rowData['additional_position'] = 0;
             foreach ($additionalData as $rowAdditional) {
                 if ($rowData['id'] === $rowAdditional['foreign_id']) {
                     if($rowAdditional['active'] == 1){
                         $rowData = array_merge($rowData, array_filter([
+                            'additional_position' => $rowAdditional['add_position'] ?? 0,
                             'top_status_description' => $rowAdditional['top_status_description'] ?? null,
                             'short_description' => $rowAdditional['short_description'] ?? null,
                             'rating' => $rowAdditional['rating'] ?? null,
@@ -222,4 +254,28 @@ class TopVPNModel extends AbstractModel{
         }
         return $rowsData;
     }
+
+    public function sortWithAdditionalData(array $rowsData)
+    {
+        $additionalRows = [];
+        $sortedRows = [];
+
+        // Сортируем дополнительные строки в отдельный массив
+        foreach ($rowsData as $rowData) {
+            if ($rowData['additional_position'] > 0) {
+                $additionalRows[] = $rowData;
+            } else {
+                $sortedRows[] = $rowData;
+            }
+        }
+
+        // Сортируем основной массив строк и вставляем дополнительные строки
+        foreach ($additionalRows as $additionalRow) {
+            $position = $additionalRow['additional_position'] - 1;
+            array_splice($sortedRows, $position, 0, [$additionalRow]);
+        }
+
+        return $sortedRows;
+    }
+
 }

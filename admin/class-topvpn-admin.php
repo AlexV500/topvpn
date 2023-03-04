@@ -175,6 +175,18 @@ class Topvpn_Admin {
 
         $page = add_submenu_page(
             'show_topvpnlist',
+            __( 'Location', 'topvpnlocation' ),
+            __( 'Location', 'topvpnlocation' ),
+            'manage_options',
+            'show_locationlist',
+            apply_filters( 'topvpn_add_submenu_page_function', function (){
+                return LocationAdminManager::init();
+            })
+        );
+        $pages[] = $page;
+
+        $page = add_submenu_page(
+            'show_topvpnlist',
             __( 'Язык', 'topvpnlanguage' ),
             __( 'Язык', 'topvpnlanguage' ),
             'manage_options',

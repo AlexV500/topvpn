@@ -136,6 +136,7 @@ class Topvpn {
             require_once V_PLUGIN_INCLUDES_DIR . 'device/Admin/DeviceAdminManager.php';
             require_once V_PLUGIN_INCLUDES_DIR . 'streaming/Admin/StreamingAdminManager.php';
             require_once V_PLUGIN_INCLUDES_DIR . 'payments/Admin/PaymentsAdminManager.php';
+            require_once V_PLUGIN_INCLUDES_DIR . 'location/Admin/LocationAdminManager.php';
             require_once V_PLUGIN_INCLUDES_DIR . 'topvpn/Admin/TopVPNAdminManager.php';
         }
 

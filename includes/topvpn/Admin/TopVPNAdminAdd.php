@@ -6,6 +6,7 @@ require_once V_PLUGIN_INCLUDES_DIR . 'topvpn/Model/TopVPNModel.php';
 require_once V_PLUGIN_INCLUDES_DIR . 'device/Model/DeviceModel.php';
 require_once V_PLUGIN_INCLUDES_DIR . 'streaming/Model/StreamingModel.php';
 require_once V_PLUGIN_INCLUDES_DIR . 'payments/Model/PaymentsModel.php';
+require_once V_PLUGIN_INCLUDES_DIR . 'location/Model/LocationModel.php';
 require_once V_PLUGIN_INCLUDES_DIR . 'lang/Model/LangModel.php';
 
 class TopVPNAdminAdd extends AdminPostAction{
@@ -14,9 +15,11 @@ class TopVPNAdminAdd extends AdminPostAction{
     protected array $deviceData;
     protected array $paymentsData;
     protected array $streamingData;
+    protected array $locationData;
     protected array $deviceChecked = [];
     protected array $paymentsChecked = [];
     protected array $streamingChecked = [];
+    protected array $locationChecked = [];
 
     public function init( array $atts = []) : object{
 
@@ -24,9 +27,11 @@ class TopVPNAdminAdd extends AdminPostAction{
         $deviceModel = new DeviceModel('topvpn_device');
         $paymentsModel = new PaymentsModel('topvpn_payments');
         $streamingModel = new StreamingModel('topvpn_streaming');
+        $locationModel = new LocationModel('topvpn_location');
         $this->deviceData = $deviceModel->getAllRows(true,  false);
         $this->paymentsData = $paymentsModel->getAllRows(true,  false);
         $this->streamingData = $streamingModel->getAllRows(true,  false);
+        $this->locationData = $locationModel->getAllRows(true,  false);
         $this->setFormFills(
             [
                 'vpn_name' => '',
@@ -49,6 +54,7 @@ class TopVPNAdminAdd extends AdminPostAction{
                 'device' => $this->deviceData,
                 'payments' => $this->paymentsData,
                 'streaming' => $this->streamingData,
+                'location' => $this->locationData,
                 'short_description' => '',
                 'description' => '',
                 'verdict' => '',
@@ -100,6 +106,7 @@ class TopVPNAdminAdd extends AdminPostAction{
                     $this->deviceChecked = $deviceModel->getDeviceByVPNId( $resultData['last_insert_id']);
                     $this->streamingChecked = $streamingModel->getStreamingByVPNId( $resultData['last_insert_id']);
                     $this->paymentsChecked = $paymentsModel->getPaymentsByVPNId( $resultData['last_insert_id']);
+                    $this->locationChecked = $locationModel->getLocationByVPNId( $resultData['last_insert_id']);
                 }
             }
             $this->setResultMessages('TopVPNModel', $result->getResultStatus(), $result->getResultMessage());
@@ -140,6 +147,7 @@ class TopVPNAdminAdd extends AdminPostAction{
         $output .= AdminHtmlFormInputs::selectManyToOne('Поддерживаемые операционные системы', 'device', $this->deviceData, ['image_name' => 'device_logo', 'image_path' => 'device/', 'font_logo_col_name' => 'device_font_logo', 'font_logo_color_col_name' => 'device_font_logo_color', 'font_logo_size_col_name' => 'device_font_logo_size', 'checked' => $this->deviceChecked], '');
         $output .= AdminHtmlFormInputs::selectManyToOne('Поддерживаемые cтриминговые системы', 'streaming', $this->streamingData, ['image_name' => 'streaming_logo', 'image_path' => 'streaming/', 'checked' => $this->streamingChecked], '');
         $output .= AdminHtmlFormInputs::selectManyToOne('Поддерживаемые платежные системы', 'payments', $this->paymentsData, ['image_name' => 'payments_logo', 'image_path' => 'payments/', 'checked' => $this->paymentsChecked], '');
+        $output .= AdminHtmlFormInputs::selectManyToOne('Location', 'location', $this->locationData, ['image_name' => 'location_logo', 'image_path' => 'location/', 'checked' => $this->locationChecked], '');
 
         $output .= '<div class="inp-group">';
         $output .= AdminHtmlFormInputs::input('Privacy score','privacy_score', $this->getFormFill('privacy_score'),'namefield','');

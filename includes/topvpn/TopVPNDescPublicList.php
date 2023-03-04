@@ -3,6 +3,7 @@
 require_once V_PLUGIN_INCLUDES_DIR . 'topvpn/Model/TopVPNModel.php';
 require_once V_PLUGIN_INCLUDES_DIR . 'device/Model/DeviceModel.php';
 require_once V_PLUGIN_INCLUDES_DIR . 'streaming/Model/StreamingModel.php';
+require_once V_PLUGIN_INCLUDES_DIR . 'location/Model/LocationModel.php';
 require_once V_CORE_LIB . 'Public/PublicList.php';
 require_once V_CORE_LIB . 'Utils/Collection.php';
 
@@ -20,6 +21,7 @@ class TopVPNDescPublicList extends PublicList{
 
         $this->addItemToCollection(new DeviceModel('topvpn_device'), 'deviceModel');
         $this->addItemToCollection(new StreamingModel('topvpn_streaming'), 'streamingModel');
+        $this->addItemToCollection(new LocationModel('topvpn_location'), 'locationModel');
         $this->switchMultiLangMode();
         $this->setOrderColumn('position');
         $this->setOrderDirection('ASC');
@@ -27,6 +29,7 @@ class TopVPNDescPublicList extends PublicList{
         $this->initRows();
         $this->addRelationParam('device', $this->getItemFromCollection('deviceModel'), 'device_sys_name');
         $this->addRelationParam('streaming', $this->getItemFromCollection('streamingModel'), 'streaming_sys_name');
+        $this->addRelationParam('location', $this->getItemFromCollection('locationModel'), 'location_sys_name');
         $this->initRowsCount($this->activeMode);
         $this->initRowsData($this->activeMode, false, true);
         return $this;
