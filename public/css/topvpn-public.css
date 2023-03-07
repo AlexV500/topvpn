@@ -824,6 +824,40 @@ ol li {
     max-width: 155px;
 }
 
+.vpn-table-entry-rate{
+    width: 164px;
+    display: block;
+    border: 0px solid;
+}
+
+.vpn-table-entry-rate-descr{
+    line-height: 1.0;
+}
+
+.vpn-table-rating-bar{
+    position: relative;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 0.1rem;
+    float: left;
+    height: 20px;
+    width: 115px;
+    border: 0px solid;
+}
+
+.vpn-table-rating-rate{
+    display: block;
+    float: right;
+    width: 45px;
+    height: 20px;
+    vertical-align: center;
+    line-height: 1.0;
+    flex-basis: 45px;
+    text-align: right;
+    border: 0px solid;
+}
+
 .check-list-wrap li{
     border-bottom: 1px solid #dfdfdf;
     color: #44484c;

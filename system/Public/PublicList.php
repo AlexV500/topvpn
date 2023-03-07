@@ -55,6 +55,7 @@ abstract class PublicList extends Components{
     }
 
     public function addRelationParam($relationName, $relationModel, $relationColumnName) : object{
+        $this->relationNames[] = $relationName;
         $this->rowsListObject->addRelationParam($relationName, $relationModel, $relationColumnName);
         return $this;
     }

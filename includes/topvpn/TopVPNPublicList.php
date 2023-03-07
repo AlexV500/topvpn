@@ -38,9 +38,12 @@ class TopVPNPublicList extends PublicList{
         $this->initRowsCount($this->activeMode);
         $this->initPaginationConfig();
         $this->initRowsData($this->activeMode);
-
+//        echo '<pre>';
+//        print_r($this->getRowsData());
+//        echo '</pre>';
         return $this;
     }
+
 
     public function render() : string {
         $output = '';
@@ -92,8 +95,14 @@ class TopVPNPublicList extends PublicList{
                 /*------------*/$output .= '<a class="tt-read-more" href="' . $result['vpn_sys_name'] .'">Go To Review <i class="fa fa-arrow-right"></i></a>';
                 /*---------*/$output .='</div>';
 
-
-                /*---------*/$output .='<div class="col-12 col-md-6 column-2 features-holder mt-3 mt-md-0 mb-4 mb-md-0 pl-2 pt-lg-2 pt-xl-0 text-left">';
+                if($this->hasRelationActive()){
+                    $columnFeatures = 'column-1';
+                    $columnRates = 'column-2';
+                } else {
+                    $columnFeatures = 'column-2';
+                    $columnRates = 'column-3';
+                }
+                /*---------*/$output .='<div class="col-12 col-md-6 '.$columnFeatures.' features-holder mt-3 mt-md-0 mb-4 mb-md-0 pl-2 pt-lg-2 pt-xl-0 text-left">';
                 /*------------*/$output .= $this->renderFeatures($result['features']);
 
 
@@ -130,43 +139,9 @@ class TopVPNPublicList extends PublicList{
                 }
 
                 /*---------*/$output .='</div>';
-                /*---------*/$output .='<div class="col-12 col-md-6 column-3 rating-info-holder d-flex flex-column justify-content-center">';
+                /*---------*/$output .='<div class="col-12 col-md-6 '.$columnRates.' rating-info-holder d-flex flex-column justify-content-center">';
 
-                /*------------*/$output .= '<div class="wss-scoreRow-772925660">
-                                            <div class="wss-multiScoreText-3728111154">Overall speed:</div>
-                                            <div class="wss-rt_container-1819568874">
-                '.HTMLOutputs::renderRate($result['overall_speed']).'
-                                            </div>
-                                            </div>  
-                
-                <div class="wss-scoreRow-772925660"><div class="wss-multiScoreText-3728111154">Privacy & Logging:</div>
-                                            <div class="wss-rt_container-1819568874">
-                                            
-                                            '.HTMLOutputs::renderRate(9.5).'
-                                            </div>
-                                            </div>
-                                            
-                                            <div class="wss-scoreRow-772925660">
-                                            <div class="wss-multiScoreText-3728111154">Security & Features:</div>
-                                            <div class="wss-rt_container-1819568874"> 
-                                            '.HTMLOutputs::renderRate(9.8).'
-                                            </div>
-                                            </div>
-                                            
-                                            <div class="wss-scoreRow-772925660">
-                                            <div class="wss-multiScoreText-3728111154">Value for money:</div>
-                                            <div class="wss-rt_container-1819568874">
-                                            '.HTMLOutputs::renderRate(9.5).'
-                                            </div>
-                                            </div>
-                                            
-                                            <div class="wss-scoreRow-772925660">
-                                            <div class="wss-multiScoreText-3728111154">Ease of Use:</div>
-                                            <div class="wss-rt_container-1819568874">                                           
-                                            
-                                            '.HTMLOutputs::renderRate(9.9).'
-                                            </div>
-                                            </div>';
+                /*------------*/$output .= $this->renderRateColumn($result);
                 /*---------*/$output .='</div>';
                 /*---------*/$output .='<div class="col-12 col-md-6 column-4 price-holder d-flex flex-column justify-content-center align-items-center text-center">';
                 /*------------*/$output .='<div class="d-score">';
@@ -250,6 +225,72 @@ class TopVPNPublicList extends PublicList{
         }
 
         $this->render = $output;
+        return $output;
+    }
+
+    public function renderRateColumn($result) : string
+    {
+        if($this->hasRelationActive()){
+            return $this->renderAdditionalRatingColumn($result);
+        }
+        return '<div class="wss-scoreRow-772925660">
+                                            <div class="wss-multiScoreText-3728111154">Overall speed:</div>
+                                            <div class="wss-rt_container-1819568874">
+                '.HTMLOutputs::renderRate($result['overall_speed']).'
+                                            </div>
+                                            </div>  
+                
+                <div class="wss-scoreRow-772925660"><div class="wss-multiScoreText-3728111154">Privacy & Logging:</div>
+                                            <div class="wss-rt_container-1819568874">
+                                            
+                                            '.HTMLOutputs::renderRate(9.5).'
+                                            </div>
+                                            </div>
+                                            
+                                            <div class="wss-scoreRow-772925660">
+                                            <div class="wss-multiScoreText-3728111154">Security & Features:</div>
+                                            <div class="wss-rt_container-1819568874"> 
+                                            '.HTMLOutputs::renderRate(9.8).'
+                                            </div>
+                                            </div>
+                                            
+                                            <div class="wss-scoreRow-772925660">
+                                            <div class="wss-multiScoreText-3728111154">Value for money:</div>
+                                            <div class="wss-rt_container-1819568874">
+                                            '.HTMLOutputs::renderRate(9.5).'
+                                            </div>
+                                            </div>
+                                            
+                                            <div class="wss-scoreRow-772925660">
+                                            <div class="wss-multiScoreText-3728111154">Ease of Use:</div>
+                                            <div class="wss-rt_container-1819568874">                                           
+                                            
+                                            '.HTMLOutputs::renderRate(9.9).'
+                                            </div>
+                                            </div>';
+    }
+
+    private function renderAdditionalRatingColumn($result) : string {
+
+        $output = '';
+
+        if($result['rating_features_k'] == ''){
+            return $output;
+        }
+        $exploded = explode(';', $result['rating_features_k']);
+
+        if(count($exploded) == 0){
+            return $output;
+        }
+        $output .= '<ul class="check-list-wrap py-3">';
+        for ($i = 0; $i < (count($exploded) - 1); $i++) {
+            $string = trim($exploded[$i]);
+            $exploded2 = explode(':', $string);
+            $output .= '<li><div class="vpn-table-rate-descr">'.trim($exploded2[0]).'</div></li>';
+            $output .= '<li><div class="vpn-table-rate"><div class="vpn-table-rating-bar">'.HTMLOutputs::renderRatingBar2(trim($exploded2[1])).'</div><div class="vpn-table-rating-rate">'.trim($exploded2[1]).'/10</div></li>';
+            $output .= '</li>';
+        }
+        $output .= '</ul>';
         return $output;
     }
 

@@ -36,6 +36,10 @@ class TopVPNAdminManager{
                 require_once V_PLUGIN_INCLUDES_DIR . 'topvpn/Admin/TopVPNAdminDelete.php';
                 (new TopVPNAdminDelete('TopVPNModel', 'topvpn_vpn'))->init()->render()->show();
                 break;
+            case 'delete_additional':
+                require_once V_PLUGIN_INCLUDES_DIR . 'topvpn/Admin/Additional/TopVPNAdditionalAdminDelete.php';
+                (new TopVPNAdditionalAdminDelete('TopVPNAdditionalModel', 'topvpn_vpn_additional'))->init()->render()->show();
+                break;
         }
     }
 }

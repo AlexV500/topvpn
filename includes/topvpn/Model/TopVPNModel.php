@@ -235,8 +235,12 @@ class TopVPNModel extends AbstractModel{
                 return 0;
             }
         });
+//        echo '<pre>';
+//        print_r($additionalData);
+//        echo '</pre>';
         foreach ($rowsData as &$rowData) {
             $rowData['additional_position'] = 0;
+            $rowData['rating_features_k'] = '';
             foreach ($additionalData as $rowAdditional) {
                 if ($rowData['id'] === $rowAdditional['foreign_id']) {
                     if($rowAdditional['active'] == 1){
@@ -244,8 +248,10 @@ class TopVPNModel extends AbstractModel{
                             'additional_position' => $rowAdditional['add_position'] ?? 0,
                             'top_status_description' => $rowAdditional['top_status_description'] ?? null,
                             'short_description' => $rowAdditional['short_description'] ?? null,
+                            'features' => $rowAdditional['features'] ?? null,
                             'rating' => $rowAdditional['rating'] ?? null,
                             'rating_description' => $rowAdditional['rating_description'] ?? null,
+                            'rating_features_k' => $rowAdditional['rating_features'] ?? null,
                         ]));
                     }
 

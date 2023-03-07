@@ -25,8 +25,7 @@ class TopVPNAdditionalModel extends AbstractModel{
     {
         $vpnId = $data['foreign_id'];
         $catSysName = $data['cat_sys_name'];
-        $query = "SELECT COUNT(*) FROM `{$this->dbTable}` WHERE foreign_id ='$vpnId' AND cat_sys_name ='$catSysName'";
-        if($this->wpdb->get_var($query) == 0) {
+        if($this->countRows($vpnId, $catSysName) == 0) {
             $recordedRow = $this->insertRow($data);
             if ($recordedRow['last_insert_id'] == 0) {
                 $this->resultMessages->addResultMessage($this->getNameOfClass(), 'error', 'Ошибка записи в Б.Д.');
@@ -56,14 +55,26 @@ class TopVPNAdditionalModel extends AbstractModel{
 
     public function deleteRow( array $data) : object{
 
-        $id = $data['id'];
-        $this->deleteName = $data['lang_name'];
+        $id = $data['foreign_id'];
+        $catSysName = $data['cat_sys_name'];
 
-        if($this->removeRow($id) !== ''){
+        if($this->removeAdditionalRow($id, $catSysName) !== ''){
             $this->resultMessages->addResultMessage($this->getNameOfClass(), 'error', 'Ошибка удаления Б.Д.');
             return Result::setResult('error', $this->resultMessages->getResultMessages($this->getNameOfClass()), '');
         }
-        $this->resultMessages->addResultMessage($this->getNameOfClass(), 'ok', $data['lang_name'].'Язык удален успешно');
+        $this->resultMessages->addResultMessage($this->getNameOfClass(), 'ok', $data['cat_sys_name'].' удален успешно');
         return Result::setResult('ok', $this->resultMessages->getResultMessages($this->getNameOfClass()), '');
+    }
+
+    public function countRows($vpnId, $catSysName){
+
+        $query = "SELECT COUNT(*) FROM `{$this->dbTable}` WHERE foreign_id ='$vpnId' AND cat_sys_name ='$catSysName'";
+        return $this->wpdb->get_var($query);
+    }
+
+    private function removeAdditionalRow(int $id, string $catSysName){
+
+        $this->wpdb->delete( $this->dbTable, ['foreign_id' => $id, 'cat_sys_name' => $catSysName]);
+        return $this->wpdb->last_error;
     }
 }

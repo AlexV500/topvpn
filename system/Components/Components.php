@@ -8,6 +8,7 @@ abstract class Components implements IComponents{
     protected string $currentURL;
     protected string $dbTable;
     protected string $render;
+    protected array $relationNames = [];
     protected object $relModelCollection;
     protected array $atts;
 
@@ -38,6 +39,28 @@ abstract class Components implements IComponents{
     public function getAtts(){
         return $this->atts;
     }
+
+    public function hasAttribute(string $attributeName): bool
+    {
+        return isset($this->atts[$attributeName]);
+    }
+
+    public function hasRelationActive(): bool
+    {
+        foreach ($this->relationNames as $attributeName) {
+            if ($this->hasAttribute($attributeName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function getAttribute(string $attributeName)
+    {
+        return $this->atts[$attributeName];
+    }
+
+
 
     public function setLang(){
         return $this->getModel()->setLang($this->languageSysNameGet);
@@ -83,7 +106,9 @@ abstract class Components implements IComponents{
 //        return $this;
 //    }
 
-    protected function getCurrentURL() : string{
+    protected function getCurrentURL(array $config = []) : string{
+//        $url = HTTP::getCurrentURL();
+//        if(isset($config['remove']))
         return HTTP::getCurrentURL();
     }
 
