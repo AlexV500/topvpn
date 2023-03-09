@@ -96,11 +96,13 @@ class TopVPNPublicList extends PublicList{
                 /*---------*/$output .='</div>';
 
                 if($this->hasRelationActive()){
-                    $columnFeatures = 'column-1';
-                    $columnRates = 'column-2';
+                    $columnFeatures = 'add-column-2';
+                    $columnRates = 'add-column-3';
+                    $justifyContent = '';
                 } else {
                     $columnFeatures = 'column-2';
                     $columnRates = 'column-3';
+                    $justifyContent = 'justify-content-center';
                 }
                 /*---------*/$output .='<div class="col-12 col-md-6 '.$columnFeatures.' features-holder mt-3 mt-md-0 mb-4 mb-md-0 pl-2 pt-lg-2 pt-xl-0 text-left">';
                 /*------------*/$output .= $this->renderFeatures($result['features']);
@@ -139,7 +141,7 @@ class TopVPNPublicList extends PublicList{
                 }
 
                 /*---------*/$output .='</div>';
-                /*---------*/$output .='<div class="col-12 col-md-6 '.$columnRates.' rating-info-holder d-flex flex-column justify-content-center">';
+                /*---------*/$output .='<div class="col-12 col-md-6 '.$columnRates.' rating-info-holder d-flex flex-column '.$justifyContent.'">';
 
                 /*------------*/$output .= $this->renderRateColumn($result);
                 /*---------*/$output .='</div>';
@@ -282,15 +284,16 @@ class TopVPNPublicList extends PublicList{
         if(count($exploded) == 0){
             return $output;
         }
-        $output .= '<ul class="check-list-wrap py-3">';
+        $output .= '<div class="row vpn-table-additional-rating mt-1">';
+        
         for ($i = 0; $i < (count($exploded) - 1); $i++) {
             $string = trim($exploded[$i]);
             $exploded2 = explode(':', $string);
-            $output .= '<li><div class="vpn-table-rate-descr">'.trim($exploded2[0]).'</div></li>';
-            $output .= '<li><div class="vpn-table-rate"><div class="vpn-table-rating-bar">'.HTMLOutputs::renderRatingBar2(trim($exploded2[1])).'</div><div class="vpn-table-rating-rate">'.trim($exploded2[1]).'/10</div></li>';
-            $output .= '</li>';
+            $output .= '<div class="col-md-7 py-2">'.trim($exploded2[0]).':</div>';
+            $output .= '<div class="col-md-5 py-2"><div class="vpn-table-rating-bar">'.HTMLOutputs::renderRatingBar2(trim($exploded2[1])).'</div><div class="vpn-table-rating-rate">'.trim($exploded2[1]).'/10</div></div>';
         }
-        $output .= '</ul>';
+        
+        $output .= '</div>';
         return $output;
     }
 

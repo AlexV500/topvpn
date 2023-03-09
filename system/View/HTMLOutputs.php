@@ -82,7 +82,7 @@ class HTMLOutputs{
     }
 
     public static function renderRatingBar2($rating){
-        $rating = $rating * 10;
+        // $rating = $rating * 10;
         $p = self::getRating($rating);
         $output = '<div class="progress">
         <div class="progress-bar bg-warning" role="progressbar" style="width: '.$p.'%" aria-valuenow="'.$p.'" aria-valuemin="0" aria-valuemax="100"></div>
