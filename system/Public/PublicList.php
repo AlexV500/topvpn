@@ -15,6 +15,7 @@ abstract class PublicList extends Components{
     protected object $rowsListObject;
     protected int $rowsCount;
     protected array $rowsData;
+    protected array $additionalResultData = [];
     protected bool $combineAdditionalMode = true;
 
     public function __construct($model, $dbTable, $atts)
@@ -38,8 +39,10 @@ abstract class PublicList extends Components{
         $rowsData = $this->rowsListObject->getRowsData();
         $additionalData = $this->rowsListObject->getAdditionalData();
         if($this->combineAdditionalMode){
-            $this->rowsData = $this->getModel()->combineAdditionalData($rowsData, $additionalData);
-            $this->rowsData = $this->getModel()->sortWithAdditionalData($this->rowsData);
+            $resultData = $this->getModel()->combineAdditionalData($rowsData, $additionalData);
+            $this->rowsData = $resultData->getRowsData();
+            $this->additionalResultData = $resultData->getAdditionalResultData();
+        //    $this->rowsData = $this->getModel()->sortWithAdditionalData($this->rowsData);
         } else {
             $this->rowsData = $rowsData;
         }
@@ -65,8 +68,12 @@ abstract class PublicList extends Components{
         return $this;
     }
 
-    public function getRowsData(){
+    public function getRowsData() : array{
         return $this->rowsData;
+    }
+
+    public function getAdditionalResultData($type): array {
+        return $this->additionalResultData[$type] ?? [];
     }
 
     public function getRowsCount() : int{

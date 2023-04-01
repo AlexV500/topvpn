@@ -15,6 +15,7 @@ class DeviceAdminEdit extends AdminPostAction {
             [
                 'device_name' => $data['device_name'],
                 'device_sys_name' => $data['device_sys_name'],
+                'device_page_uri' => $data['device_page_uri'],
                 'device_font_logo' => $data['device_font_logo'],
                 'device_font_logo_size' => $data['device_font_logo_size'],
                 'device_font_logo_color' => $data['device_font_logo_color'],
@@ -40,6 +41,7 @@ class DeviceAdminEdit extends AdminPostAction {
         $output .= '<form id="edit_device" enctype="multipart/form-data" action="" method="post">';
         $output .= AdminHtmlFormInputs::input('Название Device','device_name', $this->getFormFill('device_name'),'namefield','required');
         $output .= AdminHtmlFormInputs::input('Системное название Device','device_sys_name', $this->getFormFill('device_sys_name'),'namefield','required');
+        $output .= AdminHtmlFormInputs::input('Device page URI','device_page_uri', $this->getFormFill('device_page_uri'),'namefield','required');
         $output .= AdminHtmlFormInputs::file('Логотип','device_logo', 'namefield','required');
         $output .= '<div class="inp-group">';
         $output .= AdminHtmlFormInputs::input('Логотип(Шрифт)','device_font_logo', $this->getFormFill('device_font_logo'),'namefield','');

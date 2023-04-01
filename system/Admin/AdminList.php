@@ -76,9 +76,8 @@ abstract class AdminList extends AdminActions {
         } else return 'В Б.Д. пока нету записей!';
     }
 
-    public function countFiles(){
+    public function countFiles($path){
 
-        $path = $this->getLogoPath();
         $files = $this->getModel()->getFiles($path);
         if(!$files){
             return 'Ошибка!';
@@ -116,11 +115,10 @@ abstract class AdminList extends AdminActions {
         return true;
     }
 
-    protected function unlinkAllUnusedImagesPostHandler( string $fieldName){
+    protected function unlinkAllUnusedImagesPostHandler( string $fieldName, string $path){
 
         if ( isset( $_POST['deleteLostImages'] )) {
-            $path = $this->getLogoPath();
-            $result = $this->getModel()->UnlinkAllUnusedImages($this->dbTable, $fieldName, $path);
+            $result = $this->getModel()->unlinkAllUnusedImages($this->dbTable, $fieldName, $path);
             $this->setResultMessages('TopVPNAdminList',$result->getResultStatus(), $result->getResultMessage());
         } return $this;
     }

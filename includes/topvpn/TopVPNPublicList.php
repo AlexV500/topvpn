@@ -7,6 +7,8 @@ require_once V_PLUGIN_INCLUDES_DIR . 'location/Model/LocationModel.php';
 require_once V_CORE_LIB . 'View/HTMLOutputs.php';
 require_once V_CORE_LIB . 'Public/PublicList.php';
 require_once V_CORE_LIB . 'Utils/Collection.php';
+require_once V_CORE_LIB . 'Utils/SquareBracketsChecker.php';
+require_once V_CORE_LIB . 'Utils/BracketsParser.php';
 
 class TopVPNPublicList extends PublicList{
 
@@ -25,9 +27,9 @@ class TopVPNPublicList extends PublicList{
         $this->addItemToCollection(new LocationModel('topvpn_location'), 'locationModel');
         $this->addItemToCollection(new TopVPNAdditionalModel('topvpn_vpn_additional'), 'vpnAdditionalModel');
         $this->switchMultiLangMode();
-        $this->setOrderColumn('position');
-        $this->setOrderDirection('ASC');
-        $this->setPaginationCount(8);
+        $this->setOrderColumn('rating');
+        $this->setOrderDirection('DESC');
+        $this->setPaginationCount(30);
         $this->initRows();
         $this->addRelationParam('device', $this->getItemFromCollection('deviceModel'), 'device_sys_name');
         $this->addRelationParam('streaming', $this->getItemFromCollection('streamingModel'), 'streaming_sys_name');
@@ -47,6 +49,8 @@ class TopVPNPublicList extends PublicList{
 
     public function render() : string {
         $output = '';
+        $output1 = '';
+        $output2 = '';
         $count = count($this->getRowsData());
         $output .= '<div class="d-flex justify-content-between">';
         $output .= '<div class="">Updated: '.HTMLOutputs::updatedAt().'</div>';
@@ -57,10 +61,12 @@ class TopVPNPublicList extends PublicList{
         $output .= '</div>';
         $output .= '<div class="">';
         if ($count > 0) {
+
             for ($i = 0; $i < $count; $i++) {
                 $result = $this->getRowsData()[$i];
                 $logo = VPN_LOGO_PATH . $result['vpn_logo'];
                 $deviceSystems = $this->getItemFromCollection('deviceModel')->getDeviceByVPNId($result['id']);
+                $streamingSystems = $this->getItemFromCollection('streamingModel')->getStreamingByVPNId($result['id']);
                 $pos = $i + 1;
                 $output .= '';
                 if ($i == $this->showCount) {
@@ -113,7 +119,7 @@ class TopVPNPublicList extends PublicList{
                 /*---------------*/foreach ((array)$deviceSystems as $y => $device) {
                     /*------------------*/$deviceLogo = DEVICE_LOGO_PATH . $device['device_logo'];
                                           if(trim($device['device_font_logo']) == ""){
-                                              $output .= '<img data-toggle="tooltip" src="' . $deviceLogo . '" alt="' . $device['device_name'] . '" title="' . $device['device_name'] . '" data-original-title="' . $device['device_name'] . '" class="device-icons-small"> ';
+                                              $output1 .= '<img data-toggle="tooltip" src="' . $deviceLogo . '" alt="' . $device['device_name'] . '" title="' . $device['device_name'] . '" data-original-title="' . $device['device_name'] . '" class="device-icons-small"> ';
                                           } else {
                                               if (isset($device['device_font_logo_size']) && (trim($device['device_font_logo_size']) !== '')){
                                                   $size = 'font-size: '.$device['device_font_logo_size'].';';
@@ -126,11 +132,35 @@ class TopVPNPublicList extends PublicList{
                                                   $color = 'color: #6c737b;';
                                               }
                                               $style = $color .' '. $size;
-                                              $output .= '<span class="device-font-logo" data-toggle="tooltip" title="'.$device['device_name'].'" style="'.$style.'"><i class="'.$device['device_font_logo'].'"></i></span>&nbsp';
+                                              $output1 = '<span class="device-font-logo" data-toggle="tooltip" title="'.$device['device_name'].'" style="'.$style.'"><i class="'.$device['device_font_logo'].'"></i></span>';
+                                              $output .= '<a href="/'.$device['device_page_uri'].'">'.$output1.'</a>&nbsp';
                                           }
                     /*------------------*/
                     /*---------------*/}
+                /*---------------*/foreach ((array)$streamingSystems as $z => $streaming) {
+                                         if ($streaming['show_in_rating']) {
+                        /*------------------*/$streamingLogo = STREAMING_LOGO_PATH . $streaming['streaming_logo'];
+                                            if (trim($streaming['streaming_font_logo']) == "") {
+                                               $output .= '<img data-toggle="tooltip" src="' . $streamingLogo . '" alt="' . $streaming['streaming_name'] . '" title="' . $streaming['streaming_name'] . '" data-original-title="' . $streaming['streaming_name'] . '" class="streaming-icons-small"> ';
+                                            } else {
+                                            if (isset($device['streaming_font_logo_size']) && (trim($device['streaming_font_logo_size']) !== '')) {
+                                               $size = 'font-size: ' . $device['streaming_font_logo_size'] . ';';
+                                            } else {
+                                               $size = 'font-size: 1.4rem;';
+                                            }
+                                            if (isset($device['streaming_font_logo_color']) && (trim($device['streaming_font_logo_color']) !== '')) {
+                                               $color = 'color: ' . $streaming['streaming_font_logo_color'] . ';';
+                                            } else {
+                                               $color = 'color: #6c737b;';
+                                            }
+                                            $style = $color . ' ' . $size;
+                                         $output2 = '<span class="streaming-font-logo" data-toggle="tooltip" title="' . $device['streaming_name'] . '" style="' . $style . '"><i class="' . $streaming['streaming_font_logo'] . '"></i></span>';
+                                                $output .= '<a href="/'.$streaming['streaming_page_uri'].'">'.$output2.'</a>&nbsp';
+                /*------------------*/}
 
+                        /*---------------*/
+                    }
+                }
                 /*------------*/$output .= '</div>';
 
                 if(trim($result['verdict'] !== '')){
@@ -147,19 +177,22 @@ class TopVPNPublicList extends PublicList{
                 /*---------*/$output .='</div>';
                 /*---------*/$output .='<div class="col-12 col-md-6 column-4 price-holder d-flex flex-column justify-content-center align-items-center text-center">';
                 /*------------*/$output .='<div class="d-score">';
-                /*---------------*/$output .= $result['rating'];
+                /*---------------*/$output .= HTMLOutputs::renderAverageRate($result['rating']);
                 /*------------*/$output .='</div>';
-                /*------------*/$output .='<div class="d-rating">';
+                /*------------*/$output .='<div class="pt-2 d-rating">';
                 /*---------------*/$output .='<span>'.$result['rating_description'].'</span>';
                 /*------------*/$output .='</div>';
                 /*------------*/$output .='<div class="pt-2 d-stars">';
                 /*---------------*/$output .='<div class="star-ratings-sprite zoom8">';
-                /*------------------*/$output .= $this->getRating($result['rating'], 0);
+                /*------------------*/$output .= HTMLOutputs::renderRating($result['rating'], 0);
                 /*---------------*/$output .='</div>';
                 /*------------*/$output .='</div>';
-                /*------------*/$output .='<div class="mb-3 prices">';
+                /*------------*/$output .='<div class="pt-2 prices">';
                 /*---------------*/$output .='<span class="price"><span class="font-12">From</span> '.$result['price'].'&nbsp;USD</span>';
-                /*------------------*/$output .='<button class="btn btn-tertiary margin-0-auto">Visit Website</button>';
+
+                /*------------*/$output .='</div>';
+                /*------------*/$output .='<div class="pt-2">';
+                /*------------------*/$output .='<a class="btn btn-tertiary margin-0-auto" href="'.$result['referal_link'].'" role="button">Visit Website</a>';
                 /*------------*/$output .='</div>';
                 /*---------*/$output .='</div>';
                 /*------*/$output .= '</div>';
@@ -245,21 +278,21 @@ class TopVPNPublicList extends PublicList{
                 <div class="wss-scoreRow-772925660"><div class="wss-multiScoreText-3728111154">Privacy & Logging:</div>
                                             <div class="wss-rt_container-1819568874">
                                             
-                                            '.HTMLOutputs::renderRate(9.5).'
+                                            '.HTMLOutputs::renderRate($result['privacy_score']).'
                                             </div>
                                             </div>
                                             
                                             <div class="wss-scoreRow-772925660">
                                             <div class="wss-multiScoreText-3728111154">Security & Features:</div>
                                             <div class="wss-rt_container-1819568874"> 
-                                            '.HTMLOutputs::renderRate(9.8).'
+                                            '.HTMLOutputs::renderRate($result['feautures_score']).'
                                             </div>
                                             </div>
                                             
                                             <div class="wss-scoreRow-772925660">
                                             <div class="wss-multiScoreText-3728111154">Value for money:</div>
                                             <div class="wss-rt_container-1819568874">
-                                            '.HTMLOutputs::renderRate(9.5).'
+                                            '.HTMLOutputs::renderRate($result['value_for_money_score']).'
                                             </div>
                                             </div>
                                             
@@ -267,67 +300,80 @@ class TopVPNPublicList extends PublicList{
                                             <div class="wss-multiScoreText-3728111154">Ease of Use:</div>
                                             <div class="wss-rt_container-1819568874">                                           
                                             
-                                            '.HTMLOutputs::renderRate(9.9).'
+                                            '.HTMLOutputs::renderRate($result['easy_to_use']).'
                                             </div>
                                             </div>';
     }
 
-    private function renderAdditionalRatingColumn($result) : string {
-
+    private function renderAdditionalRatingColumn(array $result): string
+    {
         $output = '';
 
-        if($result['rating_features_k'] == ''){
-            return $output;
-        }
-        $exploded = explode(';', $result['rating_features_k']);
+        $ratingFeatures = $result['rating_features_k'];
 
-        if(count($exploded) == 0){
+        if (empty($ratingFeatures)) {
             return $output;
         }
-        $output .= '<div class="row vpn-table-additional-rating mt-1">';
-        
-        for ($i = 0; $i < (count($exploded) - 1); $i++) {
-            $string = trim($exploded[$i]);
-            $exploded2 = explode(':', $string);
-            $output .= '<div class="col-md-7 py-2">'.trim($exploded2[0]).':</div>';
-            $output .= '<div class="col-md-5 py-2"><div class="vpn-table-rating-bar">'.HTMLOutputs::renderRatingBar2(trim($exploded2[1])).'</div><div class="vpn-table-rating-rate">'.trim($exploded2[1]).'/10</div></div>';
+
+        $features = explode(';', $ratingFeatures);
+
+        if (count($features) === 0) {
+            return $output;
         }
-        
+
+        $output .= '<div class="row vpn-table-additional-rating mt-1">';
+
+        for ($i = 0; $i < count($features) - 1; $i++) {
+//            echo $features[$i].'<br/>';
+            $checker = new SquareBracketsChecker($features[$i]);
+            $checker->removeSquareBrackets();
+            if($checker->getSpecialMatched() === false) {
+                $features[$i] = $checker->getString();
+                $featureData = explode(':', trim($features[$i]));
+                $bracketsParser = new BracketsParser(trim($featureData[0]));
+                $bracketsParser->extractTextInBrackets();
+                $featureName = $bracketsParser->getCleaned();
+                $rating = trim($featureData[1]);
+
+                $output .= '<div class="col-md-7 py-2">' . $featureName . ':</div>';
+                $output .= '<div class="col-md-5 py-2">';
+                $output .= '<div class="vpn-table-rating-bar">' . HTMLOutputs::renderRatingBar2($rating) . '</div>';
+                $output .= '<div class="vpn-table-rating-rate">' . $rating . '/10</div>';
+                $output .= '</div>';
+            }
+        }
+
         $output .= '</div>';
+
         return $output;
     }
 
-    protected function renderFeatures(string $features) : string{
-
+    protected function renderFeatures(string $features) : string
+    {
         $output = '';
-        $featureRed = '';
         $exploded = explode(';', $features);
-//        echo '<pre>';
-//        print_r($exploded);
-//        echo '</pre>';
-        if(count($exploded) == 0){
+
+        if(count($exploded) === 0) {
             return $output;
         }
+
         $output .= '<ul class="features">';
-        for ($i = 0; $i < (count($exploded) - 1); $i++) {
-            $y = $i;
-            $string = $exploded[$i];
-            $substrCount = strspn($string,'[red]');
-            if($substrCount == 5){
-                $featureRed = ' feature-red';
+
+        for ($i = 0; $i < count($exploded) - 1; $i++) {
+            $string = trim($exploded[$i]);
+            $isRed = false;
+
+            if (strpos($string, '[red]') === 0) {
+                $isRed = true;
                 $string = substr($string, 5);
-                $string = trim($string);
-            } else {
-                $featureRed = '';
-                $y = $y + 1;
             }
-         //   $output .= '<li class="feature-'.$y.'"><img class="padli s16x16" src="'.$this->imgPath.'/tick-3.png">';
-            $output .= '<li class="feature-'.$y.'">';
-            $output .= HTMLOutputs::renderFeatureIcon();
-            $output .= ' ';
-            $output .= '<span class="'.$featureRed.'">'.$string.'</span>';
+
+            $output .= '<li class="feature-' . ($i + 1) . '">';
+            $output .= HTMLOutputs::renderFeatureIcon() . ' ';
+            $output .= '<span' . ($isRed ? ' class="feature-red"' : '') . '>' . $string . '</span>';
             $output .= '</li>';
         }
+
         $output .= '</ul>';
         return $output;
     }

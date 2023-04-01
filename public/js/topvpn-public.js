@@ -85,6 +85,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	const circle = new CircularProgressBar("pie");
 	circle.initial();
+	
+	const circleAverage = new CircularProgressBar("pie-average");
+	circleAverage.initial();
 });
 
 

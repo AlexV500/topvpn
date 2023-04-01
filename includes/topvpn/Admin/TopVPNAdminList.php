@@ -28,7 +28,8 @@ class TopVPNAdminList extends AdminList {
         $this->checkPositionAction();
         $this->initRowsData($this->activeMode);
         $this->setLogoPath(V_PLUGIN_INCLUDES_DIR . 'images/vpn/');
-        $this->unlinkAllUnusedImagesPostHandler('vpn_logo');
+        $this->setScreenPath(V_PLUGIN_INCLUDES_DIR . 'images/screen/');
+        $this->unlinkAllUnusedImagesPostHandler('vpn_logo', $this->getLogoPath());
       //  $this->setActiveMode();
 
         $this->setColumnDisplayNames(array(
@@ -103,7 +104,8 @@ class TopVPNAdminList extends AdminList {
 
         $output .= AdminHtmlFormInputs::renderAdminPagination($this->getRowsCount(), $this->getPaginationCount());
         $output .= AdminHtmlFormInputs::renderAdminFormButton('Добавить новый VPN', 'Добавить новый VPN', 'button button-primary', $this->getCurrentURL(), '&action=add');
-        $output .= AdminHtmlFormInputs::renderAdminManageForm($this->countAllRowsFromCustomTable('vpn_logo'), $this->countFiles());
+        $output .= AdminHtmlFormInputs::renderAdminManageForm($this->countAllRowsFromCustomTable('vpn_logo'), $this->countFiles($this->getLogoPath()));
+        $output .= AdminHtmlFormInputs::renderAdminManageForm2($this->countAllRowsFromCustomTable('screen'), $this->countFiles($this->getScreenPath()));
         $this->render = $output;
         return $this;
     }

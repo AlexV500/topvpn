@@ -18,7 +18,7 @@ class LangAdminList extends AdminList
         $this->checkPositionAction();
         $this->initRowsData($this->activeMode);
         $this->setLogoPath(V_PLUGIN_INCLUDES_DIR . 'images/lang/');
-        $this->unlinkAllUnusedImagesPostHandler('lang_logo');
+        $this->unlinkAllUnusedImagesPostHandler('lang_logo', $this->getLogoPath());
         $this->setColumnDisplayNames(array(
             'id' => __( 'id', 'topvpn' ),
             'logo' => __('Флаг', 'topvpn'),
@@ -77,7 +77,7 @@ class LangAdminList extends AdminList
 
         $output .= AdminHtmlFormInputs::renderAdminPagination($this->getRowsCount(), $this->getPaginationCount());
         $output .= AdminHtmlFormInputs::renderAdminFormButton('Добавить новый язык', 'Добавить новый язык', 'button button-primary', $this->getCurrentURL(), '&action=add');
-        $output .= AdminHtmlFormInputs::renderAdminManageForm($this->countAllRowsFromCustomTable('lang_logo'), $this->countFiles());
+        $output .= AdminHtmlFormInputs::renderAdminManageForm($this->countAllRowsFromCustomTable('lang_logo'), $this->countFiles($this->getLogoPath()));
         $this->render = $output;
         return $this;
     }

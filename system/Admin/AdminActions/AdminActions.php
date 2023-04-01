@@ -9,6 +9,7 @@ abstract class AdminActions extends Components{
     protected array $allLanguageAdm;
     protected array $resultMessages = [];
     protected string $logoPath;
+    protected string $screenPath;
     protected array $ok;
     protected array $errors;
 
@@ -46,6 +47,17 @@ abstract class AdminActions extends Components{
     public function setLogoPath( string $path) : object
     {
         $this->logoPath = $path;
+        return $this;
+    }
+
+    public function getScreenPath() : string
+    {
+        return $this->screenPath;
+    }
+
+    public function setScreenPath( string $path) : object
+    {
+        $this->screenPath = $path;
         return $this;
     }
 

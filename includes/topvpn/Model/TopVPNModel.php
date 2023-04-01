@@ -2,8 +2,11 @@
 require_once V_CORE_LIB . 'Model/AbstractModel.php';
 require_once V_CORE_LIB . 'Model/Relations/ManyToMany.php';
 require_once V_CORE_LIB . 'Model/DTO/QueryParamsDTO.php';
+require_once V_CORE_LIB . 'Model/DTO/ResultDataDTO.php';
 require_once V_CORE_LIB . 'Utils/Validator.php';
 require_once V_CORE_LIB . 'Utils/Result.php';
+require_once V_CORE_LIB . 'Utils/SquareBracketsChecker.php';
+require_once V_CORE_LIB . 'Utils/BracketsParser.php';
 
 class TopVPNModel extends AbstractModel{
 
@@ -30,6 +33,8 @@ class TopVPNModel extends AbstractModel{
             'that_key_name' => 'location_id']
     ];
 
+    public array $additionalCompData = [];
+
     public function __construct(string $dbTable)
     {
         parent::__construct($dbTable);
@@ -43,12 +48,17 @@ class TopVPNModel extends AbstractModel{
         if($validate->getResultStatus() == 'error'){
             return Result::setResult('error', $validate->getResultMessage(), $data);
         }
-        $path = V_PLUGIN_INCLUDES_DIR . 'images/vpn/';
-        $imgAdded = $this->checkFileAndUpload('vpn_logo', $path);
-        if ($imgAdded->getResultStatus() == 'ok') {
-            $data['vpn_logo'] = $imgAdded->getResultData();
+
+        $logoResult = $this->checkFileAndUpload('vpn_logo', VPN_LOGO_PATH_FILE);
+        if ($logoResult->getResultStatus() === 'ok') {
+            $data['vpn_logo'] = $logoResult->getResultData();
         }
-        $this->resultMessages->addResultMessage($this->getNameOfClass(), $imgAdded->getResultStatus(), $imgAdded->getResultMessage());
+        $this->resultMessages->addResultMessage($this->getNameOfClass(), $logoResult->getResultStatus(), $logoResult->getResultMessage());
+        $screenResult = $this->checkFileAndUpload('screen', VPN_SCREEN_PATH_FILE);
+        if ($screenResult->getResultStatus() === 'ok') {
+            $data['screen'] = $screenResult->getResultData();
+        }
+        $this->resultMessages->addResultMessage($this->getNameOfClass(), $screenResult->getResultStatus(), $screenResult->getResultMessage());
         $data['position'] = $this->getMaxPosition() + 1;
         $recordedRow = $this->insertRow($data);
 
@@ -72,14 +82,21 @@ class TopVPNModel extends AbstractModel{
             return Result::setResult('error', $validate->getResultMessage(), $data);
         }
 
-        $path = V_PLUGIN_INCLUDES_DIR . 'images/vpn/';
        // $this->UnlinkAllUnusedImages('vpn_logo', $path);
-        $imgAdded = $this->checkFileAndUpload('vpn_logo', $path);
-        if ($imgAdded->getResultStatus() !== 'no_file') {
-            if ($imgAdded->getResultStatus() == 'ok') {
-                $data['vpn_logo'] = $imgAdded->getResultData();
+
+        $logoResult = $this->checkFileAndUpload('vpn_logo', VPN_LOGO_PATH_FILE);
+        if ($logoResult->getResultStatus() !== 'no_file') {
+            if ($logoResult->getResultStatus() === 'ok') {
+                $data['vpn_logo'] = $logoResult->getResultData();
             }
-            $this->resultMessages->addResultMessage($this->getNameOfClass(), $imgAdded->getResultStatus(), $imgAdded->getResultMessage());
+            $this->resultMessages->addResultMessage($this->getNameOfClass(), $logoResult->getResultStatus(), $logoResult->getResultMessage());
+        }
+        $screenResult = $this->checkFileAndUpload('screen', VPN_SCREEN_PATH_FILE);
+        if ($screenResult->getResultStatus() !== 'no_file') {
+            if ($screenResult->getResultStatus() === 'ok') {
+                $data['screen'] = $screenResult->getResultData();
+            }
+            $this->resultMessages->addResultMessage($this->getNameOfClass(), $screenResult->getResultStatus(), $screenResult->getResultMessage());
         }
         $updatedRow = $this->updateRow($id, $data);
 //        echo '<pre>';
@@ -222,44 +239,199 @@ class TopVPNModel extends AbstractModel{
     }
 
 
-    public function combineAdditionalData(array $rowsData, array $additionalData): array
+    public function combineAdditionalData(array $rowsData, array $additionalData): object
     {
-        usort($rowsData, function($a, $b) {
-            if($a->position > $b->position) {
-                return 1;
-            }
-            elseif($a->position < $b->position) {
-                return -1;
-            }
-            else {
-                return 0;
-            }
-        });
-//        echo '<pre>';
-//        print_r($additionalData);
-//        echo '</pre>';
+        if(count($additionalData) == 0){
+            return (new ResultDataDTO($rowsData));
+        }
+        $additionalCompData = [];
         foreach ($rowsData as &$rowData) {
             $rowData['additional_position'] = 0;
-            $rowData['rating_features_k'] = '';
-            foreach ($additionalData as $rowAdditional) {
-                if ($rowData['id'] === $rowAdditional['foreign_id']) {
-                    if($rowAdditional['active'] == 1){
-                        $rowData = array_merge($rowData, array_filter([
-                            'additional_position' => $rowAdditional['add_position'] ?? 0,
-                            'top_status_description' => $rowAdditional['top_status_description'] ?? null,
-                            'short_description' => $rowAdditional['short_description'] ?? null,
-                            'features' => $rowAdditional['features'] ?? null,
-                            'rating' => $rowAdditional['rating'] ?? null,
-                            'rating_description' => $rowAdditional['rating_description'] ?? null,
-                            'rating_features_k' => $rowAdditional['rating_features'] ?? null,
-                        ]));
+            $rowData['rating_features_k'] = $this->transformRatingFeatures($rowData);
+            $rowData['rating'] = $this->countAverageRate([
+                $rowData['overall_speed'],
+                $rowData['privacy_score'],
+                $rowData['feautures_score'],
+                $rowData['value_for_money_score'],
+                $rowData['easy_to_use']
+            ]);
+
+            $matchedAdditionalData = array_filter($additionalData, function($rowAdditional) use ($rowData) {
+                return $rowData['id'] === $rowAdditional['foreign_id'] && $rowAdditional['active'] == 1;
+            });
+
+//            if($rowData['id'] === $additionalData['foreign_id'] && $additionalData['active'] == 1){
+//                $matchedAdditionalData = true;
+//            }
+
+            if (!empty($matchedAdditionalData)) {
+                $rowAdditional = reset($matchedAdditionalData);
+//                echo '<pre>';
+//                print_r($rowAdditional);
+//                echo '</pre>';
+                $exploded = explode(';', $rowAdditional['rating_features']);
+
+                $additRatingSum = 0;
+                foreach ($exploded as $string) {
+                    $checker = new SquareBracketsChecker($string);
+                    $checker->removeSquareBrackets();
+                    $exploded2 = explode(':', trim($checker->getString()));
+                //    echo $exploded2[1].' ';
+                    if($checker->getMatched()){
+                        $bracketsParser = new BracketsParser(trim($exploded2[0]));
+                        $bracketsParser->extractTextInBrackets();
+                        $cleaned = $bracketsParser->getCleaned();
+                        $extracted = $bracketsParser->getExtracted();
+                        $additionalCompData[$cleaned]['info'] = $extracted;
+                        $additionalCompData[$cleaned][$rowData['id']] = trim($exploded2[1]);
                     }
 
+                    if (is_numeric(trim($exploded2[1]))) {
+
+                        $additRatingSum += trim($exploded2[1]);
+                    }
                 }
+
+                $rowAdditional['rating'] = $additRatingSum / count($exploded);
+
+                $rowData = array_merge($rowData, array_filter([
+                    'additional_position' => $rowAdditional['add_position'] ?? 0,
+                    'top_status_description' => $rowAdditional['top_status_description'] ?? null,
+                    'short_description' => $rowAdditional['short_description'] ?? null,
+                    'features' => $rowAdditional['features'] ?? null,
+                    'rating' => $rowAdditional['rating'] ?? null,
+                    'rating_description' => $rowAdditional['rating_description'] ?? null,
+                    'rating_features_k' => $rowAdditional['rating_features'] ?? null,
+                ]));
             }
         }
-        return $rowsData;
+//        echo '<pre>';
+//        print_r($additionalCompData);
+//        echo '</pre>';
+        usort($rowsData, function($a, $b) {
+            return $b['rating'] <=> $a['rating'];
+        });
+
+        return (new ResultDataDTO($rowsData))->setAdditionalResultData($additionalCompData, 'compare');
     }
+
+    private function transformRatingFeatures($rowData): string
+    {
+        $ratingFeatures = '';
+        $ratingFields = [
+            'overall_speed' => 'Overall speed',
+            'privacy_score' => 'Privacy & Logging',
+            'feautures_score' => 'Security & Features',
+            'value_for_money_score' => 'Value for money',
+            'easy_to_use' => 'Ease of Use',
+        ];
+        foreach ($ratingFields as $key => $value) {
+            if ($rowData[$key] > 0) {
+                $ratingFeatures .= "$value: {$rowData[$key]};";
+            }
+        }
+        return $ratingFeatures;
+    }
+
+    private function countAverageRate(array $rowData): float
+    {
+        $rowData = array_filter($rowData, function($value) {
+            return $value !== 0;
+        });
+        $count = count($rowData);
+        $sum = array_sum($rowData);
+        return $count === 0 ? 0 : ($sum / $count);
+    }
+
+
+//    public function combineAdditionalData(array $rowsData, array $additionalData): array
+//    {
+//
+////        echo '<pre>';
+////        print_r($additionalData);
+////        echo '</pre>';
+//        foreach ($rowsData as &$rowData) {
+//            $rowData['additional_position'] = 0;
+//            $rowData['rating_features_k'] = $this->transformRatingFeatures($rowData);
+//            $rowData['rating'] = $this->countAverageRate($rowData['overall_speed'] + $rowData['privacy_score']
+//                + $rowData['feautures_score'] + $rowData['value_for_money_score'] + $rowData['easy_to_use']);
+//            foreach ($additionalData as $rowAdditional) {
+//                if ($rowData['id'] === $rowAdditional['foreign_id']) {
+//                    if($rowAdditional['active'] == 1){
+//
+//                        if($rowAdditional['rating_features'] !== ''){
+//                            $exploded = explode(';', $rowAdditional['rating_features']);
+//                            for ($i = 0; $i < (count($exploded) - 1); $i++) {
+//                                $string = trim($exploded[$i]);
+//                                $exploded2 = explode(':', $string);
+//                                if (is_double(trim($exploded2[0])) or is_int(trim($exploded2[0]))) {
+//                                    $additRatingSum += trim($exploded2[0]);
+//                                }
+//                            }
+//                            $rowAdditional['rating'] = $additRatingSum / (count($exploded) - 1);
+//                        } else {
+//
+//                            $rowAdditional['rating_features'] = null;
+//                            $rowAdditional['rating'] = null;
+//                        }
+//
+//                        $rowData = array_merge($rowData, array_filter([
+//                            'additional_position' => $rowAdditional['add_position'] ?? 0,
+//                            'top_status_description' => $rowAdditional['top_status_description'] ?? null,
+//                            'short_description' => $rowAdditional['short_description'] ?? null,
+//                            'features' => $rowAdditional['features'] ?? null,
+//                            'rating' => $rowAdditional['rating'] ?? null,
+//                            'rating_description' => $rowAdditional['rating_description'] ?? null,
+//                            'rating_features_k' => $rowAdditional['rating_features'] ?? null,
+//                        ]));
+//
+//                    }
+//                }
+//            }
+//        }
+//        usort($rowsData, function($a, $b) {
+//            if($a->rating > $b->rating) {
+//                return 1;
+//            }
+//            elseif($a->rating < $b->rating) {
+//                return -1;
+//            }
+//            else {
+//                return 0;
+//            }
+//        });
+//        return $rowsData;
+//    }
+//
+//    private function transformRatingFeatures($rowData){
+//
+//        $ratingFeatures = '';
+//        if($rowData['overall_speed'] > 0){
+//            $ratingFeatures .= 'Overall speed: '.$rowData['overall_speed'].';';
+//        }
+//        if($rowData['privacy_score'] > 0){
+//            $ratingFeatures .= 'Privacy & Logging: '.$rowData['privacy_score'].';';
+//        }
+//        if($rowData['feautures_score'] > 0){
+//            $ratingFeatures .= 'Security & Features: '.$rowData['feautures_score'].';';
+//        }
+//        if($rowData['value_for_money_score'] > 0){
+//            $ratingFeatures .= 'Value for money: '.$rowData['value_for_money_score'].';';
+//        }
+//        if($rowData['easy_to_use'] > 0){
+//            $ratingFeatures .= 'Ease of Use: '.$rowData['easy_to_use'].';';
+//        }
+//        return $ratingFeatures;
+//    }
+//
+//    private function countAverageRate($rowData){
+//        array_filter($rowData, function($value) {
+//            return $value !== 0;
+//        });
+//        $count = count($rowData);
+//        $sum = array_sum($rowData);
+//        return ($sum) / $count;
+//    }
 
     public function sortWithAdditionalData(array $rowsData)
     {

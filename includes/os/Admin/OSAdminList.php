@@ -22,7 +22,7 @@ class OSAdminList extends AdminList{
         $this->checkPositionAction();
         $this->initRowsData($this->activeMode);
         $this->setLogoPath(V_PLUGIN_INCLUDES_DIR . 'images/os/');
-        $this->unlinkAllUnusedImagesPostHandler('os_logo');
+        $this->unlinkAllUnusedImagesPostHandler('os_logo', $this->getLogoPath());
         $this->setColumnDisplayNames(array(
             'id' => __( 'id', 'topvpn' ),
             'logo' => __('Логотип', 'topvpn'),
@@ -98,7 +98,7 @@ class OSAdminList extends AdminList{
 
         $output .= AdminHtmlFormInputs::renderAdminPagination($this->getRowsCount(), $this->getPaginationCount());
         $output .= AdminHtmlFormInputs::renderAdminFormButton('Добавить новую OS', 'Добавить новую OS', 'button button-primary', $this->getCurrentURL(), '&action=add');
-        $output .= AdminHtmlFormInputs::renderAdminManageForm($this->countAllRowsFromCustomTable('os_logo'), $this->countFiles());
+        $output .= AdminHtmlFormInputs::renderAdminManageForm($this->countAllRowsFromCustomTable('os_logo'), $this->countFiles($this->getLogoPath()));
         $this->render = $output;
         return $this;
     }

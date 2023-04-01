@@ -22,7 +22,7 @@ class PaymentsAdminList extends AdminList{
         $this->checkPositionAction();
         $this->initRowsData($this->activeMode);
         $this->setLogoPath(V_PLUGIN_INCLUDES_DIR . 'images/payments/');
-        $this->unlinkAllUnusedImagesPostHandler('payments_logo');
+        $this->unlinkAllUnusedImagesPostHandler('payments_logo', $this->getLogoPath());
         $this->setColumnDisplayNames(array(
             'id' => __( 'id', 'topvpn' ),
             'logo' => __('Логотип', 'topvpn'),
@@ -82,7 +82,7 @@ class PaymentsAdminList extends AdminList{
 
         $output .= AdminHtmlFormInputs::renderAdminPagination($this->getRowsCount(), $this->getPaginationCount());
         $output .= AdminHtmlFormInputs::renderAdminFormButton('Добавить новую платежную систему', 'Добавить новую платежную систему', 'button button-primary', $this->getCurrentURL(), '&action=add');
-        $output .= AdminHtmlFormInputs::renderAdminManageForm($this->countAllRowsFromCustomTable('payments_logo'), $this->countFiles());
+        $output .= AdminHtmlFormInputs::renderAdminManageForm($this->countAllRowsFromCustomTable('payments_logo'), $this->countFiles($this->getLogoPath()));
         $this->render = $output;
         return $this;
     }

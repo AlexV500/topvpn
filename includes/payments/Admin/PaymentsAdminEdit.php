@@ -16,6 +16,7 @@ class PaymentsAdminEdit extends AdminPostAction {
             [
                 'payments_name' => $data['payments_name'],
                 'payments_sys_name' => $data['payments_sys_name'],
+                'payments_page_uri' => $data['payments_page_uri'],
             //    'payments_logo' => $data['payments_logo'],
                 'active' => $data['active'],
                 'updated' => $data['updated'],
@@ -39,6 +40,7 @@ class PaymentsAdminEdit extends AdminPostAction {
         $output .= '<form id="edit_payments" enctype="multipart/form-data" action="" method="post">';
         $output .= AdminHtmlFormInputs::input('Название платежную систему','payments_name', $this->getFormFill('payments_name'),'namefield','required');
         $output .= AdminHtmlFormInputs::input('Системное название платежную систему','payments_sys_name', $this->getFormFill('payments_sys_name'),'namefield','required');
+        $output .= AdminHtmlFormInputs::input('Payments page URI','payments_page_uri', $this->getFormFill('payments_page_uri'),'namefield','required');
         $output .= AdminHtmlFormInputs::file('Логотип','payments_logo', 'namefield','required');
         $output .= AdminHtmlFormInputs::select('Активный', 'active', $this->getFormFill('active'), [1 => 'Да', 0 => 'Нет'], '');
         $output .= '<input type="hidden" name="updated" value="">';

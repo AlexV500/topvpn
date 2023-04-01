@@ -14,7 +14,6 @@ class QueryParamsDTO{
         $this->multiLangMode = $multiLangMode;
     }
 
-
     public function getOrderSql() : string{
         return $this->orderSql;
     }
@@ -26,5 +25,4 @@ class QueryParamsDTO{
     public function getMultiLangMode() : string{
         return $this->multiLangMode;
     }
-
 }

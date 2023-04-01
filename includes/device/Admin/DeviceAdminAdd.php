@@ -15,6 +15,7 @@ class DeviceAdminAdd extends AdminPostAction{
             [
                 'device_name' => '',
                 'device_sys_name' => '',
+                'device_page_uri' => '',
                 'device_font_logo' => '',
                 'device_font_logo_size' => '',
                 'device_font_logo_color' => '',
@@ -40,6 +41,7 @@ class DeviceAdminAdd extends AdminPostAction{
         $output .= '<form id="add_device" enctype="multipart/form-data" action="admin.php?page=show_devicelist&action=add" method="post">';
         $output .= AdminHtmlFormInputs::input('Название Device','device_name', $this->getFormFill('device_name'),'namefield','required');
         $output .= AdminHtmlFormInputs::input('Системное название Device','device_sys_name', $this->getFormFill('device_sys_name'),'namefield','required');
+        $output .= AdminHtmlFormInputs::input('Device page URI','device_page_uri', $this->getFormFill('device_page_uri'),'namefield','required');
         $output .= AdminHtmlFormInputs::file('Логотип','device_logo', 'namefield','required');
         $output .= '<div class="inp-group">';
         $output .= AdminHtmlFormInputs::input('Логотип(Шрифт)','device_font_logo', $this->getFormFill('device_font_logo'),'namefield','');

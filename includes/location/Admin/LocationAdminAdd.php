@@ -15,7 +15,7 @@ class LocationAdminAdd extends AdminPostAction{
             [
                 'location_name' => '',
                 'location_sys_name' => '',
-
+                'location_page_uri' => '',
                 'active' => 1,
                 'created' => '',
             ]
@@ -37,6 +37,7 @@ class LocationAdminAdd extends AdminPostAction{
         $output .= '<form id="add_location" enctype="multipart/form-data" action="admin.php?page=show_locationlist&action=add" method="post">';
         $output .= AdminHtmlFormInputs::input('Название Location','location_name', $this->getFormFill('location_name'),'namefield','required');
         $output .= AdminHtmlFormInputs::input('Системное название Location','location_sys_name', $this->getFormFill('location_sys_name'),'namefield','required');
+        $output .= AdminHtmlFormInputs::input('Location page URI','location_page_uri', $this->getFormFill('location_page_uri'),'namefield','required');
         $output .= AdminHtmlFormInputs::file('Логотип','location_logo', 'namefield','required');
         $output .= AdminHtmlFormInputs::select('Активный', 'active', $this->getFormFill('active'), [1 => 'Да', 0 => 'Нет'], '');
         $output .= '<input type="hidden" name="created" value="">';

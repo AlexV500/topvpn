@@ -1,11 +1,18 @@
 <?php
-require_once V_CORE_LIB . 'Utils/Collection.php';
+require_once V_PLUGIN_INCLUDES_DIR . 'topvpn/Model/TopVPNModel.php';
+require_once V_PLUGIN_INCLUDES_DIR . 'topvpn/Model/Additional/TopVPNAdditionalModel.php';
 require_once V_PLUGIN_INCLUDES_DIR . 'device/Model/DeviceModel.php';
 require_once V_PLUGIN_INCLUDES_DIR . 'streaming/Model/StreamingModel.php';
+require_once V_PLUGIN_INCLUDES_DIR . 'location/Model/LocationModel.php';
+require_once V_CORE_LIB . 'View/HTMLOutputs.php';
+require_once V_CORE_LIB . 'Public/PublicList.php';
+require_once V_CORE_LIB . 'Utils/Collection.php';
+require_once V_CORE_LIB . 'Utils/ArrayExtractor.php';
 
 class TopVPNComparePublicList extends PublicList{
 
     protected int $showCount = 3;
+    protected array $addKeys = [];
 
     public function __construct($model, $dbTable, array $atts = [])
     {
@@ -16,15 +23,26 @@ class TopVPNComparePublicList extends PublicList{
 
         $this->addItemToCollection(new DeviceModel('topvpn_device'), 'deviceModel');
         $this->addItemToCollection(new StreamingModel('topvpn_streaming'), 'streamingModel');
+        $this->addItemToCollection(new LocationModel('topvpn_location'), 'locationModel');
+        $this->addItemToCollection(new TopVPNAdditionalModel('topvpn_vpn_additional'), 'vpnAdditionalModel');
         $this->switchMultiLangMode();
-        $this->setOrderColumn('position');
-        $this->setOrderDirection('ASC');
+        $this->setOrderColumn('rating');
+        $this->setOrderDirection('DESC');
         $this->setLimitCount(3);
         $this->initRows();
         $this->addRelationParam('device', $this->getItemFromCollection('deviceModel'), 'device_sys_name');
         $this->addRelationParam('streaming', $this->getItemFromCollection('streamingModel'), 'streaming_sys_name');
+        $this->addRelationParam('location', $this->getItemFromCollection('locationModel'), 'location_sys_name');
+        $this->addAdditionalParam('device', $this->getItemFromCollection('vpnAdditionalModel'));
+        $this->addAdditionalParam('streaming', $this->getItemFromCollection('vpnAdditionalModel'));
+        $this->addAdditionalParam('location', $this->getItemFromCollection('vpnAdditionalModel'));
         $this->initRowsCount($this->activeMode);
         $this->initRowsData($this->activeMode, false, true);
+
+        if (count($this->getAdditionalResultData('compare')) > 0) {
+            $arrayExtractor = new ArrayExtractor($this->getAdditionalResultData('compare'));
+            $this->addKeys = $arrayExtractor->extractKeys();
+        }
 
         return $this;
     }
@@ -47,6 +65,7 @@ class TopVPNComparePublicList extends PublicList{
             for ($i = 0; $i < $count; $i++) {
                 $result = $this->getRowsData()[$i];
                 $logo = VPN_LOGO_PATH . '/' . $result['vpn_logo'];
+
                 $output .= '<div class="track white px-2">';
                 $output .= '<div class="heading">';
                 $output .= '<div class="entry-logo"><a href="' . $result['vpn_sys_name'] . '/" alt="Logo"><img src="' . $logo . '" height="35" alt="Logo"></a></div>';
@@ -223,6 +242,21 @@ class TopVPNComparePublicList extends PublicList{
 </svg></span>';
         $output .= '</div>';
 
+        if (count($this->addKeys) > 0) {
+            $output .= '<div class="entry table_category">';
+            $output .= '<p>Additional Data</p>';
+            $output .= '</div>';
+            foreach ($this->addKeys as $key) {
+                $output .= '<div class="entry">';
+                $output .= '<p>' . $key . '</p>';
+                $output .= '&nbsp<span class="" data-toggle="tooltip" data-placement="top" title="'.$this->getAdditionalResultData('compare')[$key]['info'].'"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" class="bi bi-info-circle-fill" viewBox="0 0 16 16">
+  <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+</svg></span>';
+                $output .= '</div>';
+
+            }
+        }
+
         $output .= '<div class="entry table_category">';
         $output .= '<p>Purchasing</p>';
         $output .= '</div>';
@@ -384,6 +418,17 @@ class TopVPNComparePublicList extends PublicList{
                 $output .= '<div class="entry">';
                 $output .= $result['work_in_china'];
                 $output .= '</div>';
+
+
+                if (count($this->addKeys) > 0) {
+                    $output .= '<div class="entry table_category">';
+                    $output .= '</div>';
+                    foreach ($this->addKeys as $key) {
+                        $output .= '<div class="entry">';
+                        $output .= $this->getAdditionalResultData('compare')[$key][$result['id']];
+                        $output .= '</div>';
+                    }
+                }
 
                 $output .= '<div class="entry table_category">';
                 $output .= '</div>';

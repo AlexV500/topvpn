@@ -15,6 +15,7 @@ class PaymentsAdminAdd extends AdminPostAction{
             [
                 'payments_name' => '',
                 'payments_sys_name' => '',
+                'payments_page_uri' => '',
             //    'payments_logo' => '',
               //  'position' => '',
                 'active' => 1,
@@ -38,6 +39,7 @@ class PaymentsAdminAdd extends AdminPostAction{
         $output .= '<form id="add_payments" enctype="multipart/form-data" action="admin.php?page=show_paymentslist&action=add" method="post">';
         $output .= AdminHtmlFormInputs::input('Название платежной системы','payments_name', $this->getFormFill('payments_name'),'namefield','required');
         $output .= AdminHtmlFormInputs::input('Системное название платежной системы','payments_sys_name', $this->getFormFill('payments_sys_name'),'namefield','required');
+        $output .= AdminHtmlFormInputs::input('Payments page URI','payments_page_uri', $this->getFormFill('payments_page_uri'),'namefield','required');
         $output .= AdminHtmlFormInputs::file('Логотип','payments_logo', 'namefield','required');
         $output .= AdminHtmlFormInputs::select('Активный', 'active', $this->getFormFill('active'), [1 => 'Да', 0 => 'Нет'], '');
         $output .= '<input type="hidden" name="created" value="">';

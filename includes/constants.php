@@ -23,7 +23,11 @@ if ( !defined( 'V_CORE_URL' ) ) {
 define( 'V_PLUGIN_INCLUDES_DIR', WP_PLUGIN_DIR . '/topvpn/includes/' );
 define( 'V_PLUGIN_URL', plugin_dir_url( V_FILE ) );
 
+define( 'VPN_LOGO_PATH_FILE', V_PLUGIN_INCLUDES_DIR . 'images/vpn/' );
+define( 'VPN_SCREEN_PATH_FILE', V_PLUGIN_INCLUDES_DIR . 'images/screen/' );
+
 define( 'VPN_LOGO_PATH', V_CORE_URL . 'includes/images/vpn/' );
+define( 'VPN_SCREEN_PATH', V_CORE_URL . 'includes/images/screen/' );
 define( 'OS_LOGO_PATH', V_CORE_URL . 'includes/images/os/' );
 define( 'DEVICE_LOGO_PATH', V_CORE_URL . 'includes/images/device/' );
 define( 'PAYEMENTS_LOGO_PATH', V_CORE_URL . 'includes/images/payments/' );

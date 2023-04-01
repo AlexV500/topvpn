@@ -29,13 +29,23 @@ class HTMLOutputs{
 
     public static function renderRate($posRev, $colorSlice = '#00a1ff'){
 
-
         $p = ($posRev / 100) * 100;
         $p = $p * 10;
 
         // $options = "data-pie='{\"percent\" : ".$p.", \"colorSlice\" : $colorSlice, \"time\": 50}'";
         $options = "data-pie='{\"percent\" : ".$p.", \"time\": 50}'";
         $output = '<div class="pie" '.$options.'></div>';
+        return $output;
+    }
+
+    public static function renderAverageRate($posRev, $colorSlice = '#00a1ff'){
+
+        $p = ($posRev / 100) * 100;
+        $p = $p * 10;
+
+        // $options = "data-pie='{\"percent\" : ".$p.", \"colorSlice\" : $colorSlice, \"time\": 50}'";
+        $options = "data-pie='{\"percent\" : ".$p.", \"time\": 50, \"fontSize\" : \"2.5rem\", \"size\" : \"70\", \"stroke\" : \"8\", \"fontColor\" : \"#485151\"}'";
+        $output = '<div class="pie-average" '.$options.'></div>';
         return $output;
     }
 
@@ -84,8 +94,15 @@ class HTMLOutputs{
     public static function renderRatingBar2($rating){
         // $rating = $rating * 10;
         $p = self::getRating($rating);
+        $colorStyle = 'bg-rating-bar-green';
+        if($p < 90){
+            $colorStyle = 'bg-warning';
+        }
+        if($p < 50){
+            $colorStyle = 'bg-danger';
+        }
         $output = '<div class="progress">
-        <div class="progress-bar bg-warning" role="progressbar" style="width: '.$p.'%" aria-valuenow="'.$p.'" aria-valuemin="0" aria-valuemax="100"></div>
+        <div class="progress-bar '.$colorStyle.'" role="progressbar" style="width: '.$p.'%" aria-valuenow="'.$p.'" aria-valuemin="0" aria-valuemax="100"></div>
         </div>';
         return $output;
     }

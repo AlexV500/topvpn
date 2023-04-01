@@ -250,9 +250,26 @@ class AdminHtmlFormInputs
         $output .= '<div class="manage">';
         $output .= 'Записи изображений в б.д.: '.$countFromTable.'<br/>';
         $output .= 'Файлов изображений(логотипов) '.$countFiles.'<br/>';
+        $output .= '<input type="hidden" value="logo" name="type"/>';
         $output .= '<input type="hidden" value="deleteLostImages" name="deleteLostImages"/>';
         if($countFiles > $countFromTable)
         $output .= '<br/><input class="button button-primary" type="submit" value="' . __('Удалить лишние изображения', 'topvpn') . '"/>
+                    </form><br/>';
+        $output .= '</div>';
+        return $output;
+    }
+
+    public static function renderAdminManageForm2(string $countFromTable, string $countFiles): string
+    {
+        $output = '';
+        $output .= '<form id="delete-img-topvpn-2" enctype="" action="" method="post">';
+        $output .= '<div class="manage">';
+        $output .= 'Записи изображений в б.д.: '.$countFromTable.'<br/>';
+        $output .= 'Файлов изображений(скринов) '.$countFiles.'<br/>';
+        $output .= '<input type="hidden" value="screen" name="type"/>';
+        $output .= '<input type="hidden" value="deleteLostImages" name="deleteLostImages"/>';
+        if($countFiles > $countFromTable)
+            $output .= '<br/><input class="button button-primary" type="submit" value="' . __('Удалить лишние изображения', 'topvpn') . '"/>
                     </form><br/>';
         $output .= '</div>';
         return $output;

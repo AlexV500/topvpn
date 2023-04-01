@@ -124,7 +124,7 @@ class TopVPNAdminEdit extends AdminPostAction
         $output .= AdminHtmlFormInputs::input('Название VPN','vpn_name', $this->getFormFill('vpn_name'),'namefield','required');
         $output .= AdminHtmlFormInputs::input('Системное название VPN','vpn_sys_name', $this->getFormFill('vpn_sys_name'),'namefield','required');
         $output .= AdminHtmlFormInputs::file('Логотип','vpn_logo', 'namefield','required');
-
+        $output .= AdminHtmlFormInputs::file('Скрин','screen', 'namefield','required');
         $output .= AdminHtmlFormInputs::input('Партнерская ссылка','referal_link', $this->getFormFill('referal_link'),'namefield','');
         $output .= AdminHtmlFormInputs::input('Партнерская моб. ссылка','referal_link_mobile', $this->getFormFill('referal_link_mobile'),'namefield','');
 

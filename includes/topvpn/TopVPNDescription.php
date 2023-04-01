@@ -27,20 +27,23 @@ class TopVPNDescription extends PublicItem{
     public function render() : string
     {
         $logo = VPN_LOGO_PATH . $this->getRowData()['vpn_logo'];
-
+        $screen = VPN_SCREEN_PATH . $this->getRowData()['screen'];
         $output = '';
 
     //    $output .= $this->getRowData()['short_description'];
-        $output .= '<div class="row d-flex justify-content-between">';
+        $output .= '<a class="row d-flex justify-content-between no-decor-link" href="'.$this->getRowData()['referal_link'].'" target="_blank">';
         $output .='<div class="col-md-12 col-lg-6"><img alt="' . $this->getRowData()['vpn_name'] . '" class="img-fluid max-240" src="' . $logo . '" alt="' . $this->getRowData()['vpn_name'] . '" title="' . $this->getRowData()['vpn_name'] . '">';
         $output .= '</div>';
-        $output .= '<div class="col-md-12 col-lg-4 d-flex justify-content-center pt-3">';
-        $output .= HTMLOutputs::renderRating($this->getRowData()['rating'], 0);
-
+        $output .= '<div class="col-md-12 col-lg-4 d-flex justify-content-end pt-3" style="padding-right: 25px">';
+        $output .= HTMLOutputs::renderRating($this->getRowData()['rating'], 0).'&nbsp'.$this->getRowData()['rating'].'/10';
         $output .= '</div>';
-        $output .= '</div>';
+        $output .= '</a>';
         $output .= '<hr>';
+
         $output .= '<div class="row justify-content-between">';
+        $output .='<div class="col-md-12 col-lg-12"><img alt="' . $this->getRowData()['screen'] . '" class="img-fluid" src="' . $screen . '" alt="' . $this->getRowData()['screen'] . '" title="' . $this->getRowData()['screen'] . '">';
+        $output .= '</div>';
+
         $output .='<div class="col-md-12 col-lg-6">';
         $output .='<ul class="check-list-wrap list-two-col py-3">';
         $output .= '<li><div class="entry-rate-descr">Speed</div></li>';

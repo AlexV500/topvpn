@@ -22,7 +22,7 @@ class LocationAdminList extends AdminList{
         $this->checkPositionAction();
         $this->initRowsData($this->activeMode);
         $this->setLogoPath(V_PLUGIN_INCLUDES_DIR . 'images/location/');
-        $this->unlinkAllUnusedImagesPostHandler('location_logo');
+        $this->unlinkAllUnusedImagesPostHandler('location_logo', $this->getLogoPath());
         $this->setColumnDisplayNames(array(
             'id' => __( 'id', 'topvpn' ),
             'logo' => __('Логотип', 'topvpn'),
@@ -83,7 +83,7 @@ class LocationAdminList extends AdminList{
 
         $output .= AdminHtmlFormInputs::renderAdminPagination($this->getRowsCount(), $this->getPaginationCount());
         $output .= AdminHtmlFormInputs::renderAdminFormButton('Добавить новый Location', 'Добавить новый Location', 'button button-primary', $this->getCurrentURL(), '&action=add');
-        $output .= AdminHtmlFormInputs::renderAdminManageForm($this->countAllRowsFromCustomTable('location_logo'), $this->countFiles());
+        $output .= AdminHtmlFormInputs::renderAdminManageForm($this->countAllRowsFromCustomTable('location_logo'), $this->countFiles($this->getLogoPath()));
         $this->render = $output;
         return $this;
     }

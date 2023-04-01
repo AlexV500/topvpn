@@ -15,6 +15,7 @@ class LocationAdminEdit extends AdminPostAction {
             [
                 'location_name' => $data['location_name'],
                 'location_sys_name' => $data['location_sys_name'],
+                'location_page_uri' => $data['location_page_uri'],
                 'active' => $data['active'],
                 'updated' => $data['updated'],
             ]
@@ -37,6 +38,7 @@ class LocationAdminEdit extends AdminPostAction {
         $output .= '<form id="edit_location" enctype="multipart/form-data" action="" method="post">';
         $output .= AdminHtmlFormInputs::input('Название Location','location_name', $this->getFormFill('location_name'),'namefield','required');
         $output .= AdminHtmlFormInputs::input('Системное название Location','location_sys_name', $this->getFormFill('location_sys_name'),'namefield','required');
+        $output .= AdminHtmlFormInputs::input('Location page URI','location_page_uri', $this->getFormFill('location_page_uri'),'namefield','required');
         $output .= AdminHtmlFormInputs::file('Логотип','location_logo', 'namefield','required');
 
         $output .= AdminHtmlFormInputs::select('Активный', 'active', $this->getFormFill('active'), [1 => 'Да', 0 => 'Нет'], '');

@@ -63,6 +63,15 @@ class TopVPNAdditionalAdminEdit extends AdminPostAction{
         $output .= AdminHtmlFormInputs::textarea('Features', 'features', $this->getFormFill('features'), '');
         $output .= AdminHtmlFormInputs::input('Рейтинг','rating', $this->getFormFill('rating'),'namefield','');
         $output .= AdminHtmlFormInputs::input('Описание рейтинга','rating_description', $this->getFormFill('rating_description'),'namefield','');
+        $output .= '<div class="inp-group">';
+        $output .= '[Название{Описание}:Значение]; - показывать в таблице рейтинга и сравнения<br/>';
+        $output .= '[!Название{Описание}:Значение]; - показывать в таблице сравнения<br/>';
+        $output .= 'Название{Описание}:Значение; - показывать в таблице рейтинга<br/>';
+        $output .= 'Примеры:<br/>';
+        $output .= '[Android App {Android Application}: 8.8];<br/>
+                    [!Android Installs {Android Installs}: 50M];<br/>
+                    Speed: 7.6;<br/>';
+        $output .= '</div>';
         $output .= AdminHtmlFormInputs::textarea('Rating Features', 'rating_features', $this->getFormFill('rating_features'), '');
         $output .= AdminHtmlFormInputs::input('Позиция','add_position', $this->getFormFill('add_position'),'namefield','');
         $output .= AdminHtmlFormInputs::select('Активный', 'active', $this->getFormFill('active'), [1 => 'Да', 0 => 'Нет'], '');

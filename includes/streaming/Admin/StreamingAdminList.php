@@ -22,7 +22,7 @@ class StreamingAdminList extends AdminList{
         $this->checkPositionAction();
         $this->initRowsData($this->activeMode);
         $this->setLogoPath(V_PLUGIN_INCLUDES_DIR . 'images/streaming/');
-        $this->unlinkAllUnusedImagesPostHandler('streaming_logo');
+        $this->unlinkAllUnusedImagesPostHandler('streaming_logo', $this->getLogoPath());
         $this->setColumnDisplayNames(array(
             'id' => __( 'id', 'topvpn' ),
             'logo' => __('Логотип', 'topvpn'),
@@ -98,7 +98,7 @@ class StreamingAdminList extends AdminList{
 
         $output .= AdminHtmlFormInputs::renderAdminPagination($this->getRowsCount(), $this->getPaginationCount());
         $output .= AdminHtmlFormInputs::renderAdminFormButton('Добавить новый Streaming', 'Добавить новый Streaming', 'button button-primary', $this->getCurrentURL(), '&action=add');
-        $output .= AdminHtmlFormInputs::renderAdminManageForm($this->countAllRowsFromCustomTable('streaming_logo'), $this->countFiles());
+        $output .= AdminHtmlFormInputs::renderAdminManageForm($this->countAllRowsFromCustomTable('streaming_logo'), $this->countFiles($this->getLogoPath()));
         $this->render = $output;
         return $this;
     }
