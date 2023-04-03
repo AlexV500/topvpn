@@ -98,7 +98,7 @@ class TopVPNPublicList extends PublicList{
                 /*------------*/$output .=$result['short_description'];
                 /*------------*/$output .='</p>';
 
-                /*------------*/$output .= '<a class="tt-read-more" href="' . $result['vpn_sys_name'] .'">Go To Review <i class="fa fa-arrow-right"></i></a>';
+                /*------------*/$output .= '<a class="tt-read-more" href="/' . $result['vpn_sys_name'] . '-review">Go To Review <i class="fa fa-arrow-right"></i></a>';
                 /*---------*/$output .='</div>';
 
                 if($this->hasRelationActive()){

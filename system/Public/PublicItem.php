@@ -17,7 +17,11 @@ abstract class PublicItem extends Components{
         $atts = $this->getAtts();
         if(isset($atts['id'])) {
             $this->rowData = $this->getModel()->getRowById($atts['id']);
-        } else {
+        }
+        if(isset($atts['sys_name'])) {
+            $this->rowData = $this->getModel()->getRowByPk($columnName, $atts['sys_name']);
+        }
+        else {
             $this->rowData = $this->getModel()->getRowByPk($columnName, $uri);
         }
         return $this;

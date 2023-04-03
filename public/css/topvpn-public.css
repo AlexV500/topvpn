@@ -1401,7 +1401,6 @@ ol li {
 
 .wrap {
     position:relative;
-    margin-bottom:100px;
     overscroll-behavior:none;
 }
 
@@ -1457,21 +1456,36 @@ ol li {
     justify-content:center;
     border:0
 }
+
+.scroller {
+    overflow-x: hidden;
+
+}
+
 .scroller,
 .tracks {
     display:flex;
     overflow-y:hidden;
     -webkit-overflow-scrolling:touch;
     text-align:center;
-    position:relative;
-    scroll-snap-type: none;
+    /*position:relative;*/
+    /*scroll-snap-type: none;*/
 }
-.scroller {
-    overflow-x:hidden;
+
+.syncscroll {
+    height: 100%;
+}
+
+.tracks {
+    text-align:center;
+    position:relative;
+    /*margin-top: -65px;*/
+    scroll-snap-type:none;
 
 }
 
 .track:first-child {
+    background-color: #ffffff;
     text-align:left;
     position:sticky;
     position:-webkit-sticky;
@@ -1491,6 +1505,7 @@ ol li {
     position:sticky;
     top:0
 }
+
 .track {
     flex:1 0 calc(15% + 2px);
     scroll-snap-align:start;

@@ -34,10 +34,13 @@ class TopVPNBestPicks extends PublicList{
         $output .= '<div class="features">';
         $output .= '<div class="container">';
         $output .= '<div class="row justify-content-center">
-            <div class="col-lg-6">
+            <div class="col-lg-8">
                 <div class="tt-section-heading text-center mt-4 mb-5">
                     <h2 class="">Our VPN Picks for 2023</h2>
-                    <p class="tt-section-subhead">Here are January\'s <a href="/best-vpn/">best VPN services by category</a>, carefully tested and reviewed by our VPN experts.</p>
+                    <p class="tt-section-subhead">The best VPN services are presented here for various evaluation criteria</p>
+                    <div class="popup" onclick="togglePopup(\'disclaimerPopup\')">Advertiser Disclosure
+  <span class="popuptext" id="disclaimerPopup">To keep Top10VPN a free online resource, we receive advertising/referral fees when you buy a VPN through outlinks on this page. This impacts the score, location, prominence and order in which a VPN service appears. Our extensive tests of each VPN, and how it compares with other VPNs in different countries and/or for specific purposes, are also factored in. We do not feature every VPN product on the market. Listings on this page do not imply endorsement. To learn more, see</span>
+</div>
                 </div>
             </div>
         </div>';

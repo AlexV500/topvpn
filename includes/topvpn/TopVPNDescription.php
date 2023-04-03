@@ -83,8 +83,10 @@ class TopVPNDescription extends PublicItem{
         $output .= '<div class="mt-2">';
         $output .= $this->getRowData()['description'];
         $output .= '</div>';
-
-        $output .= '<table class="table table-sm table-striped mt-5">';
+        $output .= '<div class="col-md-12 col-lg-12 d-flex justify-content-end">';
+        $output .= '<a class="btn btn-tertiary" href="'.$this->getRowData()['referal_link'].'" target="_blank" role="button">Visit website</a>';
+        $output .= '</div>';
+        $output .= '<table class="table table-sm table-striped mt-4">';
         $output .= '<tbody>';
         $output .= '<tr><td>Kill Switch</td><td>'.HTMLOutputs::renderCheckStatus((int) $this->getRowData()['kill_switch']).'</td></tr>';
         $output .= '<tr><td>Wi-Fi Protection</td><td>'.HTMLOutputs::renderCheckStatus((int) $this->getRowData()['wi_fi_protection']).'</td></tr>';

@@ -15,7 +15,7 @@ class TopVPNWidgetList extends PublicList{
         $this->switchMultiLangMode();
         $this->setOrderColumn('position');
         $this->setOrderDirection('ASC');
-        $this->setLimitCount(5);
+        $this->setLimitCount(10);
         $this->initRows();
         $this->initRowsCount($this->activeMode);
         $this->initRowsData($this->activeMode, false, true);
@@ -44,8 +44,8 @@ class TopVPNWidgetList extends PublicList{
                 $output .= HTMLOutputs::renderRating($result['rating'], 0);
                 $output .= '</div>';
                 $output .= '<div class="col-7 pt-2">';
-                $output .= '<a class="btn btn-warning btn-xsm" href="" role="button">View more...</a>&nbsp';
-                $output .= '<a class="btn btn-tertiary btn-xsm" href="" role="button">Visit site</a>';
+                $output .= '<a class="btn btn-warning btn-xsm" href="/' . $result['vpn_sys_name'] . '-review" role="button">View more...</a>&nbsp';
+                $output .= '<a class="btn btn-tertiary btn-xsm" href="' . $result['referal_link'] . '" role="button">Visit site</a>';
                 $output .= '</div>';
                 $output .= '</div>';
                 $output .= '</li>';

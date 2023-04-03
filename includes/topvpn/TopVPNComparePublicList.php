@@ -54,8 +54,10 @@ class TopVPNComparePublicList extends PublicList{
         $show_trigger_2 = 0;
         $deviceLogoPath = DEVICE_LOGO_PATH;
         $count = count($this->getRowsData());
-        $output .= '<div class="comparion-scroll-table mt-4">';
-        $output .= '<div class="headers">';
+
+        $output .= '<div class="comparion-scroll-table">';
+        $output .= '<div class="wrap mb-4">';
+        $output .= '<div class="sticky-top headers">';
         $output .= '<div class="scroller syncscroll" name="myElements">';
         $output .= '<div class="track white px-2">';
         $output .= '<div class="heading">';
@@ -445,20 +447,32 @@ class TopVPNComparePublicList extends PublicList{
 
                 $output .= '<div class="entry">';
             //    $output .= $result['value_for_money_score'];
-                $output .= HTMLOutputs::renderRate(9.8);
+                $output .= $result['value_for_money_score'];
                 $output .= '</div>';
 
                 $output .= '<div class="entry">';
-
                 $output .= '</div>';
 
                 $output .= '<div class="entry">';
-                $output .='<button class="btn btn-tertiary margin-0-auto">Visit Website</button>';
+                $logo = VPN_LOGO_PATH . '/' . $result['vpn_logo'];
+                $output .= '<div class="heading">';
+                $output .= '<div class="entry-logo"><a href="' . $result['vpn_sys_name'] . '/" alt="Logo"><img src="' . $logo . '" height="35" alt="Logo"></a></div>';
+                $output .= '</div>';
+                $output .= '</div>';
+
+                $output .= '<div class="entry">';
+                $output .= '<div class="d-flex flex-row justify-content-center">';
+                $output .= HTMLOutputs::renderRating($result['rating'], 0);
+                $output .= '</div>';
+                $output .= '</div>';
+
+                $output .= '<div class="entry mb-3">';
+                $output .='<a href="' . $result['referal_link'] . '/" target="_blank" class="btn btn-tertiary margin-0-auto">Visit Website</a>';
                 $output .= '</div>';
                 $output .= '</div>';
             }
         }
-
+        $output .= '</div>';
         $output .= '</div>';
         $output .= '</div>';
         $this->render = $output;
