@@ -610,7 +610,7 @@ li.add-ons:hover {
     width: 17%;
 }
 .wp-list-table .langlist-sysName{
-    width: 28%;
+    width: 21%;
 }
 .wp-list-table .langlist-positionUp{
     width: 8%;
@@ -627,9 +627,57 @@ li.add-ons:hover {
 .wp-list-table .langlist-edit{
     width: 6%;
 }
+.wp-list-table .langlist-list-translations{
+    width: 7%;
+}
 .wp-list-table .langlist-delete{
     width: 8%;
 }
+
+
+.wp-list-table .translations-default-id{
+    width: 2%;
+}
+.wp-list-table .translations-default-phrase{
+    width: 58%;
+}
+.wp-list-table .translations-default-status{
+    width: 8%;
+}
+.wp-list-table .translations-default-created{
+    width: 12%;
+}
+.wp-list-table .translations-default-updated{
+    width: 12%;
+}
+.wp-list-table .translations-default-delete{
+    width: 8%;
+}
+
+
+
+.wp-list-table .translations-id{
+    width: 2%;
+}
+.wp-list-table .translations-phrase{
+    width: 30%;
+}
+.wp-list-table .translations-translation{
+    width: 30%;
+}
+.wp-list-table .translations-status{
+    width: 8%;
+}
+.wp-list-table .translations-created{
+    width: 12%;
+}
+.wp-list-table .translations-updated{
+    width: 12%;
+}
+.wp-list-table .translations-edit{
+    width: 6%;
+}
+
 
 
 .wp-list-table .oslist-id{

@@ -40,6 +40,31 @@ class TopVPNModel extends AbstractModel{
         parent::__construct($dbTable);
     }
 
+    public function getAverageRating($rowData){
+        $weights = array(0.3, 0.25, 0.2, 0.1, 0.05, 0.05, 0.05);
+        $rowData['rating'] = $this->weightedAverage([
+            $rowData['overall_speed'],
+            $rowData['privacy_score'],
+            $rowData['feautures_score'],
+            $rowData['customer_support_score'],
+            $rowData['bypassing_censorship_score'],
+            $rowData['value_for_money_score'],
+            $rowData['easy_to_use']
+        ], $weights);
+        return round($rowData['rating'], 2);
+    }
+
+    public function weightedAverage($nums, $weights) {
+        $weights = array(0.3, 0.25, 0.2, 0.1, 0.05, 0.05, 0.05);
+        $sum = 0;
+
+        for ($y=0; $y < count($nums); $y++){
+            $sum += $weights[$y] * $nums[$y];
+        }
+
+        return $sum / array_sum($weights);
+    }
+
     public function addRow( array $data) : object{
 
         $validate = (new Validator)->checkLength($data['vpn_name'], 3, 30, 'vpn_name', 'Имя', true)

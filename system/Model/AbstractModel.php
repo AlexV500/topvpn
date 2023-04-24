@@ -209,7 +209,6 @@ abstract class AbstractModel
                 $sql = "SELECT * FROM `{$this->dbTable}` $orderSql $paginatSql";
             }
         }
-
         return $this->wpdb->get_results($sql, ARRAY_A);
     }
 
@@ -353,7 +352,7 @@ abstract class AbstractModel
 
         $query = "INSERT INTO {$this->dbTable} ($namesStr) VALUES ($masksStr)";
         $this->wpdb->query($query, $fields);
-
+//        echo $query;
         $insertedRow = $this->getRowById($this->wpdb->insert_id);
 //        echo 'Test<br/>';
 //        print_r($insertedRow);

@@ -60,8 +60,8 @@ class TopVPNDescPublicList extends PublicList{
                 $output .= '<div class="entry-logo"><a href="' . $result['vpn_sys_name'] . '/" alt="Logo"><img src="' . $logo . '" height="35px" alt="Logo"></a>
       '.HTMLOutputs::renderRating($result['rating'], 0);
                 $output .= '<div class="mb-2"></div>';
-                $output .= '<a class="btn btn-warning btn-xsm" href="" role="button">View more...</a>&nbsp';
-                $output .= '<a class="btn btn-tertiary btn-xsm" href="" role="button">Visit site</a>';
+                $output .= '<a class="btn btn-warning btn-xsm" href="" role="button">'. goTranslate("View more...") .'</a>&nbsp';
+                $output .= '<a class="btn btn-tertiary btn-xsm" href="" role="button">'. goTranslate("Visit site") .'</a>';
                 $output .= '</div>';
                 $output .= '</div>';
                 $output .= '<div class="col-md-12 col-lg-10 d-flex bg-white">';

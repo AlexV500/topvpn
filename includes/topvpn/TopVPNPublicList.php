@@ -53,9 +53,9 @@ class TopVPNPublicList extends PublicList{
         $output2 = '';
         $count = count($this->getRowsData());
         $output .= '<div class="d-flex justify-content-between">';
-        $output .= '<div class="">Updated: '.HTMLOutputs::updatedAt().'</div>';
-        $output .= '<div class=""><div class="popup" onclick="togglePopup(\'disclaimerPopup\')">Advertiser Disclosure
-  <span class="popuptext" id="disclaimerPopup">To keep Top10VPN a free online resource, we receive advertising/referral fees when you buy a VPN through outlinks on this page. This impacts the score, location, prominence and order in which a VPN service appears. Our extensive tests of each VPN, and how it compares with other VPNs in different countries and/or for specific purposes, are also factored in. We do not feature every VPN product on the market. Listings on this page do not imply endorsement. To learn more, see</span>
+        $output .= '<div class="">'. goTranslate("Updated:") .' '.HTMLOutputs::updatedAt().'</div>';
+        $output .= '<div class=""><div class="popup" onclick="togglePopup(\'disclaimerPopup\')">'. goTranslate("Advertiser Disclosure") .'
+  <span class="popuptext" id="disclaimerPopup">'. goTranslate("To keep Top10VPN a free online resource, we receive advertising/referral fees when you buy a VPN through outlinks on this page. This impacts the score, location, prominence and order in which a VPN service appears. Our extensive tests of each VPN, and how it compares with other VPNs in different countries and/or for specific purposes, are also factored in. We do not feature every VPN product on the market. Listings on this page do not imply endorsement. To learn more, see") .'</span>
 </div>
 </div>';
         $output .= '</div>';
@@ -98,7 +98,7 @@ class TopVPNPublicList extends PublicList{
                 /*------------*/$output .=$result['short_description'];
                 /*------------*/$output .='</p>';
 
-                /*------------*/$output .= '<a class="tt-read-more" href="/' . $result['vpn_sys_name'] . '-review">Go To Review <i class="fa fa-arrow-right"></i></a>';
+                /*------------*/$output .= '<a class="tt-read-more" href="/' . $result['vpn_sys_name'] . '-review">'. goTranslate("Go To Review:") . ' <i class="fa fa-arrow-right"></i></a>';
                 /*---------*/$output .='</div>';
 
                 if($this->hasRelationActive()){
@@ -115,7 +115,7 @@ class TopVPNPublicList extends PublicList{
 
 
                 /*------------*/$output .='<div class="mt-3">';
-                /*---------------*/$output .= '<span class="available-on-text">Available on:</span>';
+                /*---------------*/$output .= '<span class="available-on-text">'. goTranslate("Available on:") . '</span>';
                 /*---------------*/foreach ((array)$deviceSystems as $y => $device) {
                     /*------------------*/$deviceLogo = DEVICE_LOGO_PATH . $device['device_logo'];
                                           if(trim($device['device_font_logo']) == ""){
@@ -177,22 +177,22 @@ class TopVPNPublicList extends PublicList{
                 /*---------*/$output .='</div>';
                 /*---------*/$output .='<div class="col-12 col-md-6 column-4 price-holder d-flex flex-column justify-content-center align-items-center text-center">';
                 /*------------*/$output .='<div class="d-score">';
-                /*---------------*/$output .= HTMLOutputs::renderAverageRate($result['rating']);
+                /*---------------*/$output .= HTMLOutputs::renderAverageRate($this->model->getAverageRating($result));
                 /*------------*/$output .='</div>';
                 /*------------*/$output .='<div class="pt-2 d-rating">';
                 /*---------------*/$output .='<span>'.$result['rating_description'].'</span>';
                 /*------------*/$output .='</div>';
                 /*------------*/$output .='<div class="pt-2 d-stars">';
                 /*---------------*/$output .='<div class="star-ratings-sprite zoom8">';
-                /*------------------*/$output .= HTMLOutputs::renderRating($result['rating'], 0);
+                /*------------------*/$output .= HTMLOutputs::renderRating($this->model->getAverageRating($result), 0);
                 /*---------------*/$output .='</div>';
                 /*------------*/$output .='</div>';
                 /*------------*/$output .='<div class="pt-2 prices">';
-                /*---------------*/$output .='<span class="price"><span class="font-12">From</span> '.$result['price'].'&nbsp;USD</span>';
+                /*---------------*/$output .='<span class="price"><span class="font-12">'. goTranslate("From") .'</span> '.$result['price'].'&nbsp;USD</span>';
 
                 /*------------*/$output .='</div>';
                 /*------------*/$output .='<div class="pt-2">';
-                /*------------------*/$output .='<a class="btn btn-tertiary margin-0-auto" href="'.$result['referal_link'].'" role="button">Visit Website</a>';
+                /*------------------*/$output .='<a class="btn btn-tertiary margin-0-auto" href="'.$result['referal_link'].'" role="button">'. goTranslate("Visit Site") .'</a>';
                 /*------------*/$output .='</div>';
                 /*---------*/$output .='</div>';
                 /*------*/$output .= '</div>';
@@ -209,9 +209,9 @@ class TopVPNPublicList extends PublicList{
             $output .= '</div>';
 
             $output .= '<div class="d-flex justify-content-between mt-3">';
-            $output .= '<div class="">Updated: '.HTMLOutputs::updatedAt().'</div>';
-            $output .= '<div class=""><div class="popup" onclick="togglePopup(\'disclaimerPopup2\')">Advertiser Disclosure
-  <span class="popuptext" id="disclaimerPopup2">To keep Top10VPN a free online resource, we receive advertising/referral fees when you buy a VPN through outlinks on this page. This impacts the score, location, prominence and order in which a VPN service appears. Our extensive tests of each VPN, and how it compares with other VPNs in different countries and/or for specific purposes, are also factored in. We do not feature every VPN product on the market. Listings on this page do not imply endorsement. To learn more, see</span>';
+            $output .= '<div class="">'. goTranslate("Updated:") .' '.HTMLOutputs::updatedAt().'</div>';
+            $output .= '<div class=""><div class="popup" onclick="togglePopup(\'disclaimerPopup2\')">'. goTranslate("Advertiser Disclosure") .'
+  <span class="popuptext" id="disclaimerPopup2">'. goTranslate("To keep Top10VPN a free online resource, we receive advertising/referral fees when you buy a VPN through outlinks on this page. This impacts the score, location, prominence and order in which a VPN service appears. Our extensive tests of each VPN, and how it compares with other VPNs in different countries and/or for specific purposes, are also factored in. We do not feature every VPN product on the market. Listings on this page do not imply endorsement. To learn more, see") .'</span>';
             $output .= '</div>';
             $output .= '</div>';
             $output .= '</div>';
@@ -269,13 +269,13 @@ class TopVPNPublicList extends PublicList{
             return $this->renderAdditionalRatingColumn($result);
         }
         return '<div class="wss-scoreRow-772925660">
-                                            <div class="wss-multiScoreText-3728111154">Overall speed:</div>
+                                            <div class="wss-multiScoreText-3728111154">'. goTranslate("Overall speed:") .'</div>
                                             <div class="wss-rt_container-1819568874">
                 '.HTMLOutputs::renderRate($result['overall_speed']).'
                                             </div>
                                             </div>  
                 
-                <div class="wss-scoreRow-772925660"><div class="wss-multiScoreText-3728111154">Privacy & Logging:</div>
+                <div class="wss-scoreRow-772925660"><div class="wss-multiScoreText-3728111154">'. goTranslate("Privacy & Logging:") .'</div>
                                             <div class="wss-rt_container-1819568874">
                                             
                                             '.HTMLOutputs::renderRate($result['privacy_score']).'
@@ -283,21 +283,21 @@ class TopVPNPublicList extends PublicList{
                                             </div>
                                             
                                             <div class="wss-scoreRow-772925660">
-                                            <div class="wss-multiScoreText-3728111154">Security & Features:</div>
+                                            <div class="wss-multiScoreText-3728111154">'. goTranslate("Security & Features:") .'</div>
                                             <div class="wss-rt_container-1819568874"> 
                                             '.HTMLOutputs::renderRate($result['feautures_score']).'
                                             </div>
                                             </div>
                                             
                                             <div class="wss-scoreRow-772925660">
-                                            <div class="wss-multiScoreText-3728111154">Value for money:</div>
+                                            <div class="wss-multiScoreText-3728111154">'. goTranslate("Value for money:") .'</div>
                                             <div class="wss-rt_container-1819568874">
                                             '.HTMLOutputs::renderRate($result['value_for_money_score']).'
                                             </div>
                                             </div>
                                             
                                             <div class="wss-scoreRow-772925660">
-                                            <div class="wss-multiScoreText-3728111154">Ease of Use:</div>
+                                            <div class="wss-multiScoreText-3728111154">'. goTranslate("Ease of Use:") .'</div>
                                             <div class="wss-rt_container-1819568874">                                           
                                             
                                             '.HTMLOutputs::renderRate($result['easy_to_use']).'

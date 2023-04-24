@@ -51,19 +51,32 @@ class ImageUpload{
                 $limitWidth  = 1280;
                 $limitHeight = 768;
 
-                // Проверим нужные параметры
+                $extension = image_type_to_extension($image[2]);
+                $name = self::getRandomFileName($fileTmpName);
+                // Сократим .jpeg до .jpg
+                $format = str_replace('jpeg', 'jpg', $extension);
+
                 if (filesize($fileTmpName) > $limitBytes) return Result::setResult('error', 'Размер изображения не должен превышать 5 Мбайт!', '');
+                $fileExtension = self::getFileExtension($_FILES[$fieldName]['name']);
+                // echo ' => '. $fileExtension;
+
+                if($fileExtension === 'svg'){
+                    $fileExtension = '.'.$fileExtension;
+                    if (!move_uploaded_file($fileTmpName, $path . $name . $fileExtension)) {
+                        return Result::setResult('error', 'При записи изображения на диск произошла ошибка!', '');
+                    }
+                    return Result::setResult('ok', 'Картинка успешно загружена!', $name.$fileExtension);
+                }
+                // Проверим нужные параметры
+
                 if ($image[1] > $limitHeight)             return Result::setResult('error', 'Высота изображения не должна превышать 768 точек!', '');
                 if ($image[0] > $limitWidth)              return Result::setResult('error', 'Ширина изображения не должна превышать 1280 точек!', '');
 
                 // Сгенерируем новое имя файла через функцию getRandomFileName()
-                $name = self::getRandomFileName($fileTmpName);
 
                 // Сгенерируем расширение файла на основе типа картинки
-                $extension = image_type_to_extension($image[2]);
-                echo $image[2] . ' => ' .$extension;
-                // Сократим .jpeg до .jpg
-                $format = str_replace('jpeg', 'jpg', $extension);
+
+           //     echo $image[2] . ' => ' .$extension;
 
                 // Переместим картинку с новым именем и расширением в папку /upload
                 if (!move_uploaded_file($fileTmpName, $path . $name . $format)) {
@@ -83,5 +96,13 @@ class ImageUpload{
         } while (file_exists($file));
 
         return $name;
+    }
+
+    public static function getFileExtension($filename) {
+        // получаем расширение файла с помощью функции pathinfo
+        $extension = pathinfo($filename, PATHINFO_EXTENSION);
+
+        // возвращаем расширение файла в нижнем регистре
+        return strtolower($extension);
     }
 }

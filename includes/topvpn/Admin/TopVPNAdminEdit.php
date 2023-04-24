@@ -73,6 +73,7 @@ class TopVPNAdminEdit extends AdminPostAction
                 'streaming_rate' => $data['streaming_rate'],
                 'gaming_rate' => $data['gaming_rate'],
                 'easy_to_use' => $data['easy_to_use'],
+                'customer_support_score' => $data['customer_support_score'],
                 'bypassing_censorship_score' => $data['bypassing_censorship_score'],
                 'server_locations_score' => $data['server_locations_score'],
                 'data_cap' => $data['data_cap'],
@@ -152,15 +153,16 @@ class TopVPNAdminEdit extends AdminPostAction
         $output .= AdminHtmlFormInputs::selectManyToOne('Location', 'location', $this->locationData, ['image_name' => 'location_logo', 'image_path' => 'location/', 'checked' => $this->locationChecked], '');
 
         $output .= '<div class="inp-group">';
-        $output .= AdminHtmlFormInputs::input('Privacy score','privacy_score', $this->getFormFill('privacy_score'),'namefield','');
-        $output .= AdminHtmlFormInputs::input('Overall Speed','overall_speed', $this->getFormFill('overall_speed'), 'namefield','');
-        $output .= AdminHtmlFormInputs::input('Features','feautures_score', $this->getFormFill('feautures_score'),'namefield','');
-        $output .= AdminHtmlFormInputs::input('Streaming','streaming_rate', $this->getFormFill('streaming_rate'),'namefield','');
-        $output .= AdminHtmlFormInputs::input('Torrenting','torrenting_rate', $this->getFormFill('torrenting_rate'),'namefield','');
-        $output .= AdminHtmlFormInputs::input('Easy to Use','easy_to_use', $this->getFormFill('easy_to_use'),'namefield','');
+        $output .= AdminHtmlFormInputs::input('Privacy & Logging Policy score','privacy_score', $this->getFormFill('privacy_score'),'namefield','');
+        $output .= AdminHtmlFormInputs::input('Overall Speed score','overall_speed', $this->getFormFill('overall_speed'), 'namefield','');
+        $output .= AdminHtmlFormInputs::input('Security & Features score','feautures_score', $this->getFormFill('feautures_score'),'namefield','');
+        $output .= AdminHtmlFormInputs::input('Streaming score','streaming_rate', $this->getFormFill('streaming_rate'),'namefield','');
+        $output .= AdminHtmlFormInputs::input('Torrenting score','torrenting_rate', $this->getFormFill('torrenting_rate'),'namefield','');
+        $output .= AdminHtmlFormInputs::input('Easy to Use score','easy_to_use', $this->getFormFill('easy_to_use'),'namefield','');
+        $output .= AdminHtmlFormInputs::input('Customer support score','customer_support_score', $this->getFormFill('customer_support_score'),'namefield','');
         $output .= AdminHtmlFormInputs::input('Bypassing Censorship','bypassing_censorship_score', $this->getFormFill('bypassing_censorship_score'),'namefield','');
         $output .= AdminHtmlFormInputs::input('Server Locations','server_locations_score', $this->getFormFill('server_locations_score'),'namefield','');
-        $output .= AdminHtmlFormInputs::input('Value for money','value_for_money_score', $this->getFormFill('value_for_money_score'),'namefield','');
+        $output .= AdminHtmlFormInputs::input('Value for money score(Price & Value)','value_for_money_score', $this->getFormFill('value_for_money_score'),'namefield','');
         $output .= AdminHtmlFormInputs::input('User Score','user_score', $this->getFormFill('user_score'),'namefield','');
         $output .= '</div>';
 
@@ -175,7 +177,7 @@ class TopVPNAdminEdit extends AdminPostAction
         $output .= AdminHtmlFormInputs::input('Countries','countries', $this->getFormFill('countries'), 'namefield','');;
         /**/$output .= AdminHtmlFormInputs::input('Torrenting','torrenting', $this->getFormFill('torrenting'), 'namefield','');
         /**/$output .= AdminHtmlFormInputs::input('Simultaneous Connections','simultaneous_connections', $this->getFormFill('simultaneous_connections'), 'namefield','');
-        /**/$output .= AdminHtmlFormInputs::select('Works In China','work_in_china', $this->getFormFill('work_in_china'), ['Yes' => 'Да', 'No' => 'Нет'],'');
+        /**/$output .= AdminHtmlFormInputs::select('Works In China','work_in_china', $this->getFormFill('work_in_china'), ['Yes' => 'Да', 'No' => 'Нет', 'Unreliable' => 'Unreliable'],'');
         /**/$output .= AdminHtmlFormInputs::input('Support','support', $this->getFormFill('support'),'namefield','');
         $output .= AdminHtmlFormInputs::input('Прайс','price', $this->getFormFill('price'),'namefield','');
         /**/$output .= AdminHtmlFormInputs::input('Прайс(Chiepest)','chiepest_price', $this->getFormFill('chiepest_price'),'namefield','');

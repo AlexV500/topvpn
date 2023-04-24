@@ -16,6 +16,7 @@ class LangAdminEdit extends AdminPostAction{
             [
                 'lang_name' => $data['lang_name'],
                 'lang_sys_name' => $data['lang_sys_name'],
+                'lang_sys_name_before' => $data['lang_sys_name'],
                 'active' => $data['active'],
                 'updated' => $data['updated'],
             ]
@@ -41,6 +42,7 @@ class LangAdminEdit extends AdminPostAction{
         $output .= AdminHtmlFormInputs::select('Активный', 'active', $this->getFormFill('active'), [1 => 'Да', 0 => 'Нет'], '');
         $output .= '<input type="hidden" name="updated" value="">';
         $output .= '<input type="hidden" name="edit_lang" value="1">';
+        $output .= '<input type="hidden" name="lang_sys_name_before" value="'.$this->getFormFill('lang_sys_name_before').'">';
         $output .= AdminHtmlFormInputs::renderAdminFormSubmitButton('Редактировать');
         $output .= '</form>';
         $this->render = $output;

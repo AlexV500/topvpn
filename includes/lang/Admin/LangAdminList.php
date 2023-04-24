@@ -29,6 +29,7 @@ class LangAdminList extends AdminList
             'status'       => __( 'Статус', 'topvpn' ),
             'created'       => __( 'Создано (Г-м-д)', 'topvpn' ),
             'edit'         => __( 'Редакт.', 'topvpn' ),
+            'list-translations'  => __( 'Переводы.', 'topvpn' ),
             'delete'       => __( 'Удалить', 'topvpn' ),
         ));
         return $this;
@@ -61,7 +62,8 @@ class LangAdminList extends AdminList
                 $output .= "<td class='status'>".$this->getStatusTitle($result['active'])."</td>";
                 $output .= "<td class='created'>".$result['created']."</td>";
 
-                $output .= "<td class='edit'><a href='" . add_query_arg( 'paged', $this->getPaged(), $this->getCurrentURL() ) . "&action=edit&item_id=" . $result['id'] . "' alt='" . __( 'Редакт.', 'topvpn') . "'><img src='". V_CORE_URL ."admin/images/edit2.png'/></a></td>";
+                $output .= "<td class='edit'><a href='" . $this->getCurrentURL() . "&action=edit&item_id=" . $result['id'] . "' alt='" . __( 'Редакт.', 'topvpn') . "'><img src='". V_CORE_URL ."admin/images/edit2.png'/></a></td>";
+                $output .= "<td class='list-tranlations'><a href='" . $this->getCurrentURL() . "&action=list_translations&foreign_id=" . $result['id'] . "' alt='" . __( 'Список переводов', 'topvpn') . "'><img src='". V_CORE_URL ."admin/images/note.png'/></a></td>";
                 $output .= "<td class='remove'>" .
                     "<a href='" . $this->getCurrentURL() . "&action=delete&item_id=" . $result['id'] . "' alt='" . __( 'Удалить', 'topvpn') . "'><img src='". V_CORE_URL ."admin/images/remove2.png'/></a>" . "</td>";
 

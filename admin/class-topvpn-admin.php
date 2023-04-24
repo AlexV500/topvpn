@@ -187,8 +187,8 @@ class Topvpn_Admin {
 
         $page = add_submenu_page(
             'show_topvpnlist',
-            __( 'Язык', 'topvpnlanguage' ),
-            __( 'Язык', 'topvpnlanguage' ),
+            __( 'Язык/Переводы', 'topvpnlanguage' ),
+            __( 'Язык/Переводы', 'topvpnlanguage' ),
             'manage_options',
             'show_topvpnlanguagelist',
             apply_filters( 'topvpn_add_submenu_page_function', function (){

@@ -1433,11 +1433,11 @@ ol li {
     display:flex;
     justify-content:center;
     align-items:center;
-    position:-webkit-sticky;
-    position:sticky;
-    top:0;
+    /*position:-webkit-sticky;*/
+    /*position:sticky;*/
+    /*top:0;*/
     background:#fff;
-    padding:8px 0;
+    /*padding:8px 0;*/
     z-index:1;
     width:150px
 }
