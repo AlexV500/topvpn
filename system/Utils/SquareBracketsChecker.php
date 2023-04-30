@@ -6,11 +6,13 @@ class SquareBracketsChecker{
     private string $string;
     private bool $matched;
     private bool $specialMatched;
+    private bool $ratingCountMatched;
 
     public function __construct(string $string) {
         $this->string = $string;
         $this->matched = false;
         $this->specialMatched = false;
+        $this->ratingCountMatched = false;
     }
 
     public function removeSquareBrackets(): void {
@@ -23,6 +25,10 @@ class SquareBracketsChecker{
             if (strpos($this->string, '!') === 0) {
                 $this->string = substr($this->string, 1);
                 $this->specialMatched = true;
+            }
+            if (strpos($this->string, '&') === 0) {
+                $this->string = substr($this->string, 1);
+                $this->ratingCountMatched = true;
             }
         }
     }
@@ -38,5 +44,7 @@ class SquareBracketsChecker{
     public function getSpecialMatched(): bool {
         return $this->specialMatched;
     }
-
+    public function getRatingCountMatched(): bool {
+        return $this->ratingCountMatched;
+    }
 }

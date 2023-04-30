@@ -40,28 +40,37 @@ class TopVPNModel extends AbstractModel{
         parent::__construct($dbTable);
     }
 
+    public function getAllRows(bool $activeMode = true, bool $paginationMode = true, bool $limitMode = false){
+        $rowsData = parent::getAllRows($activeMode, $paginationMode, $limitMode);
+        foreach ($rowsData as &$rowData) {
+            $rowData['rating'] = $this->getAverageRating($rowData);
+        }
+        usort($rowsData, function($a, $b) {
+            return $b['rating'] <=> $a['rating'];
+        });
+        return $rowsData;
+    }
+
     public function getAverageRating($rowData){
-        $weights = array(0.3, 0.25, 0.2, 0.1, 0.05, 0.05, 0.05);
+        $weights = array(0.3, 0.3, 0.2, 0.1, 0.05, 0.05);
         $rowData['rating'] = $this->weightedAverage([
             $rowData['overall_speed'],
             $rowData['privacy_score'],
             $rowData['feautures_score'],
-            $rowData['customer_support_score'],
-            $rowData['bypassing_censorship_score'],
-            $rowData['value_for_money_score'],
-            $rowData['easy_to_use']
+            $rowData['streaming_rate'],
+            $rowData['torrenting_rate'],
+            $rowData['easy_to_use'],
         ], $weights);
         return round($rowData['rating'], 2);
     }
 
     public function weightedAverage($nums, $weights) {
-        $weights = array(0.3, 0.25, 0.2, 0.1, 0.05, 0.05, 0.05);
         $sum = 0;
 
         for ($y=0; $y < count($nums); $y++){
             $sum += $weights[$y] * $nums[$y];
-        }
 
+        }
         return $sum / array_sum($weights);
     }
 
@@ -269,17 +278,19 @@ class TopVPNModel extends AbstractModel{
         if(count($additionalData) == 0){
             return (new ResultDataDTO($rowsData));
         }
+        $weights = array(0.3, 0.3, 0.2, 0.1, 0.05, 0.05);
         $additionalCompData = [];
         foreach ($rowsData as &$rowData) {
             $rowData['additional_position'] = 0;
-            $rowData['rating_features_k'] = $this->transformRatingFeatures($rowData);
-            $rowData['rating'] = $this->countAverageRate([
+        //    $rowData['rating_features_k'] = $this->transformRatingFeatures($rowData);
+            $rowData['rating'] = $this->weightedAverage([
                 $rowData['overall_speed'],
                 $rowData['privacy_score'],
                 $rowData['feautures_score'],
-                $rowData['value_for_money_score'],
-                $rowData['easy_to_use']
-            ]);
+                $rowData['streaming_rate'],
+                $rowData['torrenting_rate'],
+                $rowData['easy_to_use'],
+            ], $weights);
 
             $matchedAdditionalData = array_filter($additionalData, function($rowAdditional) use ($rowData) {
                 return $rowData['id'] === $rowAdditional['foreign_id'] && $rowAdditional['active'] == 1;
@@ -310,14 +321,26 @@ class TopVPNModel extends AbstractModel{
                         $additionalCompData[$cleaned]['info'] = $extracted;
                         $additionalCompData[$cleaned][$rowData['id']] = trim($exploded2[1]);
                     }
+                    if($checker->getRatingCountMatched()) {
+                        if (is_numeric(trim($exploded2[1]))) {
 
-                    if (is_numeric(trim($exploded2[1]))) {
+                            //    $additRatingSum += trim($exploded2[1]);
 
-                        $additRatingSum += trim($exploded2[1]);
+                            $weights = array(0.2, 0.2, 0.2, 0.2, 0.1, 0.05, 0.05);
+                            $rowAdditional['rating'] = $this->weightedAverage([
+                                $exploded2[1],
+                                $rowData['overall_speed'],
+                                $rowData['privacy_score'],
+                                $rowData['feautures_score'],
+                                $rowData['streaming_rate'],
+                                $rowData['torrenting_rate'],
+                                $rowData['easy_to_use']
+                            ], $weights);
+                        }
                     }
                 }
 
-                $rowAdditional['rating'] = $additRatingSum / count($exploded);
+            //    $rowAdditional['rating'] = $additRatingSum / count($exploded);
 
                 $rowData = array_merge($rowData, array_filter([
                     'additional_position' => $rowAdditional['add_position'] ?? 0,
@@ -336,7 +359,22 @@ class TopVPNModel extends AbstractModel{
         usort($rowsData, function($a, $b) {
             return $b['rating'] <=> $a['rating'];
         });
-
+        
+//        usort($rowsData, function($a, $b) {
+//            if($a->rating > $b->rating) {
+//                return 1;
+//            }
+//            elseif($a->rating < $b->rating) {
+//                return -1;
+//            }
+//            else {
+//                return 0;
+//            }
+//        });
+        
+//        echo '<pre>';
+//        print_r($rowsData);
+//        echo '</pre>';
         return (new ResultDataDTO($rowsData))->setAdditionalResultData($additionalCompData, 'compare');
     }
 

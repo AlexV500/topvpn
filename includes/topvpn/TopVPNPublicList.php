@@ -27,8 +27,8 @@ class TopVPNPublicList extends PublicList{
         $this->addItemToCollection(new LocationModel('topvpn_location'), 'locationModel');
         $this->addItemToCollection(new TopVPNAdditionalModel('topvpn_vpn_additional'), 'vpnAdditionalModel');
         $this->switchMultiLangMode();
-        $this->setOrderColumn('rating');
-        $this->setOrderDirection('DESC');
+     //   $this->setOrderColumn('rating');
+     //   $this->setOrderDirection('DESC');
         $this->setPaginationCount(30);
         $this->initRows();
         $this->addRelationParam('device', $this->getItemFromCollection('deviceModel'), 'device_sys_name');
@@ -40,9 +40,10 @@ class TopVPNPublicList extends PublicList{
         $this->initRowsCount($this->activeMode);
         $this->initPaginationConfig();
         $this->initRowsData($this->activeMode);
-//        echo '<pre>';
-//        print_r($this->getRowsData());
-//        echo '</pre>';
+
+   //     echo '<pre>';
+    //    print_r($this->getRowsData());
+    //    echo '</pre>';
         return $this;
     }
 
@@ -54,6 +55,45 @@ class TopVPNPublicList extends PublicList{
         $count = count($this->getRowsData());
         $output .= '<div class="d-flex justify-content-between">';
         $output .= '<div class="">'. goTranslate("Updated:") .' '.HTMLOutputs::updatedAt().'</div>';
+        $output .= '<div class=""><div class="popup" onclick="togglePopup(\'calculatedPopup\')">'. goTranslate("How is this calculated?").'<span class="popuptext" id="calculatedPopup">
+                    <span class="calculatedPopup tooltip-toast active large"
+                    <span class="calculatedPopup tooltip-toast-wrapper">
+                    <span class="calculatedPopup flex showOnDesktop">
+                    
+                    </span>
+                    <span class="calculatedPopup tooltip-toast-content">
+                    <div class="calculatedPopup" style="text-align: left;">
+                    <p>Our overall rating is reached by combining several subcategories. The subcategories are weighted as follows:</p>
+                    <ul>';
+        if($this->hasRelationActive()){
+            $name = $this->getActiveRelationAttributeName();
+            $trs = ucfirst($name) .' App:';
+            $output .= '
+                    <li>'. goTranslate($trs) .' 20%</li>
+                    <li>Speed &amp; Reliability: 20%</li>
+                    <li>Logging &amp; Jurisdiction: 20%</li>                    
+                    <li>Security &amp; Extra Features: 20%</li>
+                    <li>Streaming: 10%</li>
+                    <li>Torrenting: 5%</li>
+                    <li>Ease of Use: 5%</li>';
+
+        } else {
+            $output .= '<li>Speed &amp; Reliability: 30%</li>
+                    <li>Logging &amp; Jurisdiction: 30%</li>                    
+                    <li>Security &amp; Extra Features: 20%</li>
+                    <li>Streaming: 10%</li>
+                    <li>Torrenting: 5%</li>
+                    <li>Ease of Use: 5%</li>   ';
+        }
+
+        $output .= '</ul>                    
+                    </div>
+                    </span>
+                    </span>
+                    </span>
+                    </span>
+                    </div>
+                    </div>';
         $output .= '<div class=""><div class="popup" onclick="togglePopup(\'disclaimerPopup\')">'. goTranslate("Advertiser Disclosure") .'
   <span class="popuptext" id="disclaimerPopup">'. goTranslate("To keep Top10VPN a free online resource, we receive advertising/referral fees when you buy a VPN through outlinks on this page. This impacts the score, location, prominence and order in which a VPN service appears. Our extensive tests of each VPN, and how it compares with other VPNs in different countries and/or for specific purposes, are also factored in. We do not feature every VPN product on the market. Listings on this page do not imply endorsement. To learn more, see") .'</span>
 </div>
@@ -177,14 +217,14 @@ class TopVPNPublicList extends PublicList{
                 /*---------*/$output .='</div>';
                 /*---------*/$output .='<div class="col-12 col-md-6 column-4 price-holder d-flex flex-column justify-content-center align-items-center text-center">';
                 /*------------*/$output .='<div class="d-score">';
-                /*---------------*/$output .= HTMLOutputs::renderAverageRate($this->model->getAverageRating($result));
+                /*---------------*/$output .= HTMLOutputs::renderAverageRate($result['rating']);
                 /*------------*/$output .='</div>';
                 /*------------*/$output .='<div class="pt-2 d-rating">';
                 /*---------------*/$output .='<span>'.$result['rating_description'].'</span>';
                 /*------------*/$output .='</div>';
                 /*------------*/$output .='<div class="pt-2 d-stars">';
                 /*---------------*/$output .='<div class="star-ratings-sprite zoom8">';
-                /*------------------*/$output .= HTMLOutputs::renderRating($this->model->getAverageRating($result), 0);
+                /*------------------*/$output .= HTMLOutputs::renderRating($result['rating'], 0);
                 /*---------------*/$output .='</div>';
                 /*------------*/$output .='</div>';
                 /*------------*/$output .='<div class="pt-2 prices">';
@@ -263,11 +303,16 @@ class TopVPNPublicList extends PublicList{
         return $output;
     }
 
-    public function renderRateColumn($result) : string
+    private function renderRateColumn($result) : string
     {
         if($this->hasRelationActive()){
             return $this->renderAdditionalRatingColumn($result);
         }
+        else return $this->renderRateColumnCircles($result);
+    }
+
+    private function renderRateColumnCircles($result) : string {
+
         return '<div class="wss-scoreRow-772925660">
                                             <div class="wss-multiScoreText-3728111154">'. goTranslate("Overall speed:") .'</div>
                                             <div class="wss-rt_container-1819568874">
@@ -290,9 +335,16 @@ class TopVPNPublicList extends PublicList{
                                             </div>
                                             
                                             <div class="wss-scoreRow-772925660">
-                                            <div class="wss-multiScoreText-3728111154">'. goTranslate("Value for money:") .'</div>
+                                            <div class="wss-multiScoreText-3728111154">'. goTranslate("Streaming:") .'</div>
                                             <div class="wss-rt_container-1819568874">
-                                            '.HTMLOutputs::renderRate($result['value_for_money_score']).'
+                                            '.HTMLOutputs::renderRate($result['streaming_rate']).'
+                                            </div>
+                                            </div>
+                                            
+                                            <div class="wss-scoreRow-772925660">
+                                            <div class="wss-multiScoreText-3728111154">'. goTranslate("Torrenting:") .'</div>
+                                            <div class="wss-rt_container-1819568874">
+                                            '.HTMLOutputs::renderRate($result['torrenting_rate']).'
                                             </div>
                                             </div>
                                             
@@ -305,6 +357,49 @@ class TopVPNPublicList extends PublicList{
                                             </div>';
     }
 
+    private function renderRateColumnBars($result) : string {
+
+        $output = '';
+
+        $output .= '<div class="col-md-7 py-2">' . goTranslate("Overall speed:") . '</div>';
+        $output .= '<div class="col-md-5 py-2">';
+        $output .= '<div class="vpn-table-rating-bar">' . HTMLOutputs::renderRatingBar2($result['overall_speed']) . '</div>';
+        $output .= '<div class="vpn-table-rating-rate">' . $result['overall_speed'] . '/10</div>';
+        $output .= '</div>';
+
+        $output .= '<div class="col-md-7 py-2">' . goTranslate("Privacy & Logging:") . '</div>';
+        $output .= '<div class="col-md-5 py-2">';
+        $output .= '<div class="vpn-table-rating-bar">' . HTMLOutputs::renderRatingBar2($result['privacy_score']) . '</div>';
+        $output .= '<div class="vpn-table-rating-rate">' . $result['privacy_score'] . '/10</div>';
+        $output .= '</div>';
+
+        $output .= '<div class="col-md-7 py-2">' . goTranslate("Security & Features:") . '</div>';
+        $output .= '<div class="col-md-5 py-2">';
+        $output .= '<div class="vpn-table-rating-bar">' . HTMLOutputs::renderRatingBar2($result['feautures_score']) . '</div>';
+        $output .= '<div class="vpn-table-rating-rate">' . $result['feautures_score'] . '/10</div>';
+        $output .= '</div>';
+
+        $output .= '<div class="col-md-7 py-2">' . goTranslate("Streaming:") . '</div>';
+        $output .= '<div class="col-md-5 py-2">';
+        $output .= '<div class="vpn-table-rating-bar">' . HTMLOutputs::renderRatingBar2($result['streaming_rate']) . '</div>';
+        $output .= '<div class="vpn-table-rating-rate">' . $result['streaming_rate'] . '/10</div>';
+        $output .= '</div>';
+
+        $output .= '<div class="col-md-7 py-2">' . goTranslate("Torrenting:") . '</div>';
+        $output .= '<div class="col-md-5 py-2">';
+        $output .= '<div class="vpn-table-rating-bar">' . HTMLOutputs::renderRatingBar2($result['torrenting_rate']) . '</div>';
+        $output .= '<div class="vpn-table-rating-rate">' . $result['torrenting_rate'] . '/10</div>';
+        $output .= '</div>';
+
+        $output .= '<div class="col-md-7 py-2">' . goTranslate("Ease of Use:") . '</div>';
+        $output .= '<div class="col-md-5 py-2">';
+        $output .= '<div class="vpn-table-rating-bar">' . HTMLOutputs::renderRatingBar2($result['easy_to_use']) . '</div>';
+        $output .= '<div class="vpn-table-rating-rate">' . $result['easy_to_use'] . '/10</div>';
+        $output .= '</div>';
+
+        return $output;
+    }
+
     private function renderAdditionalRatingColumn(array $result): string
     {
         $output = '';
@@ -312,12 +407,18 @@ class TopVPNPublicList extends PublicList{
         $ratingFeatures = $result['rating_features_k'];
 
         if (empty($ratingFeatures)) {
+            $output .= '<div class="row vpn-table-additional-rating mt-1">';
+            $output .= $this->renderRateColumnBars($result);
+            $output .= '</div>';
             return $output;
         }
 
         $features = explode(';', $ratingFeatures);
 
         if (count($features) === 0) {
+            $output .= '<div class="row vpn-table-additional-rating mt-1">';
+            $output .= $this->renderRateColumnBars($result);
+            $output .= '</div>';
             return $output;
         }
 
@@ -343,9 +444,30 @@ class TopVPNPublicList extends PublicList{
             }
         }
 
+        $output .= $this->renderRateColumnBars($result);
+
         $output .= '</div>';
 
         return $output;
+    }
+
+
+    protected function parseFeatures($features) : array {
+
+        for ($i = 0; $i < count($features) - 1; $i++) {
+//            echo $features[$i].'<br/>';
+            $checker = new SquareBracketsChecker($features[$i]);
+            $checker->removeSquareBrackets();
+            if($checker->getSpecialMatched() === false) {
+                $features[$i] = $checker->getString();
+                $featureData = explode(':', trim($features[$i]));
+                $bracketsParser = new BracketsParser(trim($featureData[0]));
+                $bracketsParser->extractTextInBrackets();
+                $featureName[$i] = $bracketsParser->getCleaned();
+                $rating[$i] = trim($featureData[1]);
+            } else return [];
+        }
+        return ['featureName' => $featureName, 'rating' => $rating];
     }
 
     protected function renderFeatures(string $features) : string

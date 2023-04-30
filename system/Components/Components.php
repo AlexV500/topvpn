@@ -55,6 +55,16 @@ abstract class Components implements IComponents{
         return false;
     }
 
+    public function getActiveRelationAttributeName(): string
+    {
+        foreach ($this->relationNames as $attributeName) {
+            if ($this->hasAttribute($attributeName)) {
+                return $this->getAttribute($attributeName);
+            }
+        }
+        return false;
+    }
+
     public function getAttribute(string $attributeName)
     {
         return $this->atts[$attributeName];

@@ -27,6 +27,17 @@ class HTMLOutputs{
         return $p;
     }
 
+    public static function renderRateByType($rating, $type): string{
+
+        if($type == 'main'){
+            return self::renderRate($rating);
+        }
+        if($type == 'additional'){
+            return self::renderRatingBar2($rating);
+        }
+        else return '';
+    }
+
     public static function renderRate($posRev, $colorSlice = '#00a1ff'){
 
         $p = ($posRev / 100) * 100;

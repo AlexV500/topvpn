@@ -35,10 +35,13 @@ class GOTranslations{
             return $phrase;
         }
         if(!$this->getWrightingMode()){
-            if($this->getLocale() === $this->getDefaultLocale()){
+            if($this->getCurrentLocale() === $this->getDefaultLocale()){
                return $phrase;
             }
         }
+//        if($this->getCurrentLocale() === $this->getDefaultLocale()){
+//            return $phrase;
+//        }
         $data = [];
         $phrase = trim($phrase);
         $phraseStrippedWsp = TranslationsUtils::stripWhitespaces($phrase);
