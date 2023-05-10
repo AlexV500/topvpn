@@ -26,8 +26,8 @@ class TopVPNComparePublicList extends PublicList{
         $this->addItemToCollection(new LocationModel('topvpn_location'), 'locationModel');
         $this->addItemToCollection(new TopVPNAdditionalModel('topvpn_vpn_additional'), 'vpnAdditionalModel');
         $this->switchMultiLangMode();
-        $this->setOrderColumn('rating');
-        $this->setOrderDirection('DESC');
+//        $this->setOrderColumn('rating');
+//        $this->setOrderDirection('DESC');
         $this->setLimitCount(3);
         $this->initRows();
         $this->addRelationParam('device', $this->getItemFromCollection('deviceModel'), 'device_sys_name');
@@ -37,7 +37,7 @@ class TopVPNComparePublicList extends PublicList{
         $this->addAdditionalParam('streaming', $this->getItemFromCollection('vpnAdditionalModel'));
         $this->addAdditionalParam('location', $this->getItemFromCollection('vpnAdditionalModel'));
         $this->initRowsCount($this->activeMode);
-        $this->initRowsData($this->activeMode, false, true);
+        $this->initRowsData($this->activeMode, false);
 
         if (count($this->getAdditionalResultData('compare')) > 0) {
             $arrayExtractor = new ArrayExtractor($this->getAdditionalResultData('compare'));
@@ -85,12 +85,16 @@ class TopVPNComparePublicList extends PublicList{
 //            }
 //        }
 
-        $output .= '<div class="entry" data-toggle="tooltip" data-placement="top" title="Tooltip on top"">';
+        $output .= '<div class="entry" data-toggle="tooltip" data-placement="top" title="Tooltip on top">';
         $output .= '<p>'. goTranslate("VPN:") .'</p>';
         $output .= '</div>';
 
-        $output .= '<div class="entry" data-toggle="tooltip" data-placement="top" title="Tooltip on top"">';
+        $output .= '<div class="entry" data-toggle="tooltip" data-placement="top" title="Tooltip on top">';
         $output .= '<p>'. goTranslate("User Rating:") .'</p>';
+        $output .= '</div>';
+
+        $output .= '<div class="entry mb-3">';
+
         $output .= '</div>';
 
         $output .= '<div class="entry table_category">';
@@ -288,6 +292,7 @@ class TopVPNComparePublicList extends PublicList{
         $output .= '<p>'. goTranslate("Value for Money:") .'</p>';
         $output .= '</div>';
 
+
         $output .= '<div class="entry last-row" style="height: 72px;">';
         $output .= '<p></p>';
         $output .= '</div>';
@@ -297,7 +302,7 @@ class TopVPNComparePublicList extends PublicList{
             for ($i = 0; $i < $count; $i++) {
                 $result = $this->getRowsData()[$i];
 
-                $logo = VPN_LOGO_PATH . '/' . $result['vpn_logo'];
+                $logo = VPN_LOGO_PATH . $result['vpn_logo'];
 
 
 //                $output .= '<div class="track white px-2">';
@@ -311,15 +316,25 @@ class TopVPNComparePublicList extends PublicList{
                 $output .= '<div class="entry">';
 
                 $output .= '<div class="heading">';
-                $output .= '<div class="entry-logo"><a href="' . $result['vpn_sys_name'] . '/" alt="Logo"><img src="' . $logo . '" height="35" alt="Logo"></a></div>';
+                $output .= '<div class="entry-logo"><a href="' . $result['vpn_sys_name'] . '/" alt="Logo"><img class="img-fluid max-240" src="' . $logo . '" alt="Logo"></a></div>';
                 $output .= '</div>';
                 $output .= '</div>';
 
                 $output .= '<div class="entry">';
                 $output .= '<div class="d-flex flex-row justify-content-center">';
-                $output .= HTMLOutputs::renderRating($result['rating'], 0);
+                $output .= HTMLOutputs::renderRating($result['rating'], 0).'&nbsp'.$result['rating'].'/10';
                 $output .= '</div>';
                 $output .= '</div>';
+
+                $output .= '<div class="entry mb-3">';
+                $output .= '<div class="d-flex flex-row justify-content-center">';
+                $output .= '<a class="btn btn-warning btn-xsm" href="' . $result['vpn_sys_name'] .'-review" target="_blank" role="button">'. goTranslate("View more...") .'</a>&nbsp';
+                $output .= '<a class="btn btn-tertiary btn-xsm" href="' . $result['referal_link'] . '/" target="_blank"  role="button">Visit site</a>';
+                $output .= '</div>';
+                $output .= '</div>';
+
+//                $output .= '<a class="btn btn-warning btn-xsm" href="' . $result['vpn_sys_name'] .'-review" target="_blank" role="button">'. goTranslate("View more...") .'</a>&nbsp';
+//                $output .= '<a class="btn btn-tertiary btn-xsm" href="' . $result['referal_link'] . '/" target="_blank"  role="button">Visit site</a>';
 
 
                 $output .= '<div class="entry table_category">';
@@ -453,6 +468,7 @@ class TopVPNComparePublicList extends PublicList{
                     $output .= '</div>';
                     foreach ($this->addKeys as $key) {
                         $output .= '<div class="entry">';
+                        if(isset($this->getAdditionalResultData('compare')[$key][$result['id']]))
                         $output .= $this->getAdditionalResultData('compare')[$key][$result['id']];
                         $output .= '</div>';
                     }
@@ -488,13 +504,17 @@ class TopVPNComparePublicList extends PublicList{
 
                 $output .= '<div class="entry">';
                 $output .= '<div class="d-flex flex-row justify-content-center">';
-                $output .= HTMLOutputs::renderRating($result['rating'], 0);
+                $output .= HTMLOutputs::renderRating($result['rating'], 0).'&nbsp'.$result['rating'].'/10';
                 $output .= '</div>';
                 $output .= '</div>';
 
-                $output .= '<div class="entry mb-3">';
-                $output .='<a href="' . $result['referal_link'] . '/" target="_blank" class="btn btn-tertiary margin-0-auto">Visit Website</a>';
+                $output .= '<div class="entry">';
+                $output .= '<div class="d-flex flex-row justify-content-center">';
+                $output .= '<a class="btn btn-warning btn-xsm" href="' . $result['vpn_sys_name'] .'-review" target="_blank" role="button">'. goTranslate("View more...") .'</a>&nbsp';
+                $output .= '<a class="btn btn-tertiary btn-xsm" href="' . $result['referal_link'] . '/" target="_blank"  role="button">Visit site</a>';
                 $output .= '</div>';
+                $output .= '</div>';
+
                 $output .= '</div>';
             }
         }

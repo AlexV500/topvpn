@@ -65,26 +65,26 @@ class TopVPNPublicList extends PublicList{
                     <div class="calculatedPopup" style="text-align: left;">
                     <p>Our overall rating is reached by combining several subcategories. The subcategories are weighted as follows:</p>
                     <ul>';
-        if($this->hasRelationActive()){
-            $name = $this->getActiveRelationAttributeName();
-            $trs = ucfirst($name) .' App:';
-            $output .= '
-                    <li>'. goTranslate($trs) .' 20%</li>
-                    <li>Speed &amp; Reliability: 20%</li>
-                    <li>Logging &amp; Jurisdiction: 20%</li>                    
-                    <li>Security &amp; Extra Features: 20%</li>
-                    <li>Streaming: 10%</li>
-                    <li>Torrenting: 5%</li>
-                    <li>Ease of Use: 5%</li>';
-
-        } else {
+//        if($this->hasRelationActive()){
+//            $name = $this->getActiveRelationAttributeName();
+//            $trs = ucfirst($name) .' App:';
+//            $output .= '
+//                    <li>'. goTranslate($trs) .' 20%</li>
+//                    <li>Speed &amp; Reliability: 20%</li>
+//                    <li>Logging &amp; Jurisdiction: 20%</li>
+//                    <li>Security &amp; Extra Features: 20%</li>
+//                    <li>Streaming: 10%</li>
+//                    <li>Torrenting: 5%</li>
+//                    <li>Ease of Use: 5%</li>';
+//
+//        } else {
             $output .= '<li>Speed &amp; Reliability: 30%</li>
                     <li>Logging &amp; Jurisdiction: 30%</li>                    
                     <li>Security &amp; Extra Features: 20%</li>
                     <li>Streaming: 10%</li>
                     <li>Torrenting: 5%</li>
                     <li>Ease of Use: 5%</li>   ';
-        }
+      //  }
 
         $output .= '</ul>                    
                     </div>
@@ -404,49 +404,48 @@ class TopVPNPublicList extends PublicList{
     {
         $output = '';
 
-        $ratingFeatures = $result['rating_features_k'];
-
-        if (empty($ratingFeatures)) {
+        if (empty($result['rating_features_k'])) {
             $output .= '<div class="row vpn-table-additional-rating mt-1">';
             $output .= $this->renderRateColumnBars($result);
             $output .= '</div>';
             return $output;
-        }
+        } else {
 
-        $features = explode(';', $ratingFeatures);
+            $features = explode(';', $result['rating_features_k']);
 
-        if (count($features) === 0) {
-            $output .= '<div class="row vpn-table-additional-rating mt-1">';
-            $output .= $this->renderRateColumnBars($result);
-            $output .= '</div>';
-            return $output;
-        }
-
-        $output .= '<div class="row vpn-table-additional-rating mt-1">';
-
-        for ($i = 0; $i < count($features) - 1; $i++) {
-//            echo $features[$i].'<br/>';
-            $checker = new SquareBracketsChecker($features[$i]);
-            $checker->removeSquareBrackets();
-            if($checker->getSpecialMatched() === false) {
-                $features[$i] = $checker->getString();
-                $featureData = explode(':', trim($features[$i]));
-                $bracketsParser = new BracketsParser(trim($featureData[0]));
-                $bracketsParser->extractTextInBrackets();
-                $featureName = $bracketsParser->getCleaned();
-                $rating = trim($featureData[1]);
-
-                $output .= '<div class="col-md-7 py-2">' . $featureName . ':</div>';
-                $output .= '<div class="col-md-5 py-2">';
-                $output .= '<div class="vpn-table-rating-bar">' . HTMLOutputs::renderRatingBar2($rating) . '</div>';
-                $output .= '<div class="vpn-table-rating-rate">' . $rating . '/10</div>';
+            if (count($features) === 0) {
+                $output .= '<div class="row vpn-table-additional-rating mt-1">';
+                $output .= $this->renderRateColumnBars($result);
                 $output .= '</div>';
+                return $output;
             }
+
+            $output .= '<div class="row vpn-table-additional-rating mt-1">';
+
+            for ($i = 0; $i < count($features) - 1; $i++) {
+//            echo $features[$i].'<br/>';
+                $checker = new SquareBracketsChecker($features[$i]);
+                $checker->removeSquareBrackets();
+                if($checker->getSpecialMatched() === false) {
+                    $features[$i] = $checker->getString();
+                    $featureData = explode(':', trim($features[$i]));
+                    $bracketsParser = new BracketsParser(trim($featureData[0]));
+                    $bracketsParser->extractTextInBrackets();
+                    $featureName = $bracketsParser->getCleaned();
+                    $rating = trim($featureData[1]);
+
+                    $output .= '<div class="col-md-7 py-2">' . $featureName . ':</div>';
+                    $output .= '<div class="col-md-5 py-2">';
+                    $output .= '<div class="vpn-table-rating-bar">' . HTMLOutputs::renderRatingBar2($rating) . '</div>';
+                    $output .= '<div class="vpn-table-rating-rate">' . $rating . '/10</div>';
+                    $output .= '</div>';
+                }
+            }
+
+            $output .= $this->renderRateColumnBars($result);
+
+            $output .= '</div>';
         }
-
-        $output .= $this->renderRateColumnBars($result);
-
-        $output .= '</div>';
 
         return $output;
     }

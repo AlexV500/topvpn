@@ -13,12 +13,12 @@ class TopVPNWidgetList extends PublicList{
 
 
         $this->switchMultiLangMode();
-        $this->setOrderColumn('position');
-        $this->setOrderDirection('ASC');
+//        $this->setOrderColumn('position');
+//        $this->setOrderDirection('ASC');
         $this->setLimitCount(10);
         $this->initRows();
         $this->initRowsCount($this->activeMode);
-        $this->initRowsData($this->activeMode, false, true);
+        $this->initRowsData($this->activeMode, false, false);
         return $this;
     }
 
@@ -27,7 +27,7 @@ class TopVPNWidgetList extends PublicList{
         $logoPath = V_CORE_URL . 'includes/images/vpn';
         $output = '<div class="card">';
         $output .= '<div class="card-header">';
-        $output .= 'Top VPN';
+        $output .= goTranslate("Top 10 VPN");
         $output .= '</div>';
         $output .= '<div class="card-body">';
         $count = count($this->getRowsData());

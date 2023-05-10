@@ -19,11 +19,13 @@ class TopVPNHeaderShortcode extends PublicItem{
     public function render() : string
     {
         $output = '';
-        $output .= '<div class="hero-slider-content text-white">';
-        $output .= '<h5 class="text-white">';
-        $output .= $this->getRowData()['short_description'];
-        $output .= '</h5>';
-        $output .= '</div>';
+        if(isset($this->getRowData()['short_description'])){
+            $output .= '<div class="hero-slider-content text-white">';
+            $output .= '<h5 class="text-white">';
+            $output .= $this->getRowData()['short_description'];
+            $output .= '</h5>';
+            $output .= '</div>';
+        }
 
         return $output;
     }

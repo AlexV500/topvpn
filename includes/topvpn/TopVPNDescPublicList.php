@@ -23,15 +23,15 @@ class TopVPNDescPublicList extends PublicList{
         $this->addItemToCollection(new StreamingModel('topvpn_streaming'), 'streamingModel');
         $this->addItemToCollection(new LocationModel('topvpn_location'), 'locationModel');
         $this->switchMultiLangMode();
-        $this->setOrderColumn('rating');
-        $this->setOrderDirection('DESC');
+//        $this->setOrderColumn('rating');
+//        $this->setOrderDirection('DESC');
         $this->setLimitCount(5);
         $this->initRows();
         $this->addRelationParam('device', $this->getItemFromCollection('deviceModel'), 'device_sys_name');
         $this->addRelationParam('streaming', $this->getItemFromCollection('streamingModel'), 'streaming_sys_name');
         $this->addRelationParam('location', $this->getItemFromCollection('locationModel'), 'location_sys_name');
         $this->initRowsCount($this->activeMode);
-        $this->initRowsData($this->activeMode, false, true);
+        $this->initRowsData($this->activeMode, false, false);
         return $this;
     }
 

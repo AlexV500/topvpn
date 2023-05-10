@@ -19,7 +19,7 @@ class TranslationsUtils{
         }
     }
 
-    function goPrepareKey($key){
+    public static function goPrepareKey($key){
         $string = htmlentities($key, null, 'utf-8');
         $content = str_replace(" ", "", $string);
         $content = html_entity_decode($content);

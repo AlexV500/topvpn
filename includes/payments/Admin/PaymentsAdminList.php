@@ -15,7 +15,7 @@ class PaymentsAdminList extends AdminList{
     {
         $this->setOrderColumn('position');
         $this->setOrderDirection('ASC');
-        $this->setPaginationCount();
+        $this->setPaginationCount(18);
         $this->initRows($this->atts);
         $this->initRowsCount($this->activeMode);
         $this->initPaginationConfig();
@@ -57,7 +57,7 @@ class PaymentsAdminList extends AdminList{
                 $output .= "<td class='topvpn-id'>";
                 $output .= $result['id'];
                 $output .= "</td>";
-                $output .= "<td class='topvpnLogo'><img src='". V_CORE_URL .'includes/images/payments/'.$result['payments_logo']."'></td>";
+                $output .= "<td class='topvpnLogo'><img src='". V_CORE_URL .'includes/images/payments/'.$result['payments_logo']."' height='20px'></td>";
                 $output .= "<td class='topvpnName'>" . stripslashes( wp_filter_nohtml_kses( $result['payments_name'] ) ) . $name_suffix . "</td>";
                 $output .= "<td class='topvpnSysName'>" . stripslashes( wp_filter_nohtml_kses( $result['payments_sys_name'] ) ) . $name_suffix . "</td>";
                 $output .= "<td class='position'><a href='" . $this->getCurrentURL() . "&position_set=up&item_id=" . $result['id'] . "'>Вверх</a></td>";

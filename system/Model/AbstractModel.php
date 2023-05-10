@@ -17,7 +17,7 @@ abstract class AbstractModel
     protected string $orderDirection = 'ASC';
     public string $rowCount;
     public string $paginationCount;
-    public string $limitCount;
+    public int $limitCount = 0;
     public string $offset;
     public object $errorStatus;
     public object $resultMessages;
@@ -88,6 +88,11 @@ abstract class AbstractModel
     {
         $this->limitCount = $limitCount;
         return $this;
+    }
+
+    public function getLimitCount() : string
+    {
+        return $this->limitCount;
     }
 
     public function setPaginationCount( int $paginationCount) : object

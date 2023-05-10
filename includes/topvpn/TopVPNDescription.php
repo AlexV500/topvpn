@@ -35,7 +35,7 @@ class TopVPNDescription extends PublicItem{
         $output .='<div class="col-md-12 col-lg-6"><img alt="' . $this->getRowData()['vpn_name'] . '" class="img-fluid max-240" src="' . $logo . '" alt="' . $this->getRowData()['vpn_name'] . '" title="' . $this->getRowData()['vpn_name'] . '">';
         $output .= '</div>';
         $output .= '<div class="col-md-12 col-lg-4 d-flex justify-content-end pt-3" style="padding-right: 25px">';
-        $output .= HTMLOutputs::renderRating($this->model->getAverageRating($this->getRowData()), 0).'&nbsp'.$this->model->getAverageRating($this->getRowData()).'/10';
+        $output .= HTMLOutputs::renderRating($this->getRowData()['rating'], 0).'&nbsp'.$this->getRowData()['rating'].'/10';
         $output .= '</div>';
         $output .= '</a>';
         $output .= '<hr>';
@@ -88,7 +88,7 @@ class TopVPNDescription extends PublicItem{
         $output .= '<div class="col-md-12 col-lg-12 d-flex justify-content-end">';
         $output .= '<a class="btn btn-tertiary" href="'.$this->getRowData()['referal_link'].'" target="_blank" role="button">Visit website</a>';
         $output .= '</div>';
-        $output .= '<table class="table table-sm table-striped mt-4">';
+        $output .= '<table class="table table-sm table-striped mt-4 vpn-key-data">';
         $output .= '<tbody>';
         $output .= '<tr><td>'. goTranslate("Kill Switch:") .'</td><td>'.HTMLOutputs::renderCheckStatus((int) $this->getRowData()['kill_switch']).'</td></tr>';
         $output .= '<tr><td>'. goTranslate("Wi-Fi Protection:") .'</td><td>'.HTMLOutputs::renderCheckStatus((int) $this->getRowData()['wi_fi_protection']).'</td></tr>';

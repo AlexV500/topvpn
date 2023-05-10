@@ -22,15 +22,19 @@ class Customization extends PublicItem{
         $output = '';
         if(isset($atts['content_type'])) {
             if($atts['content_type'] == 'header_text') {
+                if(isset($this->getRowData()['header_content']))
                 $output .= $this->getRowData()['header_content'];
             }
             if($atts['content_type'] == 'header_image') {
+                if(isset($this->getRowData()['header_image']))
                 $output .= $this->getRowData()['header_image'];
             }
             if($atts['content_type'] == 'comparison_header_content') {
+                if(isset($this->getRowData()['comparison_header_content']))
                 $output .= $this->getRowData()['comparison_header_content'];
             }
             if($atts['content_type'] == 'description_header_content') {
+                if(isset($this->getRowData()['description_header_content']))
                 $output .= $this->getRowData()['description_header_content'];
             }
         }
