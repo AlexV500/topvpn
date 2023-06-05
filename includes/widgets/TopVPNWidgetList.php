@@ -54,7 +54,7 @@ class TopVPNWidgetList extends PublicList{
         $output .= '</ul>';
         $output .= '</div>';
         $output .= '</div>';
-        $output .= '</div>';
+
         $this->render = $output;
         return $output;
     }

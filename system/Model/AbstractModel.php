@@ -13,6 +13,7 @@ abstract class AbstractModel
     public string $pk = 'id' ;
     public string $lang = '';
     protected bool $multiLangMode = true;
+    protected bool $adminMode = false;
     protected string $orderColumn = 'id';
     protected string $orderDirection = 'ASC';
     public string $rowCount;
@@ -40,6 +41,17 @@ abstract class AbstractModel
     public function getDbTable() : string
     {
         return $this->dbTable;
+    }
+
+    public function setAdminMode() : object
+    {
+        $this->adminMode = true;
+        return $this;
+    }
+
+    public function getAdminMode() : string
+    {
+        return $this->adminMode;
     }
 
     public function switchMultiLangMode( string $lang) : object
@@ -489,7 +501,7 @@ abstract class AbstractModel
         $currentRow = false;
         $prevRow = false;
         $count = $this->countAllRows(false);
-        $query = $this->getAllRows(false, true, false);
+        $query = $this->getAllRows(false, false, false);
         if (($count > 1) && ($id > 0)) {
             foreach ($query as $key => $row) {
                 if ($row['id'] == $id) {
@@ -512,7 +524,7 @@ abstract class AbstractModel
         $currentRow = false;
         $nextRow = false;
         $count = $this->countAllRows(false);
-        $query = $this->getAllRows(false, true, false);
+        $query = $this->getAllRows(false, false, false);
 
         if (($count > 1) && ($id > 0)) {
             foreach ($query as $key => $row) {

@@ -56,20 +56,59 @@ class TopVPNModel extends AbstractModel{
             }
         }
 
+        if($this->getAdminMode()){
+            $active = array_filter($rowsData, function($item){
+                if($item['active'] == 1){
+                    return $item;
+                }
+            });
+            $hidden = array_filter($rowsData, function($item){
+                if($item['active'] == 0){
+                    return $item;
+                }
+            });
+            $rowsData = array_merge($active, $hidden);
+        }
+
         return $rowsData;
     }
 
+    public function getRowById($id){
+        $rowData = parent::getRowById($id);
+        $rowData['rating'] = $this->getAverageRating($rowData);
+        return $rowData;
+    }
+
+    public function getRowByPk($id, $sysName){
+        $rowData = parent::getRowByPk($id, $sysName);
+        $rowData['rating'] = $this->getAverageRating($rowData);
+        return $rowData;
+    }
+
     public function getAverageRating($rowData){
+
+        if(!$rowData){
+            return 0;
+        }
+
         $weights = array(0.3, 0.3, 0.2, 0.1, 0.05, 0.05);
-        $rating = $this->weightedAverage([
-            $rowData['overall_speed'],
-            $rowData['privacy_score'],
-            $rowData['feautures_score'],
-            $rowData['streaming_rate'],
-            $rowData['torrenting_rate'],
-            $rowData['easy_to_use'],
-        ], $weights);
-        return round($rating, 1);
+        if (array_key_exists('overall_speed', $rowData)
+            && array_key_exists('privacy_score', $rowData)
+            && array_key_exists('feautures_score', $rowData)
+            && array_key_exists('streaming_rate', $rowData)
+            && array_key_exists('torrenting_rate', $rowData)
+            && array_key_exists('easy_to_use', $rowData)
+        ) {
+            $rating = $this->weightedAverage([
+                $rowData['overall_speed'],
+                $rowData['privacy_score'],
+                $rowData['feautures_score'],
+                $rowData['streaming_rate'],
+                $rowData['torrenting_rate'],
+                $rowData['easy_to_use'],
+            ], $weights);
+            return round($rating, 1);
+        } else return 0;
     }
 
     public function weightedAverage($nums, $weights) {
@@ -291,7 +330,7 @@ class TopVPNModel extends AbstractModel{
             $sql = "SELECT $this->dbTable.*
                               FROM $this->dbTable
                               INNER JOIN {$this->prefix}topvpn_vpn_location ON ({$this->dbTable}.id={$this->prefix}topvpn_vpn_location.vpn_id)    
-                              INNER JOIN {$this->prefix}topvpn_location ON ({$this->prefix}topvpn_location.id = {$this->prefix}topvpn_vpn_location.streaming_id)
+                              INNER JOIN {$this->prefix}topvpn_location ON ({$this->prefix}topvpn_location.id = {$this->prefix}topvpn_vpn_location.location_id)
                               WHERE {$this->prefix}topvpn_location.id = $id AND {$this->dbTable}.active = 1 $multiLangMode";
         }
 

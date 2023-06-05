@@ -6,6 +6,7 @@ require_once V_PLUGIN_INCLUDES_DIR . 'topvpn/TopVPNDescPublicList.php';
 require_once V_PLUGIN_INCLUDES_DIR . 'topvpn/TopVPNDescription.php';
 require_once V_PLUGIN_INCLUDES_DIR . 'topvpn/TopVPNComparePublicList.php';
 require_once V_PLUGIN_INCLUDES_DIR . 'widgets/TopVPNWidgetList.php';
+require_once V_PLUGIN_INCLUDES_DIR . 'widgets/TopVPNWidgetContext.php';
 require_once V_PLUGIN_INCLUDES_DIR . 'topvpn/TopVPNHeaderShortcode.php';
 require_once V_PLUGIN_INCLUDES_DIR . 'customization/Customization.php';
 
@@ -23,6 +24,7 @@ class TopVPN_Shortcodes
         add_shortcode('TopVPNDescription', array(__CLASS__, 'TopVPNDescription'));
         add_shortcode('TopVPNComparePublicList', array(__CLASS__, 'TopVPNComparePublicList'));
         add_shortcode('TopVPNWidgetList', array(__CLASS__, 'TopVPNWidgetList'));
+        add_shortcode('TopVPNWidgetContext', array(__CLASS__, 'TopVPNWidgetContext'));
         add_shortcode('short_vpn_description', array(__CLASS__, 'TopVPNHeaderShortcode'));
         add_shortcode('customization_snippets', array(__CLASS__, 'Customization'));
     }
@@ -50,6 +52,10 @@ class TopVPN_Shortcodes
     public static function TopVPNWidgetList( $atts, $content = null ) {
 
         return (new TopVPNWidgetList('TopVPNModel', 'topvpn_vpn', $atts))->init()->render();
+    }
+    public static function TopVPNWidgetContext( $atts, $content = null ) {
+
+        return (new TopVPNWidgetContext('TopVPNModel', 'topvpn_vpn', $atts))->init()->render();
     }
     public static function TopVPNHeaderShortcode( $atts, $content = null ) {
 

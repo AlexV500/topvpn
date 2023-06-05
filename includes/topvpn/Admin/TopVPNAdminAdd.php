@@ -56,6 +56,7 @@ class TopVPNAdminAdd extends AdminPostAction{
                 'streaming' => $this->streamingData,
                 'location' => $this->locationData,
                 'short_description' => '',
+                'context_description' => '',
                 'description' => '',
                 'verdict' => '',
                 'overall_speed' => '',
@@ -139,6 +140,7 @@ class TopVPNAdminAdd extends AdminPostAction{
         $output .= '</div>';
 
         $output .= AdminHtmlFormInputs::textarea('Короткое описание', 'short_description', $this->getFormFill('short_description'), '');
+        $output .= AdminHtmlFormInputs::textarea('Содержание описания', 'context_description', $this->getFormFill('context_description'), '');
         $output .= AdminHtmlFormInputs::textarea('Полное описание', 'description', $this->getFormFill('description'), '');
         $output .= AdminHtmlFormInputs::input('Вердикт','verdict', $this->getFormFill('verdict'),'namefield','');
 

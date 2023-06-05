@@ -59,6 +59,7 @@ class TopVPNAdminEdit extends AdminPostAction
                 'rating_description' => $data['rating_description'],
                 'active' => $data['active'],
                 'short_description' => $data['short_description'],
+                'context_description' => $data['context_description'],
                 'description' => $data['description'],
                 'verdict' => $data['verdict'],
 
@@ -141,6 +142,7 @@ class TopVPNAdminEdit extends AdminPostAction
         $output .= '</div>';
 
         $output .= AdminHtmlFormInputs::textarea('Короткое описание', 'short_description', $this->getFormFill('short_description'), '');
+        $output .= AdminHtmlFormInputs::textarea('Содержание описания', 'context_description', $this->getFormFill('context_description'), '');
         $output .= AdminHtmlFormInputs::textarea('Полное описание', 'description', $this->getFormFill('description'), '');
         $output .= AdminHtmlFormInputs::input('Вердикт','verdict', $this->getFormFill('verdict'),'namefield','');
 

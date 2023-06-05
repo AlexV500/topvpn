@@ -19,9 +19,9 @@ class TopVPNAdminList extends AdminList {
         $this->selectLanguageAdm();
         $this->switchMultiLangMode();
         $this->initAllLanguageAdm('LangModel', 'topvpn_lang');
-        $this->setOrderColumn('position');
-        $this->setOrderDirection('ASC');
-        $this->setPaginationCount();
+//        $this->setOrderColumn('position');
+//        $this->setOrderDirection('ASC');
+        $this->setPaginationCount(20);
         $this->initRows($this->atts);
         $this->initRowsCount($this->activeMode);
         $this->initPaginationConfig();
@@ -30,6 +30,7 @@ class TopVPNAdminList extends AdminList {
         $this->setLogoPath(V_PLUGIN_INCLUDES_DIR . 'images/vpn/');
         $this->setScreenPath(V_PLUGIN_INCLUDES_DIR . 'images/screen/');
         $this->unlinkAllUnusedImagesPostHandler('vpn_logo', $this->getLogoPath());
+        $this->unlinkAllUnusedImagesPostHandler('screen', $this->getScreenPath());
       //  $this->setActiveMode();
 
         $this->setColumnDisplayNames(array(
@@ -65,11 +66,15 @@ class TopVPNAdminList extends AdminList {
             for ( $i = 0; $i < count($this->getRowsData()); $i++ ) {
 
                 $result = $this->getRowsData()[$i];
+                $trClass = '';
+                if($result['active'] == 0){
+                   $trClass = 'table-secondary ';
+                }
 
                 $name_suffix = '';
                 $class_status = '';
 
-                $output .= '<tr class="' . $class_status . ( $i % 2 == 0 ? 'even' : 'odd' ) . '">';
+                $output .= '<tr class="' . $trClass . $class_status . ( $i % 2 == 0 ? 'even' : 'odd' ) . '">';
 
                 $output .= "<td class='topvpn-id'>";
                 $output .= $result['id'];

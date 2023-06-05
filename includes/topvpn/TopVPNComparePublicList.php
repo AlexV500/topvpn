@@ -94,7 +94,9 @@ class TopVPNComparePublicList extends PublicList{
         $output .= '</div>';
 
         $output .= '<div class="entry mb-3">';
-
+        $output .= '<div class=" scroll-icon">';
+        $output .= 'Scroll &nbsp <i class="fa fa-arrows-h" aria-hidden="true"></i>';
+        $output .= '</div>';
         $output .= '</div>';
 
         $output .= '<div class="entry table_category">';

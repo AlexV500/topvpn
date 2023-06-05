@@ -14,10 +14,12 @@ abstract class AdminList extends AdminActions {
     protected object $rowsListObject;
     protected int $rowsCount;
     protected array $rowsData;
+    protected string $pagedParam = '';
 
     public function __construct($model, $dbTable)
     {
         parent::__construct($model, $dbTable);
+        $this->setPaged();
  //       $this->rowsListObject = new RowsListObject($this->model, $this->dbTable);
 //        $this->setCurrentURL();
     }
@@ -102,7 +104,7 @@ abstract class AdminList extends AdminActions {
 
         if($set == 'up'){
             $positionUp = $this->getModel()->positionUp($id);
-            if(!$positionUp){
+            if(!$positionUp){echo $set .' '.$id ;
                 return false;
             }
         }
@@ -115,12 +117,30 @@ abstract class AdminList extends AdminActions {
         return true;
     }
 
+    protected function setPaged() : object{
+
+        if ( isset( $_GET['paged'] )){
+            $this->pagedParam = '&paged='.$_GET['paged'];
+        }
+        return $this;
+    }
+
+    protected function getPaged() : string{
+
+        return $this->pagedParam;
+    }
+
     protected function unlinkAllUnusedImagesPostHandler( string $fieldName, string $path){
 
-        if ( isset( $_POST['deleteLostImages'] )) {
+        $deleteLostImages = isset($_POST['deleteLostImages']);
+        $deleteLostScreen = isset($_POST['deleteLostScreen']);
+
+        if ($deleteLostImages || $deleteLostScreen) {
             $result = $this->getModel()->unlinkAllUnusedImages($this->dbTable, $fieldName, $path);
-            $this->setResultMessages('TopVPNAdminList',$result->getResultStatus(), $result->getResultMessage());
-        } return $this;
+            $this->setResultMessages('TopVPNAdminList', $result->getResultStatus(), $result->getResultMessage());
+        }
+
+        return $this;
     }
 
 }

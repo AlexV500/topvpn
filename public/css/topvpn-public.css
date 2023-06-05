@@ -1819,3 +1819,42 @@ ol li {
     text-decoration: none;
     color: #0244bf;
 }
+
+.overlay-link {
+    /*width: 100%;*/
+    /*height: 100%;*/
+    /*display:  block;*/
+    text-decoration: none;
+    color: rgb(33, 37, 41);
+}
+
+#rating-table .list-group-item{
+    padding: 0px 5px 0px 5px;
+    min-width: 40px;
+    text-align: center;
+}
+
+#header-list-group img {
+    width: 2rem;
+}
+
+#header-list-group .list-group-item{
+    background-color: #deeaef;
+}
+
+#header-list-group  .list-group-item.current {
+    background-color: #bae3f1;
+}
+#header-list-group li{
+    padding: 0.5rem
+}
+
+.scroll-icon {
+    display: none;
+}
+
+@media screen and (max-width: 767px) {
+    .scroll-icon {
+        display: block;
+    }
+}

@@ -70,8 +70,6 @@ abstract class Components implements IComponents{
         return $this->atts[$attributeName];
     }
 
-
-
     public function setLang(){
         return $this->getModel()->setLang($this->languageSysNameGet);
     }

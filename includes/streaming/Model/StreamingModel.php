@@ -19,6 +19,22 @@ class StreamingModel extends AbstractModel{
         $this->unsetMultiLangMode();
     }
 
+//    public function getAllRows(bool $activeMode = true, bool $paginationMode = true, bool $sqlLimitMode = false){
+//        $rowsData = parent::getAllRows($activeMode, $paginationMode, $sqlLimitMode);
+//        $limitCount = $this->getLimitCount();
+//
+//        if($sqlLimitMode == false){
+//            usort($rowsData, function($a, $b) {
+//                return $b['streaming_name'] <=> $a['streaming_name'];
+//            });
+//
+//            if($limitCount > 0){
+//                return array_slice($rowsData, 0, $limitCount);
+//            }
+//        }
+//        return $rowsData;
+//    }
+
     public function addRow($data) : object
     {
         $validate = (new Validator)->checkLength($data['streaming_name'], 2, 30, 'streaming_name', 'Имя', true)

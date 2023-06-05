@@ -13,12 +13,12 @@ class CustomizationModel extends AbstractModel{
 
     public function addRow($data) : object
     {
-        $validate = (new Validator)->checkLength($data['customization_name'], 3, 255, 'customization_name', true)
-            ->checkLength($data['page_uri'], 2, 255, 'page_uri', true);
+//        $validate = (new Validator)->checkLength($data['customization_name'], 3, 255, 'customization_name', true)
+//            ->checkLength($data['page_uri'], 2, 255, 'page_uri', true);
 
-        if ($validate->getResultStatus() == 'error') {
-            return Result::setResult('error', $validate->getResultMessage(), $data);
-        }
+//        if ($validate->getResultStatus() == 'error') {
+//            return Result::setResult('error', $validate->getResultMessage(), $data);
+//        }
 
         $recordedRow = $this->insertRow($data);
         if ($recordedRow['last_insert_id'] == 0) {
@@ -31,12 +31,12 @@ class CustomizationModel extends AbstractModel{
 
     public function editRow($id, $data) : object
     {
-        $validate = (new Validator)->checkLength($data['customization_name'], 3, 255, 'customization_name', true)
-            ->checkLength($data['page_uri'], 2, 255, 'page_uri', true);
-
-        if($validate->getResultStatus() == 'error'){
-            return Result::setResult('error', $validate->getResultMessage(), $data);
-        }
+//        $validate = (new Validator)->checkLength($data['customization_name'], 3, 255, 'customization_name', true)
+//            ->checkLength($data['page_uri'], 2, 255, 'page_uri', true);
+//
+//        if($validate->getResultStatus() == 'error'){
+//            return Result::setResult('error', $validate->getResultMessage(), $data);
+//        }
 
         $updatedRow = $this->updateRow($id, $data);
 

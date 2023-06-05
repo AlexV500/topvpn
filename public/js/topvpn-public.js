@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	buttonBoxDown = document.getElementById('other-brokers-button-down'),
 	buttonBoxUp = document.getElementById('other-brokers-button-up');
-
+	ratingTable = document.getElementById('rating-table');
 	if(box && box2 && buttonBoxDown && buttonBoxUp){
 		buttonBoxUp.classList.add('box-hidden');
 		box.classList.add('box-hidden');
@@ -88,6 +88,10 @@ document.addEventListener('DOMContentLoaded', function() {
 	
 	const circleAverage = new CircularProgressBar("pie-average");
 	circleAverage.initial();
+
+	ratingTable.onclick = function(event) {
+		console.log(event.target);
+	};
 });
 
 

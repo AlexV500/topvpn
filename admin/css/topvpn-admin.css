@@ -798,3 +798,7 @@ li.add-ons:hover {
 .os-font-logo{
 
 }
+
+.table-secondary, .table-secondary > td, .table-secondary > th {
+    background-color: #d6d8db;
+}

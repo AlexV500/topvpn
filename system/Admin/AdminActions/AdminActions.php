@@ -16,6 +16,7 @@ abstract class AdminActions extends Components{
     public function __construct($model, $dbTable)
     {
         parent::__construct($model, $dbTable);
+        $this->model = $this->model->setAdminMode();
     }
 
 //    public function __construct($model, $dbTable){

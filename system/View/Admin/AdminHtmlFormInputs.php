@@ -72,7 +72,7 @@ class AdminHtmlFormInputs
             $output .= '<table>';
             $output .= '<tr>';
             foreach ($rows as $i => $items) {
-                $output .= '<td width="25%">';
+                $output .= '<td width="200">';
                 $output .= '<ul class="list-unstyled">';
 
                 foreach ($items as $item):
@@ -267,7 +267,7 @@ class AdminHtmlFormInputs
         $output .= 'Записи изображений в б.д.: '.$countFromTable.'<br/>';
         $output .= 'Файлов изображений(скринов) '.$countFiles.'<br/>';
         $output .= '<input type="hidden" value="screen" name="type"/>';
-        $output .= '<input type="hidden" value="deleteLostImages" name="deleteLostImages"/>';
+        $output .= '<input type="hidden" value="deleteLostScreen" name="deleteLostScreen"/>';
         if($countFiles > $countFromTable)
             $output .= '<br/><input class="button button-primary" type="submit" value="' . __('Удалить лишние изображения', 'topvpn') . '"/>
                     </form><br/>';
