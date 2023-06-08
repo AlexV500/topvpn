@@ -4,6 +4,8 @@ require_once V_PLUGIN_INCLUDES_DIR . 'topvpn/TopVPNBestPicks.php';
 require_once V_PLUGIN_INCLUDES_DIR . 'topvpn/TopVPNPublicList.php';
 require_once V_PLUGIN_INCLUDES_DIR . 'topvpn/TopVPNDescPublicList.php';
 require_once V_PLUGIN_INCLUDES_DIR . 'topvpn/TopVPNDescription.php';
+require_once V_PLUGIN_INCLUDES_DIR . 'topvpn/TopVPNDescriptionBefore.php';
+require_once V_PLUGIN_INCLUDES_DIR . 'topvpn/TopVPNDescriptionAfter.php';
 require_once V_PLUGIN_INCLUDES_DIR . 'topvpn/TopVPNComparePublicList.php';
 require_once V_PLUGIN_INCLUDES_DIR . 'widgets/TopVPNWidgetList.php';
 require_once V_PLUGIN_INCLUDES_DIR . 'widgets/TopVPNWidgetContext.php';
@@ -22,6 +24,8 @@ class TopVPN_Shortcodes
         add_shortcode('TopVPNList', array(__CLASS__, 'TopVPNList'));
         add_shortcode('TopVPNDescriptionList', array(__CLASS__, 'TopVPNDescriptionList'));
         add_shortcode('TopVPNDescription', array(__CLASS__, 'TopVPNDescription'));
+        add_shortcode('TopVPNDescriptionBefore', array(__CLASS__, 'TopVPNDescriptionBefore'));
+        add_shortcode('TopVPNDescriptionAfter', array(__CLASS__, 'TopVPNDescriptionAfter'));
         add_shortcode('TopVPNComparePublicList', array(__CLASS__, 'TopVPNComparePublicList'));
         add_shortcode('TopVPNWidgetList', array(__CLASS__, 'TopVPNWidgetList'));
         add_shortcode('TopVPNWidgetContext', array(__CLASS__, 'TopVPNWidgetContext'));
@@ -44,6 +48,14 @@ class TopVPN_Shortcodes
     public static function TopVPNDescription( $atts, $content = null ) {
 
         return (new TopVPNDescription('TopVPNModel', 'topvpn_vpn', $atts))->init()->render();
+    }
+    public static function TopVPNDescriptionBefore( $atts, $content = null ) {
+
+        return (new TopVPNDescriptionBefore('TopVPNModel', 'topvpn_vpn', $atts))->init()->render();
+    }
+    public static function TopVPNDescriptionAfter( $atts, $content = null ) {
+
+        return (new TopVPNDescriptionAfter('TopVPNModel', 'topvpn_vpn', $atts))->init()->render();
     }
     public static function TopVPNComparePublicList( $atts, $content = null ) {
 

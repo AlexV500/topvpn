@@ -28,8 +28,41 @@
 	 * Although scripts in the WordPress core, Plugins and Themes may be
 	 * practising this, we should strive to set a better example in our own work.
 	 */
+	$(window).load(function() {
+	$(window).scroll(function(){
+		var $sections = $('section');
+		$sections.each(function(i,el){
+			var top  = $(el).offset().top-200;
+			var bottom = top +$(el).height();
+			var scroll = $(window).scrollTop();
+			var id = $(el).attr('id');
+			if( scroll > top && scroll < bottom){
+				$('a.active').removeClass('active');
+				$('a[href="#'+id+'"]').addClass('active');
 
+			}
+		})
+	});
+
+	$(".widget-context").on("click","a", function (event) {
+		// исключаем стандартную реакцию браузера
+
+		event.preventDefault();
+
+		// получем идентификатор блока из атрибута href
+		let id  = $(this).attr('href'),
+
+			// находим высоту, на которой расположен блок
+			top = $(id).offset().top;
+		    top = top - 100;
+
+		// анимируем переход к блоку, время: 800 мс
+		$('body,html').animate({scrollTop: top}, 800);
+	});
+	});
 })( jQuery );
+
+
 document.addEventListener('DOMContentLoaded', function() {
 
 	var box = document.getElementsByClassName('box')[0],
@@ -39,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	buttonBoxDown = document.getElementById('other-brokers-button-down'),
 	buttonBoxUp = document.getElementById('other-brokers-button-up');
-	ratingTable = document.getElementById('rating-table');
+//	ratingTable = document.getElementById('rating-table');
 	if(box && box2 && buttonBoxDown && buttonBoxUp){
 		buttonBoxUp.classList.add('box-hidden');
 		box.classList.add('box-hidden');
@@ -81,17 +114,18 @@ document.addEventListener('DOMContentLoaded', function() {
 		}, false);
 	}
 
-
-
 	const circle = new CircularProgressBar("pie");
 	circle.initial();
 	
 	const circleAverage = new CircularProgressBar("pie-average");
 	circleAverage.initial();
 
-	ratingTable.onclick = function(event) {
-		console.log(event.target);
-	};
+	// ratingTable.onclick = function(event) {
+	// 	console.log(event.target);
+	// };
+
+
+
 });
 
 

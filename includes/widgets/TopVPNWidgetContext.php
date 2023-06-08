@@ -27,29 +27,34 @@ class TopVPNWidgetContext extends PublicItem{
         return $output;
     }
 
-    protected function renderFeatures(string $context) : string
+    protected function renderFeatures(string $context): string
     {
         $output = '';
         $exploded = explode(';', $context);
 
-        if(count($exploded) === 0) {
+        if (empty($exploded)) {
             return $output;
         }
-//        $output = '<div class="card">';
-//        $output .= '<div class="card-body">';
-        $output .= '<div class="">';
-        $output .= '<div class="sticky-top list-group">';
 
-        for ($i = 0; $i < count($exploded) - 1; $i++) {
-            $string = trim($exploded[$i]);
+        $output .= '<div class="list-group sticky-top mb-3 widget-context">';
 
-            $output .= '<a href="#" class="list-group-item list-group-item-action">';
-            $output .= $string;
-            $output .= '</a>';
+        foreach ($exploded as $item) {
+            $string = trim($item);
+            if($string == ''){
+                continue;
+            }
+            if (strpos($string, "#") !== false) {
+                $exploded2 = explode('#', $string);
+                $output .= '<a href="#' . $exploded2[1] . '" class="list-group-item list-group-item-action">';
+                $output .= $exploded2[0];
+                $output .= '</a>';
+            } else {
+                $output .= '<a href="#" class="list-group-item list-group-item-action">';
+                $output .= $string;
+                $output .= '</a>';
+            }
         }
 
-//        $output .= '</div>';
-        $output .= '</div>';
         $output .= '</div>';
         return $output;
     }
