@@ -23,6 +23,7 @@ class TopVPNWidgetContext extends PublicItem{
             return $output;
         }
         $output = $this->renderFeatures($this->getRowData()['context_description']);
+
         $this->render = $output;
         return $output;
     }
@@ -31,12 +32,20 @@ class TopVPNWidgetContext extends PublicItem{
     {
         $output = '';
         $exploded = explode(';', $context);
-
+        $logo = VPN_LOGO_PATH . $this->getRowData()['vpn_logo'];
         if (empty($exploded)) {
             return $output;
         }
 
-        $output .= '<div class="list-group sticky-top mb-3 widget-context">';
+        $output .= '<div class="sticky-top mb-4">';
+
+        $output .= '<div class="list-group widget-context">';
+
+        $output .= '<a class="list-group-item list-group-item-action" href="' . $this->getRowData()['referal_link'] . '" target="_blank">';
+
+        $output .= '<img alt="' . $this->getRowData()['vpn_name'] . '" class="img-fluid" src="' . $logo . '" alt="' . $this->getRowData()['vpn_name'] . '" title="' . $this->getRowData()['vpn_name'] . '">';
+
+        $output .= '</a>';
 
         foreach ($exploded as $item) {
             $string = trim($item);
@@ -56,6 +65,10 @@ class TopVPNWidgetContext extends PublicItem{
         }
 
         $output .= '</div>';
+
+        $output .= '</div>';
+
+
         return $output;
     }
 }

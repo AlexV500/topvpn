@@ -34,21 +34,6 @@ class TopVPNDescriptionAfter extends PublicItem{
         $output = '';
 
 
-
-        $output .= '<div class="row">';
-        $output .= '<div class="col-sm-6 col-md-6 col-lg-6 d-flex justify-content-start">';
-        $output .= '<div class="pr-2 pt-2 pb-2"><div class="popup" onclick="togglePopup(\'disclaimerPopup2\')">'. goTranslate("Advertiser Disclosure") .'
-  <span class="popuptext" id="disclaimerPopup2">'. goTranslate("To keep Top10VPN a free online resource, we receive advertising/referral fees when you buy a VPN through outlinks on this page. This impacts the score, location, prominence and order in which a VPN service appears. Our extensive tests of each VPN, and how it compares with other VPNs in different countries and/or for specific purposes, are also factored in. We do not feature every VPN product on the market. Listings on this page do not imply endorsement. To learn more, see") .'</span>
-</div>
-</div>';
-        $output .= '</div>';
-
-        $output .= '<div class="col-sm-6 col-md-6 col-lg-6 d-flex justify-content-end">';
-        $output .= '<a class="btn btn-tertiary" href="'.$this->getRowData()['referal_link'].'" target="_blank" role="button">'. goTranslate("Visit website") .'</a>';
-        $output .= '</div>';
-        $output .= '</div>';
-
-
         $output .= '<table class="table table-sm table-striped mt-4 vpn-key-data">';
         $output .= '<tbody>';
         $output .= '<tr><td>'. goTranslate("Kill Switch:") .'</td><td>'.HTMLOutputs::renderCheckStatus((int) $this->getRowData()['kill_switch']).'</td></tr>';
@@ -74,6 +59,20 @@ class TopVPNDescriptionAfter extends PublicItem{
         $output .= '<tr><td>'. goTranslate("Supported location:") .'</td><td>'.$this->renderLocations($locations).'</td></tr>';
         $output .= '</tbody>';
         $output .= '</table>';
+
+        $output .= '<div class="row">';
+        $output .= '<div class="col-sm-6 col-md-6 col-lg-6 d-flex justify-content-start">';
+        $output .= '<div class="pr-2 pt-2 pb-2"><div class="popup" onclick="togglePopup(\'disclaimerPopup2\')">'. goTranslate("Advertiser Disclosure") .'
+  <span class="popuptext" id="disclaimerPopup2">'. goTranslate("To keep Top10VPN a free online resource, we receive advertising/referral fees when you buy a VPN through outlinks on this page. This impacts the score, location, prominence and order in which a VPN service appears. Our extensive tests of each VPN, and how it compares with other VPNs in different countries and/or for specific purposes, are also factored in. We do not feature every VPN product on the market. Listings on this page do not imply endorsement. To learn more, see") .'</span>
+</div>
+</div>';
+        $output .= '</div>';
+
+        $output .= '<div class="col-sm-6 col-md-6 col-lg-6 d-flex justify-content-end">';
+        $output .= '<a class="btn btn-tertiary" href="'.$this->getRowData()['referal_link'].'" target="_blank" role="button">'. goTranslate("Visit website") .'</a>';
+        $output .= '</div>';
+        $output .= '</div>';
+
 
         return $output;
     }
