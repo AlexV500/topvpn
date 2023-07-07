@@ -43,7 +43,7 @@ class TopVPNWidgetContext extends PublicItem{
 
         $output .= '<a class="list-group-item list-group-item-action" href="' . $this->getRowData()['referal_link'] . '" target="_blank">';
 
-        $output .= '<img alt="' . $this->getRowData()['vpn_name'] . '" class="img-fluid" src="' . $logo . '" alt="' . $this->getRowData()['vpn_name'] . '" title="' . $this->getRowData()['vpn_name'] . '">';
+        $output .= '<img alt="' . $this->getRowData()['vpn_name'] . '" class="max-240" src="' . $logo . '" alt="' . $this->getRowData()['vpn_name'] . '" title="' . $this->getRowData()['vpn_name'] . '">';
 
         $output .= '</a>';
 

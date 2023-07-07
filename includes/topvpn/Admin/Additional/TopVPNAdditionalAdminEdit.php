@@ -58,6 +58,7 @@ class TopVPNAdditionalAdminEdit extends AdminPostAction{
         $output .= AdminHtmlFormInputs::renderAdminHead($header);
         $output .= AdminHtmlFormOutputs::renderResultMessages($this->getResultMessages());
         $output .= '<form id="add_additional" enctype="multipart/form-data" action="" method="post">';
+        $output .= AdminHtmlFormInputs::select('Топ статус', 'top_status', $this->getFormFill('top_status'), [0 => 'Нет', 1 => 'Да'], '');
         $output .= AdminHtmlFormInputs::input('Описание топ статуса (регалии)','top_status_description', $this->getFormFill('top_status_description'),'namefield','');
         $output .= AdminHtmlFormInputs::textarea('Короткое описание', 'short_description', $this->getFormFill('short_description'), '');
         $output .= AdminHtmlFormInputs::textarea('Features', 'features', $this->getFormFill('features'), '');
@@ -91,6 +92,7 @@ class TopVPNAdditionalAdminEdit extends AdminPostAction{
             'id' => $respData['id'],
             'foreign_id' => $respData['foreign_id'],
             'cat_sys_name' => $respData['cat_sys_name'],
+            'top_status' => $respData['top_status'],
             'top_status_description' => $respData['top_status_description'],
             'short_description' => $respData['short_description'],
             'features' => $respData['features'],
@@ -110,6 +112,7 @@ class TopVPNAdditionalAdminEdit extends AdminPostAction{
             'id' => $respData['last_insert_id'],
             'foreign_id' => $respData['foreign_id'],
             'cat_sys_name' => $respData['cat_sys_name'],
+            'top_status' => '',
             'top_status_description' => '',
             'short_description' => '',
             'features' => '',

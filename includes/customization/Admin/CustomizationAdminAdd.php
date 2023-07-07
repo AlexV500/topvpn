@@ -20,6 +20,7 @@ class CustomizationAdminAdd extends AdminPostAction{
                 'lang' => '',
                 'header_content' => '',
                 'header_image' => '',
+                'rating_header_content' => '',
                 'comparison_header_content' => '',
                 'description_header_content' => '',
                 'active' => 1,
@@ -46,6 +47,7 @@ class CustomizationAdminAdd extends AdminPostAction{
         $output .= AdminHtmlFormInputs::input('URI страницы','page_uri', $this->getFormFill('page_uri'),'namefield','required');
         $output .= AdminHtmlFormInputs::textarea('Контент шапки', 'header_content', $this->getFormFill('header_content'), '');
         $output .= AdminHtmlFormInputs::textarea('Изображение шапки', 'header_image', $this->getFormFill('header_image'), '');
+        $output .= AdminHtmlFormInputs::textarea('Блок заголовка таблицы рейтинга', 'rating_header_content', $this->getFormFill('rating_header_content'), '');
         $output .= AdminHtmlFormInputs::textarea('Блок заголовка таблицы сравнения', 'comparison_header_content', $this->getFormFill('comparison_header_content'), '');
         $output .= AdminHtmlFormInputs::textarea('Блок заголовка описаний(внизу)', 'description_header_content', $this->getFormFill('description_header_content'), '');
         $output .= AdminHtmlFormInputs::renderAdminLanguageSelectorField($this->getAllLanguageAdm(), $this->getLanguageSysNameGet());

@@ -26,7 +26,7 @@ class TopVPNHeaderShortcode extends PublicItem{
             $output .= '</h5>';
             $output .= '</div>';
         }
-
+        
         return $output;
     }
 }

@@ -34,7 +34,7 @@ class TopVPNDescriptionAfter extends PublicItem{
         $output = '';
 
 
-        $output .= '<table class="table table-sm table-striped mt-4 vpn-key-data">';
+        $output .= '<table class="table table-sm table-striped mt-2 vpn-key-data">';
         $output .= '<tbody>';
         $output .= '<tr><td>'. goTranslate("Kill Switch:") .'</td><td>'.HTMLOutputs::renderCheckStatus((int) $this->getRowData()['kill_switch']).'</td></tr>';
         $output .= '<tr><td>'. goTranslate("Wi-Fi Protection:") .'</td><td>'.HTMLOutputs::renderCheckStatus((int) $this->getRowData()['wi_fi_protection']).'</td></tr>';
@@ -69,7 +69,7 @@ class TopVPNDescriptionAfter extends PublicItem{
         $output .= '</div>';
 
         $output .= '<div class="col-sm-6 col-md-6 col-lg-6 d-flex justify-content-end">';
-        $output .= '<a class="btn btn-tertiary" href="'.$this->getRowData()['referal_link'].'" target="_blank" role="button">'. goTranslate("Visit website") .'</a>';
+        $output .= '<a class="btn btn-tertiary" href="'.$this->getRowData()['full_list_locations_link'].'" target="_blank" role="button">'. goTranslate("Go to full list of supported locations") .'</a>';
         $output .= '</div>';
         $output .= '</div>';
 

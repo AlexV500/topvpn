@@ -138,7 +138,23 @@ class AdminHtmlFormInputs
             '</span>' .
             '</label>' .
             '</div>' .
-            '<textarea rows="10" cols="90" name="' . $name . '" class="">' .
+            '<textarea rows="10" cols="74" name="' . $name . '" class="">' .
+            stripslashes($formFill) .
+            '</textarea>';
+        return $output;
+    }
+
+    public static function textareamini($label, $name, $formFill, $required = ''): string
+    {
+
+        $output = '<div class="field">' .
+            '<label class="field-label ' . $required . '">' .
+            '<span class="label">' .
+            __($label, 'topvpn') .
+            '</span>' .
+            '</label>' .
+            '</div>' .
+            '<textarea rows="3" cols="74" name="' . $name . '" class="">' .
             stripslashes($formFill) .
             '</textarea>';
         return $output;

@@ -406,6 +406,7 @@ class TopVPNModel extends AbstractModel{
             //    echo $rowAdditional['rating'].'|| ';
                 $rowData = array_merge($rowData, array_filter([
                     'additional_position' => $rowAdditional['add_position'] ?? 0,
+                    'top_status' => $rowAdditional['top_status'] ?? 0,
                     'top_status_description' => $rowAdditional['top_status_description'] ?? null,
                     'short_description' => $rowAdditional['short_description'] ?? null,
                     'features' => $rowAdditional['features'] ?? null,
@@ -420,10 +421,35 @@ class TopVPNModel extends AbstractModel{
 //        echo '<pre>';
 //        print_r($additionalCompData);
 //        echo '</pre>';
+
         if($sort) {
-            usort($rowsData, function ($a, $b) {
+
+            $result = [];
+            $topStatusRowsData = array_filter($rowsData, function($item) {
+                return $item['top_status'] == 1;
+            });
+
+            $noStatusRowData = array_filter($rowsData, function($item) {
+                return $item['top_status'] == 0;
+            });
+
+            usort($topStatusRowsData, function($a, $b) {
                 return $b['rating'] <=> $a['rating'];
             });
+
+            usort($noStatusRowData, function($a, $b) {
+                return $b['rating'] <=> $a['rating'];
+            });
+
+            foreach($topStatusRowsData as $val) {
+                $result[] = $val;
+            }
+
+            foreach($noStatusRowData as $val) {
+                $result[] = $val;
+            }
+
+            $rowsData = $result;
         }
 
 //        usort($rowsData, function($a, $b) {

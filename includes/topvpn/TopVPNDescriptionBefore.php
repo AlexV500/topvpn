@@ -28,11 +28,11 @@ class TopVPNDescriptionBefore extends PublicItem{
         $output = '';
 
         //    $output .= $this->getRowData()['short_description'];
-        $output .= '<div class="d-flex justify-content-between bg-main py-3 bottom-border-gray sticky-top">';
+        $output .= '<div class="d-flex justify-content-between bg-main py-2 mb-3 bottom-border-gray sticky-top" syle="z-index: 2">';
         $output .= '<div class="bd-highlight">';
 
     //    $output .= '<a class="no-decor-link" href="' . $this->getRowData()['referal_link'] . '" target="_blank">';
-        $output .= '<img alt="' . $this->getRowData()['vpn_name'] . '" class="" width="200" src="' . $logo . '" alt="' . $this->getRowData()['vpn_name'] . '" title="' . $this->getRowData()['vpn_name'] . '">';
+        $output .= '<img alt="' . $this->getRowData()['vpn_name'] . '" class="" height="40" src="' . $logo . '" alt="' . $this->getRowData()['vpn_name'] . '" title="' . $this->getRowData()['vpn_name'] . '">';
 //   $output .= '<div class="">';
         //  $output .= '</div>';
         //  $output .= '<div class="" style="text-align: center">'.goTranslate("Visit Website:") . '<i class="fa fa-arrow-right"></i>';
@@ -41,13 +41,15 @@ class TopVPNDescriptionBefore extends PublicItem{
         $output .= '</div>';
 
 
-        $output .= '<div class="pt-2 px-2 bd-highlight d-flex ">';
+        $output .= '<div class="pt-2 px-2 bd-highlight d-flex">';
+        
         $output .= '<div class="d-flex justify-content-end">';
         $output .= HTMLOutputs::renderRating($this->getRowData()['rating'], 0) . '&nbsp';
         $output .= '</div>';
 
         $output .= '<div class="d-flex justify-content-end">';
         $output .=  $this->getRowData()['rating'] . '/10';
+        
         $output .= '</div>';
         $output .= '</div>';
 
@@ -56,7 +58,6 @@ class TopVPNDescriptionBefore extends PublicItem{
         $output .= '</div>';
         $output .= '</div>';
 
-        $output .= '<hr>';
 ////////////
         //      $output .= '<img alt="' . $this->getRowData()['vpn_name'] . '" class="img-fluid max-240" src="' . $screen . '" alt="' . $this->getRowData()['screen'] . '" title="' . $this->getRowData()['screen'] . '">';
 ////////////
@@ -104,7 +105,7 @@ class TopVPNDescriptionBefore extends PublicItem{
         $output .= '</div>';
 
         $output .= '<div class="">';
-
+        $output .= '<h3>' . $this->getRowData()['vpn_name'] .' '. goTranslate("key data:") .'</h3>';
 //        $output .= '<div class="col-sm-6 col-md-6 col-lg-6 d-flex justify-content-start">';
 //        $output .= '<div class="pr-2 pt-2 pb-2"><div class="popup" onclick="togglePopup(\'disclaimerPopup\')">' . goTranslate("Advertiser Disclosure") . '
 //  <span class="popuptext" id="disclaimerPopup">' . goTranslate("To keep Top10VPN a free online resource, we receive advertising/referral fees when you buy a VPN through outlinks on this page. This impacts the score, location, prominence and order in which a VPN service appears. Our extensive tests of each VPN, and how it compares with other VPNs in different countries and/or for specific purposes, are also factored in. We do not feature every VPN product on the market. Listings on this page do not imply endorsement. To learn more, see") . '</span>

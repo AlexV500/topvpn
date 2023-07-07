@@ -28,7 +28,7 @@ class TopVPNComparePublicList extends PublicList{
         $this->switchMultiLangMode();
 //        $this->setOrderColumn('rating');
 //        $this->setOrderDirection('DESC');
-        $this->setLimitCount(3);
+//        $this->setLimitCount(3);
         $this->initRows();
         $this->addRelationParam('device', $this->getItemFromCollection('deviceModel'), 'device_sys_name');
         $this->addRelationParam('streaming', $this->getItemFromCollection('streamingModel'), 'streaming_sys_name');
@@ -38,6 +38,7 @@ class TopVPNComparePublicList extends PublicList{
         $this->addAdditionalParam('location', $this->getItemFromCollection('vpnAdditionalModel'));
         $this->initRowsCount($this->activeMode);
         $this->initRowsData($this->activeMode, false);
+        $this->sliceRowsData(3);
 
         if (count($this->getAdditionalResultData('compare')) > 0) {
             $arrayExtractor = new ArrayExtractor($this->getAdditionalResultData('compare'));
@@ -139,49 +140,10 @@ class TopVPNComparePublicList extends PublicList{
 </svg></span>';
         $output .= '</div>';
 
-        $output .= '<div class="entry table_category">';
-        $output .= '<p>'. goTranslate("Security:") .'</p>';
-        $output .= '</div>';
-
-        $output .= '<div class="entry">';
-        $output .= '<p>'. goTranslate("Kill Switch:") .'</p>';
-        $output .= '&nbsp<span class="" data-toggle="tooltip" data-placement="top" title="'. goTranslate("A VPN kill switch is a key feature that stops your device’s Internet connectivity when the VPN stops working.") .'"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" class="bi bi-info-circle-fill" viewBox="0 0 16 16">
-  <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
-</svg></span>';
-        $output .= '</div>';
-
-        $output .= '<div class="entry">';
-        $output .= '<p>'. goTranslate("Wi-Fi Protection:") .'</p>';
-        $output .= '&nbsp<span class="" data-toggle="tooltip" data-placement="top" title="'. goTranslate("Hardening your wireless connection with a VPN keeps your personal data secure, especially when using public Wi-Fi.") .'"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" class="bi bi-info-circle-fill" viewBox="0 0 16 16">
-  <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
-</svg></span>';
-        $output .= '</div>';
-
-        $output .= '<div class="entry">';
-        $output .= '<p>'. goTranslate("Encryption:") .'</p>';
-        $output .= '&nbsp<span class="" data-toggle="tooltip" data-placement="top" title="'. goTranslate("Strong encryption is essential to securing the data you send through the VPN tunnel. Your internet activity becomes unreadable by snoopers.") .'"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" class="bi bi-info-circle-fill" viewBox="0 0 16 16">
-  <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
-</svg></span>';
-        $output .= '</div>';
-
-        $output .= '<div class="entry table_category">';
-        $output .= '<p>'. goTranslate("Privacy:") .'</p>';
-        $output .= '</div>';
-
-        $output .= '<div class="entry">';
-        $output .= '<p>'. goTranslate("Keep Your IP Private:") .'</p>';
-        $output .= '&nbsp<span class="" data-toggle="tooltip" data-placement="top" title="'. goTranslate("Keeping your IP address private is the core feature of a VPN service. All of the VPNs in this list have passed the IP leak test.") .'"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" class="bi bi-info-circle-fill" viewBox="0 0 16 16">
-  <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
-</svg></span>';
-        $output .= '</div>';
 
 
-        $output .= '<div class="entry">';
-        $output .= '<p>'. goTranslate("Open Source VPN:") .'</p>';
-        $output .= '&nbsp<span class="" data-toggle="tooltip" data-placement="top" title="'. goTranslate("Top VPN providers allow anyone to inspect the source code of their VPN software. This helps build trust with the users.") .'"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" class="bi bi-info-circle-fill" viewBox="0 0 16 16">
-  <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
-</svg></span>';
-        $output .= '</div>';
+
+
 
         $output .= '<div class="entry table_category">';
         $output .= '<p>'. goTranslate("Key Data:") .'</p>';
@@ -271,6 +233,58 @@ class TopVPNComparePublicList extends PublicList{
 
             }
         }
+
+
+
+
+
+        $output .= '<div class="entry table_category">';
+        $output .= '<p>'. goTranslate("Security:") .'</p>';
+        $output .= '</div>';
+
+        $output .= '<div class="entry">';
+        $output .= '<p>'. goTranslate("Kill Switch:") .'</p>';
+        $output .= '&nbsp<span class="" data-toggle="tooltip" data-placement="top" title="'. goTranslate("A VPN kill switch is a key feature that stops your device’s Internet connectivity when the VPN stops working.") .'"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" class="bi bi-info-circle-fill" viewBox="0 0 16 16">
+  <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+</svg></span>';
+        $output .= '</div>';
+
+        $output .= '<div class="entry">';
+        $output .= '<p>'. goTranslate("Wi-Fi Protection:") .'</p>';
+        $output .= '&nbsp<span class="" data-toggle="tooltip" data-placement="top" title="'. goTranslate("Hardening your wireless connection with a VPN keeps your personal data secure, especially when using public Wi-Fi.") .'"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" class="bi bi-info-circle-fill" viewBox="0 0 16 16">
+  <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+</svg></span>';
+        $output .= '</div>';
+
+        $output .= '<div class="entry">';
+        $output .= '<p>'. goTranslate("Encryption:") .'</p>';
+        $output .= '&nbsp<span class="" data-toggle="tooltip" data-placement="top" title="'. goTranslate("Strong encryption is essential to securing the data you send through the VPN tunnel. Your internet activity becomes unreadable by snoopers.") .'"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" class="bi bi-info-circle-fill" viewBox="0 0 16 16">
+  <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+</svg></span>';
+        $output .= '</div>';
+
+        $output .= '<div class="entry table_category">';
+        $output .= '<p>'. goTranslate("Privacy:") .'</p>';
+        $output .= '</div>';
+
+        $output .= '<div class="entry">';
+        $output .= '<p>'. goTranslate("Keep Your IP Private:") .'</p>';
+        $output .= '&nbsp<span class="" data-toggle="tooltip" data-placement="top" title="'. goTranslate("Keeping your IP address private is the core feature of a VPN service. All of the VPNs in this list have passed the IP leak test.") .'"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" class="bi bi-info-circle-fill" viewBox="0 0 16 16">
+  <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+</svg></span>';
+        $output .= '</div>';
+
+
+        $output .= '<div class="entry">';
+        $output .= '<p>'. goTranslate("Open Source VPN:") .'</p>';
+        $output .= '&nbsp<span class="" data-toggle="tooltip" data-placement="top" title="'. goTranslate("Top VPN providers allow anyone to inspect the source code of their VPN software. This helps build trust with the users.") .'"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" class="bi bi-info-circle-fill" viewBox="0 0 16 16">
+  <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+</svg></span>';
+        $output .= '</div>';
+
+
+
+
 
         $output .= '<div class="entry table_category">';
         $output .= '<p>'. goTranslate("Purchasing:") .'</p>';
@@ -387,39 +401,7 @@ class TopVPNComparePublicList extends PublicList{
                 $output .= '</div>';
                 $output .= '</div>';
 
-                $output .= '<div class="entry table_category">';
-                $output .= '</div>';
 
-                $output .= '<div class="entry">';
-                $output .= '<span class="check-status">';
-                $output .= HTMLOutputs::renderCheckStatus((int) $result['kill_switch']);
-                $output .= '</span>';
-                $output .= '</div>';
-
-                $output .= '<div class="entry">';
-                $output .= '<span class="check-status">';
-                $output .= HTMLOutputs::renderCheckStatus((int) $result['wi_fi_protection']);
-                $output .= '</span>';
-                $output .= '</div>';
-
-                $output .= '<div class="entry">';
-                $output .= $result['encryption'];
-                $output .= '</div>';
-
-                $output .= '<div class="entry table_category">';
-                $output .= '</div>';
-
-                $output .= '<div class="entry">';
-                $output .= '<span class="check-status">';
-                $output .= HTMLOutputs::renderCheckStatus((int) $result['keep_your_ip_private']);
-                $output .= '</span>';
-                $output .= '</div>';
-
-                $output .= '<div class="entry">';
-                $output .= '<span class="check-status">';
-                $output .= HTMLOutputs::renderCheckStatus((int) $result['open_source_vpn']);
-                $output .= '</span>';
-                $output .= '</div>';
 
                 $output .= '<div class="entry table_category">';
                 $output .= '</div>';
@@ -465,16 +447,55 @@ class TopVPNComparePublicList extends PublicList{
                 $output .= '</div>';
 
 
+
                 if (count($this->addKeys) > 0) {
                     $output .= '<div class="entry table_category">';
                     $output .= '</div>';
                     foreach ($this->addKeys as $key) {
                         $output .= '<div class="entry">';
                         if(isset($this->getAdditionalResultData('compare')[$key][$result['id']]))
-                        $output .= $this->getAdditionalResultData('compare')[$key][$result['id']];
+                            $output .= $this->getAdditionalResultData('compare')[$key][$result['id']];
                         $output .= '</div>';
                     }
                 }
+
+
+                $output .= '<div class="entry table_category">';
+                $output .= '</div>';
+
+                $output .= '<div class="entry">';
+                $output .= '<span class="check-status">';
+                $output .= HTMLOutputs::renderCheckStatus((int) $result['kill_switch']);
+                $output .= '</span>';
+                $output .= '</div>';
+
+                $output .= '<div class="entry">';
+                $output .= '<span class="check-status">';
+                $output .= HTMLOutputs::renderCheckStatus((int) $result['wi_fi_protection']);
+                $output .= '</span>';
+                $output .= '</div>';
+
+                $output .= '<div class="entry">';
+                $output .= $result['encryption'];
+                $output .= '</div>';
+
+                $output .= '<div class="entry table_category">';
+                $output .= '</div>';
+
+                $output .= '<div class="entry">';
+                $output .= '<span class="check-status">';
+                $output .= HTMLOutputs::renderCheckStatus((int) $result['keep_your_ip_private']);
+                $output .= '</span>';
+                $output .= '</div>';
+
+                $output .= '<div class="entry">';
+                $output .= '<span class="check-status">';
+                $output .= HTMLOutputs::renderCheckStatus((int) $result['open_source_vpn']);
+                $output .= '</span>';
+                $output .= '</div>';
+
+
+
 
                 $output .= '<div class="entry table_category">';
                 $output .= '</div>';

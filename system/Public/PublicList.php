@@ -79,4 +79,10 @@ abstract class PublicList extends Components{
     public function getRowsCount() : int{
         return $this->rowsCount;
     }
+
+    public function sliceRowsData($count) : object{
+        if (is_array($this->getRowsData()) && count($this->getRowsData()) >= $count) {
+            $this->rowsData = array_slice($this->getRowsData(), 0, $count);
+        } return $this;
+    }
 }

@@ -257,7 +257,9 @@ class TopVPNPublicList extends PublicList{
                 $output .= '</div>';
  //               $output .= '</a>';
 //                $output .= '</div>';
-
+                $output .= $this->renderSupportedVpnBlockTitle($result, $count, $i);
+                
+                
             }
             if($this->showTrigger == 1){
                 $output .= '</div>';
@@ -317,6 +319,26 @@ class TopVPNPublicList extends PublicList{
 
         $this->render = $output;
         return $output;
+    }
+    
+    private function renderSupportedVpnBlockTitle($result, $count, $i){
+        $output = '';
+        $atts = $this->getAtts();
+        if($result['top_status'] == 1){
+                    if($i < $count) {
+                        $nextResult = $this->getRowsData()[$i + 1];
+                        if($nextResult['top_status'] == 0){
+                            $output .= '<div class="mt-4">';
+                        //    $output .= '<div class="col-md-8 col-lg-7">';
+                            $output .= '<div class="cta-content-wrap text-center">';
+                            $output .= '<h2 class="">See other supported VPN</h2>';
+                        //    $output .= '</div>';
+                            $output .= '</div>';
+                            $output .= '</div>';
+                        }
+                    }
+                }
+                return $output;
     }
 
     private function renderRateColumn($result) : string
@@ -453,7 +475,7 @@ class TopVPNPublicList extends PublicList{
                     $output .= '<div class="col-md-7 py-2">' . $featureName . ':</div>';
                     $output .= '<div class="col-md-5 py-2">';
                     $output .= '<div class="vpn-table-rating-bar">' . HTMLOutputs::renderRatingBar2($rating) . '</div>';
-                    $output .= '<div class="vpn-table-rating-rate">' . $rating . '/10</div>';
+                    $output .= '<div class="vpn-table-rating-rate">' . $rating . '</div>';
                     $output .= '</div>';
                 }
             }
